@@ -5,14 +5,9 @@ const mongoose = require('mongoose');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
-
-// Load environment variables
 dotenv.config();
-
-// Initialize express app
 const app = express();
 
-// Middleware
 app.use(cookieParser());
 app.use(cors({
     origin: process.env.CLIENT_URL || 'http://localhost:3000',
@@ -21,17 +16,14 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Static folder for uploads
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-// Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
     console.log('Created uploads directory at:', uploadsDir);
 }
 
-// Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => {
         console.log('✅ MongoDB Atlas connected successfully');
@@ -41,16 +33,11 @@ mongoose.connect(process.env.MONGODB_URI)
         console.error('❌ MongoDB connection error:', err.message);
     });
 
-
-// Add this for better error handling
 mongoose.connection.on('error', err => {
     console.error('MongoDB connection error:', err);
 });
-// Import User model at the top
 const User = require('./models/User');
 const bcrypt = require('bcryptjs');
-
-// Function to ensure at least one admin exists
 async function ensureAdmin() {
     try {
         const adminExists = await User.findOne({ role: 'admin' });
@@ -77,14 +64,11 @@ async function ensureAdmin() {
 }
 
 
-// Add these to your middleware section
 app.use((req, res, next) => {
-    // Log all requests
     console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl}`);
     next();
 });
 
-// Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/admin', require('./routes/admin'));
@@ -93,36 +77,18 @@ app.use('/api/chats', require('./routes/chats'));
 app.use('/api/categories', require('./routes/categories'));
 const uploadRoutes = require('./routes/upload');
 
-// Enable cookie parsing
-
-// Use routes
 app.use('/api/upload', uploadRoutes);
 
-// API Test route
 app.get('/api/test', (req, res) => {
     res.json({ message: 'API is working' });
 });
 
-// Add this after your routes
 app.use((err, req, res, next) => {
     console.error('Unhandled error:', err);
     res.status(500).json({ message: 'Server error', error: err.message });
 });
 
-// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running`);
 });
-
-
-
-
-
-
-// Work on Admin Dashboard
-
-// cd frontend
-// npm run dev
-// cd backend
-// npm run dev
