@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 const User = require('../models/User');
-
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN || '7d',
@@ -93,7 +92,6 @@ exports.register = async (req, res) => {
 exports.verifyEmail = async (req, res) => {
     try {
         const { token } = req.query;
-
         if (!token) {
             return res.status(400).json({
                 success: false,
@@ -131,7 +129,6 @@ exports.verifyEmail = async (req, res) => {
     }
 };
 
-//  Login
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
