@@ -56,19 +56,18 @@ async function ensureAdmin() {
         const adminExists = await User.findOne({ role: 'admin' });
 
         if (!adminExists) {
-            const hashedPassword = await bcrypt.hash('Admin@1234', 10);
-
             const admin = await User.create({
                 name: 'Super Admin',
                 email: 'admin@tshirtstore.com',
-                password: hashedPassword,
+                password: 'Admin123456',
                 role: 'admin',
                 isVerified: true
             });
 
+
             console.log('✅ Default Admin created:');
-            console.log('   Email: admin@ekart.com');
-            console.log('   Password: Admin@1234');
+            console.log('   Email: admin@tshirtstore.com');
+            console.log('   Password: Admin123456');
         } else {
             console.log(`⚡ Admin already exists: ${adminExists.email}`);
         }
@@ -113,15 +112,10 @@ app.use((err, req, res, next) => {
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server is running`);
 });
 
-// Add this near the beginning of your server.js
-console.log('ENVIRONMENT CHECK:');
-console.log('NODE_ENV:', process.env.NODE_ENV);
-console.log('Cloudinary Cloud Name:', process.env.CLOUDINARY_CLOUD_NAME ? 'SET ✓' : 'MISSING ✗');
-console.log('Cloudinary API Key:', process.env.CLOUDINARY_API_KEY ? 'SET ✓' : 'MISSING ✗');
-console.log('Cloudinary API Secret:', process.env.CLOUDINARY_API_SECRET ? 'SET ✓' : 'MISSING ✗');
+
 
 
 
