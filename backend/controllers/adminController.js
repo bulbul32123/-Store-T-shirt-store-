@@ -2,8 +2,6 @@ const Product = require('../models/Product');
 const Order = require('../models/Order');
 const User = require('../models/User');
 const { errorHandler } = require('../utils/errorHandler');
-
-// Get admin dashboard statistics
 exports.getStats = async (req, res) => {
     try {
         console.log("working");
@@ -13,13 +11,9 @@ exports.getStats = async (req, res) => {
                 message: 'Access denied. Admin privileges required.'
             });
         }
-
-        // Get counts
         const totalProducts = await Product.countDocuments();
         const totalOrders = await Order.countDocuments();
         const totalUsers = await User.countDocuments();
-
-        // Get total revenue
         const revenue = await Order.aggregate([
             {
                 $match: {
@@ -35,22 +29,16 @@ exports.getStats = async (req, res) => {
         ]);
 
         const totalRevenue = revenue.length > 0 ? revenue[0].total : 0;
-
-        // Get recent orders
         const recentOrders = await Order.find()
             .sort({ createdAt: -1 })
             .limit(5)
             .populate('user', 'name email')
             .lean();
-
-        // Get low stock products
         const lowStockProducts = await Product.find({ stockQuantity: { $lt: 10 } })
             .sort({ stockQuantity: 1 })
             .limit(5)
             .populate('category', 'name')
             .lean();
-
-        // Return all stats
         res.json({
             success: true,
             totalProducts,
@@ -121,10 +109,8 @@ exports.login = async (req, res) => {
     }
 };
 
-// Additional admin controllers can be added here
 exports.getAllUsers = async (req, res) => {
     try {
-        // Check if user is admin
         if (req.user.role !== 'admin') {
             return res.status(403).json({
                 success: false,
@@ -145,7 +131,6 @@ exports.getAllUsers = async (req, res) => {
 
 exports.getUserById = async (req, res) => {
     try {
-        // Check if user is admin
         if (req.user.role !== 'admin') {
             return res.status(403).json({
                 success: false,
@@ -173,7 +158,6 @@ exports.getUserById = async (req, res) => {
 
 exports.updateUserRole = async (req, res) => {
     try {
-        // Check if user is admin
         if (req.user.role !== 'admin') {
             return res.status(403).json({
                 success: false,
@@ -215,7 +199,6 @@ exports.updateUserRole = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
     try {
-        // Check if user is admin
         if (req.user.role !== 'admin') {
             return res.status(403).json({
                 success: false,
@@ -223,7 +206,6 @@ exports.deleteUser = async (req, res) => {
             });
         }
 
-        // Check if user is trying to delete themselves
         if (req.params.id === req.user.id) {
             return res.status(400).json({
                 success: false,
