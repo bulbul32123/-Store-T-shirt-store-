@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProductCard from './ProductCard';
@@ -18,7 +17,6 @@ const RelatedProducts = ({ category, currentProductId }) => {
                     `${process.env.NEXT_PUBLIC_API_URL}/api/products?category=${category}&limit=4`
                 );
 
-                // Filter out the current product and limit to 4 products
                 const filteredProducts = data.products
                     .filter(product => product._id !== currentProductId)
                     .slice(0, 4);

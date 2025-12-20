@@ -1,7 +1,5 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
-
-
 const SidebarContext = createContext(undefined);
 
 export const useSidebar = () => {
@@ -30,7 +28,6 @@ export const SidebarProvider = ({
         setIsMobileOpen(false);
       }
     };
-
     handleResize();
     window.addEventListener("resize", handleResize);
 

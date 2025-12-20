@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import Link from 'next/link';
 import { FiShoppingCart, FiHeart, FiEye } from 'react-icons/fi';
@@ -17,12 +16,9 @@ const ProductCard = ({ product }) => {
         product.colors.length > 0 ? product.colors[0].name : 'Default'
     );
 
-    // Calculate discount price if applicable
     const discountedPrice = product.discount
         ? product.price - (product.price * product.discount) / 100
         : null;
-
-    // Add to wishlist
     const addToWishlist = async () => {
         try {
             if (!user) {
@@ -48,7 +44,6 @@ const ProductCard = ({ product }) => {
         }
     };
 
-    // Handle quick add to cart
     const handleQuickAddToCart = () => {
         if (!product.inStock || product.stockQuantity === 0) {
             toast.error('This product is out of stock');
@@ -64,7 +59,6 @@ const ProductCard = ({ product }) => {
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            {/* Product Image */}
             <div className="relative h-64 overflow-hidden">
                 <Link href={`/product/${product._id}`}>
                     <img
@@ -73,8 +67,6 @@ const ProductCard = ({ product }) => {
                         className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                     />
                 </Link>
-
-                {/* Badges */}
                 <div className="absolute top-2 left-2 flex flex-col gap-2">
                     {product.discount > 0 && (
                         <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
@@ -92,8 +84,6 @@ const ProductCard = ({ product }) => {
                         </span>
                     )}
                 </div>
-
-                {/* Quick Action Buttons */}
                 <div
                     className={`absolute right-2 top-2 flex flex-col gap-2 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'
                         }`}
@@ -114,8 +104,6 @@ const ProductCard = ({ product }) => {
                     </Link>
                 </div>
             </div>
-
-            {/* Product Info */}
             <div className="p-4">
                 <Link href={`/product/${product._id}`}>
                     <h3 className="text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors mb-1 truncate">
@@ -165,8 +153,6 @@ const ProductCard = ({ product }) => {
                         {product.category}
                     </span>
                 </div>
-
-                {/* Size and Color Selection */}
                 {isHovered && (
                     <div className="mb-3 space-y-2">
                         {product.sizes && product.sizes.length > 0 && (
@@ -211,7 +197,6 @@ const ProductCard = ({ product }) => {
                     </div>
                 )}
 
-                {/* Add to Cart Button */}
                 <button
                     onClick={handleQuickAddToCart}
                     disabled={!product.inStock || product.stockQuantity === 0}

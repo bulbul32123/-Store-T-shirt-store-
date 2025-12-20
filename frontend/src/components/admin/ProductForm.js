@@ -1,17 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { FiX, FiPlus, FiUpload } from 'react-icons/fi';
+import { FiX, FiPlus } from 'react-icons/fi';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import React from 'react';
 import { toast } from 'react-hot-toast';
-
-// Add CSS for animation
 const fadeIn = {
     animation: 'fadeIn 0.3s ease-in-out',
 };
 
 const ProductForm = ({
-    // State props
     formData,
     images,
     errors,
@@ -20,8 +17,6 @@ const ProductForm = ({
     fileInputRef,
     categories,
     isEdit,
-
-    // Handler props
     handleChange,
     handleSubmit,
     handleImageUpload,
@@ -29,25 +24,18 @@ const ProductForm = ({
     handleSizeChange,
     onCancel,
 }) => {
-    // Define the available sizes
     const availableSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'];
     const [showDiscount, setShowDiscount] = useState(false);
-    // State for new color
     const [newColor, setNewColor] = useState({ name: '', code: '#000000' });
 
-    // Add debugging for color data
     useEffect(() => {
         if (isEdit && formData.colors && formData.colors.length > 0) {
             console.log('Color data for editing:', formData.colors);
         }
     }, [isEdit, formData.colors]);
-
-    // Add this useEffect to normalize color data on edit
     useEffect(() => {
         if (isEdit && formData.colors && formData.colors.length > 0) {
             console.log('Normalizing color data for edit mode...');
-
-            // Check if any colors need to be formatted
             const needsFormatting = formData.colors.some(color =>
                 typeof color === 'string' ||
                 (typeof color === 'object' && (!color.code || !color.name))
@@ -56,26 +44,21 @@ const ProductForm = ({
             if (needsFormatting) {
                 console.log('Color data needs formatting, converting...');
 
-                // Create properly formatted color objects
                 const formattedColors = formData.colors.map((color, index) => {
-                    // If already an object with name and code, keep as is
                     if (typeof color === 'object' && color.name && color.code) {
                         return color;
                     }
 
-                    // If string, create object with name and default code
                     if (typeof color === 'string') {
                         return { name: color, code: '#000000' };
                     }
 
-                    // If object but missing properties
                     return {
                         name: color.name || `Color ${index + 1}`,
                         code: color.code || '#000000'
                     };
                 });
 
-                // Update the form data
                 handleChange({
                     target: {
                         name: 'colors',
@@ -87,24 +70,16 @@ const ProductForm = ({
             }
         }
     }, [isEdit, formData.colors, handleChange]);
-
-    // Enhanced color handling
     const handleAddNewColor = () => {
         if (!newColor.name.trim()) return;
-
-        // Check if we've reached the maximum number of colors
         if (formData.colors.length >= 5) {
             toast.error('Maximum of 5 colors reached.');
             return;
         }
-
-        // Create a properly formatted color object
         const colorObject = {
             name: newColor.name.trim(),
             code: newColor.code || '#000000'
         };
-
-        // Add to colors array
         const updatedColors = [...formData.colors, colorObject];
 
         handleChange({
@@ -114,11 +89,8 @@ const ProductForm = ({
             }
         });
 
-        // Reset inputs
         setNewColor({ name: '', code: newColor.code });
     };
-
-    // Updated color removal
     const handleRemoveColorByName = (name) => {
         const updatedColors = formData.colors.filter(color =>
             typeof color === 'object' ? color.name !== name : color !== name
@@ -132,16 +104,10 @@ const ProductForm = ({
         });
     };
 
-    // Improved color normalization with better debugging
     const normalizedColors = React.useMemo(() => {
         if (!Array.isArray(formData.colors)) return [];
 
-        console.log('Raw formData.colors:', JSON.stringify(formData.colors));
-
         return formData.colors.map((color, index) => {
-            console.log(`Processing color ${index}:`, color);
-
-            // Handle string colors
             if (typeof color === 'string') {
                 return {
                     id: `color-string-${index}`,
@@ -150,32 +116,23 @@ const ProductForm = ({
                 };
             }
 
-            // Get the color name
             const colorName = color.name || 'Unnamed';
-
-            // Extract color code with detailed logging
             let colorCode = null;
             if (color.code) {
-                console.log(`Found code property: ${color.code}`);
                 colorCode = color.code;
             } else if (color.hex) {
-                console.log(`Found hex property: ${color.hex}`);
                 colorCode = color.hex;
             } else if (color.color) {
-                console.log(`Found color property: ${color.color}`);
                 colorCode = color.color;
             } else {
-                console.log(`No color code found, using default`);
                 colorCode = '#000000';
             }
-
-            // Ensure hex format
             if (colorCode && !colorCode.startsWith('#')) {
                 colorCode = '#' + colorCode;
             }
 
             const normalizedColor = {
-                id: `color-${index}`, // Removed Date.now() to prevent re-renders
+                id: `color-${index}`, 
                 name: colorName,
                 code: colorCode
             };
@@ -184,15 +141,10 @@ const ProductForm = ({
             return normalizedColor;
         });
     }, [formData.colors]);
-
-    // Add this function near the top of your component
     const getContrastColor = (hexColor) => {
-        // Default to black if color format is invalid
         if (!hexColor || typeof hexColor !== 'string' || !hexColor.startsWith('#')) {
             return '#000000';
         }
-
-        // Convert hex to RGB
         let r, g, b;
         if (hexColor.length === 7) {
             r = parseInt(hexColor.substring(1, 3), 16);
@@ -205,11 +157,7 @@ const ProductForm = ({
         } else {
             return '#000000';
         }
-
-        // Calculate luminance
         const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-
-        // Return white for dark colors, black for light colors
         return luminance > 0.5 ? '#000000' : '#ffffff';
     };
 
@@ -220,7 +168,6 @@ const ProductForm = ({
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Basic Information */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -299,8 +246,6 @@ const ProductForm = ({
                         )}
                     </div>
                 </div>
-
-                {/* Description */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Description
@@ -313,8 +258,6 @@ const ProductForm = ({
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                     ></textarea>
                 </div>
-
-                {/* Sizes - Updated to use selectable buttons */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Sizes *
@@ -342,7 +285,6 @@ const ProductForm = ({
                     </p>
                 </div>
 
-                {/* Colors with Simple Color Picker */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Colors * <span className="text-xs text-gray-500 font-normal">(Max 5)</span>
@@ -373,12 +315,9 @@ const ProductForm = ({
                         </button>
                     </div>
 
-                    {/* Color counter */}
                     <div className="mt-1 text-xs text-gray-500">
                         {normalizedColors.length} of 5 colors used
                     </div>
-
-                    {/* Color Pills - Updated with background color and adaptive text */}
                     <div className="flex flex-wrap gap-2 mt-2">
                         {normalizedColors.map(color => {
                             const textColor = getContrastColor(color.code);
@@ -414,15 +353,13 @@ const ProductForm = ({
                         <p className="mt-1 text-sm text-red-600">{errors.colors}</p>
                     )}
                 </div>
-
-                {/* Images - Grid Layout */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Product Images * <span className="text-xs text-gray-500 font-normal">(Max 5)</span>
                     </label>
 
                     <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                        {/* Existing Images */}
+                    
                         {images.map((image, index) => (
                             <div key={image.public_id || `img-${index}`} className="relative group">
                                 <div className="w-full h-32 border rounded-lg overflow-hidden bg-gray-50">
@@ -441,8 +378,6 @@ const ProductForm = ({
                                 </button>
                             </div>
                         ))}
-
-                        {/* Add Image Button - Only shown if under limit */}
                         {images.length < 5 && (
                             <div
                                 onClick={() => !uploadingImage && fileInputRef.current.click()}
@@ -473,8 +408,6 @@ const ProductForm = ({
                             multiple
                         />
                     </div>
-
-                    {/* Counter and Help Text */}
                     <div className="mt-2 flex justify-between items-center">
                         <p className="text-xs text-gray-500">
                             JPG, JPEG, PNG, WEBP, GIF up to 5MB
@@ -489,7 +422,6 @@ const ProductForm = ({
                     )}
                 </div>
 
-                {/* Featured, Trending, Popular */}
                 <div className="flex flex-wrap gap-4">
                     <label className="flex items-center space-x-2">
                         <input
@@ -524,7 +456,6 @@ const ProductForm = ({
                         <span className="text-sm text-gray-700">Popular</span>
                     </label>
 
-                    {/* Discount Toggle Feature - Completed */}
                     <div className="flex items-center">
                         <button
                             type="button"
@@ -540,7 +471,6 @@ const ProductForm = ({
                     </div>
                 </div>
 
-                {/* Discount Input Field - Displayed when toggled */}
                 {showDiscount && (
                     <div style={fadeIn}>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -567,7 +497,6 @@ const ProductForm = ({
                     </div>
                 )}
 
-                {/* Actions */}
                 <div className="mt-6 flex items-center justify-end gap-4">
                     <button
                         type="button"

@@ -1,11 +1,9 @@
 'use client';
-
 import { useState } from 'react';
 import Link from 'next/link';
 
 const Hero = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
-
     const slides = [
         {
             id: 1,
@@ -42,14 +40,12 @@ const Hero = () => {
     const nextSlide = () => {
         setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     };
-
     const prevSlide = () => {
         setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
     };
 
     return (
         <section className="relative h-[600px] overflow-hidden">
-            {/* Slides */}
             <div
                 className="h-full transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${currentSlide * 100}%)`, width: `${slides.length * 100}%`, display: 'flex' }}
@@ -80,7 +76,6 @@ const Hero = () => {
                 ))}
             </div>
 
-            {/* Navigation Arrows */}
             <button
                 onClick={prevSlide}
                 className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-30 hover:bg-opacity-50 rounded-full p-2 text-white z-20 transition duration-300"
@@ -100,7 +95,6 @@ const Hero = () => {
                 </svg>
             </button>
 
-            {/* Dots */}
             <div className="absolute bottom-6 left-0 right-0 flex justify-center space-x-2 z-20">
                 {slides.map((_, index) => (
                     <button

@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -15,7 +14,6 @@ const Header = () => {
     const { user, logout } = useAuth();
     const { cartItems } = useCart();
 
-    // Handle scroll effect
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 10) {
@@ -29,7 +27,6 @@ const Header = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Handle search submit
     const handleSearchSubmit = (e) => {
         e.preventDefault();
         if (searchQuery.trim()) {
@@ -44,12 +41,10 @@ const Header = () => {
         >
             <div className="container mx-auto px-4">
                 <div className="flex items-center justify-between">
-                    {/* Logo */}
                     <Link href="/" className="text-2xl font-bold text-blue-600">
                         T-Shirt Store
                     </Link>
 
-                    {/* Desktop Navigation */}
                     <nav className="hidden md:flex items-center space-x-8">
                         <Link
                             href="/"
@@ -88,9 +83,7 @@ const Header = () => {
                         </Link>
                     </nav>
 
-                    {/* Search, Cart, and User */}
                     <div className="hidden md:flex items-center space-x-6">
-                        {/* Search Form */}
                         <form onSubmit={handleSearchSubmit} className="relative">
                             <input
                                 type="text"
@@ -102,7 +95,6 @@ const Header = () => {
                             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                         </form>
 
-                        {/* Cart */}
                         <Link href="/cart" className="relative">
                             <FiShoppingCart className="w-6 h-6 text-gray-700 hover:text-blue-600 transition-colors" />
                             {cartItems.length > 0 && (
@@ -112,7 +104,6 @@ const Header = () => {
                             )}
                         </Link>
 
-                        {/* User Menu */}
                         {user ? (
                             <div className="relative group">
                                 <button className="flex items-center space-x-1">
@@ -144,8 +135,6 @@ const Header = () => {
                             </Link>
                         )}
                     </div>
-
-                    {/* Mobile Menu Button */}
                     <button
                         className="md:hidden text-gray-700"
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -159,11 +148,9 @@ const Header = () => {
                 </div>
             </div>
 
-            {/* Mobile Menu */}
             {isMenuOpen && (
                 <div className="md:hidden bg-white border-t mt-2">
                     <div className="container mx-auto px-4 py-3">
-                        {/* Mobile Search */}
                         <form onSubmit={handleSearchSubmit} className="relative mb-4">
                             <input
                                 type="text"
@@ -174,8 +161,6 @@ const Header = () => {
                             />
                             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                         </form>
-
-                        {/* Mobile Navigation */}
                         <nav className="flex flex-col space-y-3">
                             <Link
                                 href="/"
@@ -218,8 +203,6 @@ const Header = () => {
                                 Contact
                             </Link>
                         </nav>
-
-                        {/* Mobile User Links */}
                         <div className="mt-4 pt-4 border-t border-gray-200">
                             {user ? (
                                 <>

@@ -1,8 +1,6 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Link from 'next/link';
 import ProductCard from '@/components/products/ProductCard';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { API_URL } from '@/utils/config';
@@ -16,7 +14,6 @@ const FeaturedProducts = () => {
         const fetchFeaturedProducts = async () => {
             try {
                 setLoading(true);
-                // Use the imported API_URL
                 const { data } = await axios.get(`${API_URL}/api/products/featured`);
                 setProducts(data.products || data);
             } catch (error) {
@@ -69,7 +66,6 @@ const FeaturedProducts = () => {
     );
 };
 
-// Dummy data for development fallback
 const dummyProducts = [
     {
         _id: '1',

@@ -1,7 +1,5 @@
 'use client';
-
 import Link from 'next/link';
-
 const Categories = () => {
     const categories = [
         {

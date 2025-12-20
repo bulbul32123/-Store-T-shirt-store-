@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect, useRef } from 'react';
 import { FiUpload, FiX } from 'react-icons/fi';
 
@@ -46,8 +45,7 @@ export default function CategoryForm({ category, categories, onSave, onCancel })
             setErrors({ ...errors, image: 'Please select an image file' });
             return;
         }
-
-        if (file.size > 2 * 1024 * 1024) { // 2MB
+        if (file.size > 2 * 1024 * 1024) { 
             setErrors({ ...errors, image: 'Image size should be less than 2MB' });
             return;
         }
@@ -71,8 +69,6 @@ export default function CategoryForm({ category, categories, onSave, onCancel })
         if (!formData.name.trim()) {
             newErrors.name = 'Category name is required';
         }
-
-        // Check if parent category is the same as the current category
         if (category && formData.parent === category._id) {
             newErrors.parent = 'A category cannot be its own parent';
         }
@@ -90,8 +86,6 @@ export default function CategoryForm({ category, categories, onSave, onCancel })
 
         onSave(formData);
     };
-
-    // Filter out current category from parent options to prevent self-referencing
     const parentOptions = categories.filter(cat => !category || cat._id !== category._id);
 
     return (
@@ -102,7 +96,6 @@ export default function CategoryForm({ category, categories, onSave, onCancel })
 
             <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 gap-6 mb-6">
-                    {/* Name field */}
                     <div>
                         <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                             Category Name *
@@ -121,8 +114,6 @@ export default function CategoryForm({ category, categories, onSave, onCancel })
                             <p className="mt-1 text-sm text-red-600">{errors.name}</p>
                         )}
                     </div>
-
-                    {/* Description field */}
                     <div>
                         <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
                             Description
@@ -136,8 +127,6 @@ export default function CategoryForm({ category, categories, onSave, onCancel })
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         ></textarea>
                     </div>
-
-                    {/* Parent category field */}
                     <div>
                         <label htmlFor="parent" className="block text-sm font-medium text-gray-700 mb-1">
                             Parent Category (optional)
@@ -161,8 +150,6 @@ export default function CategoryForm({ category, categories, onSave, onCancel })
                             <p className="mt-1 text-sm text-red-600">{errors.parent}</p>
                         )}
                     </div>
-
-                    {/* Featured checkbox */}
                     <div className="flex items-center">
                         <input
                             type="checkbox"
@@ -176,8 +163,6 @@ export default function CategoryForm({ category, categories, onSave, onCancel })
                             Featured Category (will be highlighted on homepage)
                         </label>
                     </div>
-
-                    {/* Image upload field */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Category Image (optional)
@@ -228,8 +213,6 @@ export default function CategoryForm({ category, categories, onSave, onCancel })
                         </p>
                     </div>
                 </div>
-
-                {/* Form actions */}
                 <div className="flex justify-end space-x-3">
                     <button
                         type="button"

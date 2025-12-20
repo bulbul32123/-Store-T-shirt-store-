@@ -1,9 +1,0 @@
-# Ignore everything in admin, backend, and frontend
-/admin/*
-/backend/*
-/frontend/*
-
-# But keep the folder itself (and .gitkeep files)
-!/admin/.gitkeep
-!/backend/.gitkeep
-!/frontend/.gitkeep

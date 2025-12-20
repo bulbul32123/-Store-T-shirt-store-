@@ -17,7 +17,6 @@ const SearchBar = ({ inputRef }) => {
   const dropdownRef = useRef(null);
   const router = useRouter();
 
-  // Debounce search query
   useEffect(() => {
     const delayedSearch = setTimeout(() => {
       if (query.trim() && query.length > 1) {
@@ -31,7 +30,6 @@ const SearchBar = ({ inputRef }) => {
     return () => clearTimeout(delayedSearch);
   }, [query]);
 
-  // Handle clicks outside to close dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -44,11 +42,9 @@ const SearchBar = ({ inputRef }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Mock search function - replace with your actual API calls
   const performSearch = async (searchTerm) => {
     setIsLoading(true);
     try {
-      // Replace these with your actual API endpoints
       const [productsRes, ordersRes, customersRes, categoriesRes] = await Promise.all([
         searchProducts(searchTerm),
         searchOrders(searchTerm),
@@ -71,14 +67,11 @@ const SearchBar = ({ inputRef }) => {
       setIsLoading(false);
     }
   };
-
-  // Mock API functions - replace with your actual API calls
   const searchProducts = async (term) => {
     try {
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/api/products?search=${term}`
       );
-      // Assuming API returns { products: [] }
       return data.products?.slice(0, 5) || [];
     } catch (error) {
       console.error("Product search failed:", error.response?.data || error.message);
@@ -124,15 +117,12 @@ const SearchBar = ({ inputRef }) => {
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/api/categories?search=${term}`
       );
-      // Assuming API returns { categories: [] }
       return data.categories?.slice(0, 5) || [];
     } catch (error) {
       console.error("Category search failed:", error.response?.data || error.message);
       return [];
     }
   };
-
-  // Flatten all results for keyboard navigation
   const getAllResults = () => {
     const all = [];
     if (results.products.length) {
@@ -181,8 +171,6 @@ const SearchBar = ({ inputRef }) => {
 
   const handleResultClick = (result) => {
     const { type, data } = result;
-
-    // Navigate based on result type
     switch (type) {
       case 'product':
         router.push(`/admin/products/${data.id}`);
@@ -237,8 +225,6 @@ const SearchBar = ({ inputRef }) => {
   const renderResult = (result, index) => {
     const { type, data } = result;
     const isSelected = selectedIndex === index;
-
-    // Fix for undefined keys
     const uniqueKey = `${type}-${data.id || data._id || index}`;
 
     return (
@@ -291,7 +277,6 @@ const SearchBar = ({ inputRef }) => {
 
 
   const hasResults = results.products.length || results.orders.length || results.customers.length || results.categories.length;
-  console.log(results.products);
 
 
   return (
@@ -341,7 +326,6 @@ const SearchBar = ({ inputRef }) => {
         </div>
       </form>
 
-      {/* Search Results Dropdown */}
       {isOpen && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50">
           {isLoading ? (
@@ -351,7 +335,6 @@ const SearchBar = ({ inputRef }) => {
             </div>
           ) : hasResults ? (
             <div>
-              {/* Products Section */}
               {results.products.length > 0 && (
                 <>
                   <div className="px-4 py-2 bg-gray-50 border-b border-gray-100">
@@ -362,8 +345,6 @@ const SearchBar = ({ inputRef }) => {
                   )}
                 </>
               )}
-
-              {/* Orders Section */}
               {results.orders.length > 0 && (
                 <>
                   <div className="px-4 py-2 bg-gray-50 border-b border-gray-100">
@@ -375,7 +356,6 @@ const SearchBar = ({ inputRef }) => {
                 </>
               )}
 
-              {/* Customers Section */}
               {results.customers.length > 0 && (
                 <>
                   <div className="px-4 py-2 bg-gray-50 border-b border-gray-100">
@@ -387,7 +367,6 @@ const SearchBar = ({ inputRef }) => {
                 </>
               )}
 
-              {/* Categories Section */}
               {results.categories.length > 0 && (
                 <>
                   <div className="px-4 py-2 bg-gray-50 border-b border-gray-100">

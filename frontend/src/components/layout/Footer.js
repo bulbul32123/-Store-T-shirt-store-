@@ -9,7 +9,6 @@ const Footer = () => {
         <footer className="bg-gray-900 text-white pt-12 pb-6">
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {/* Company Info */}
                     <div>
                         <h3 className="text-xl font-bold mb-4">T-Shirt Store</h3>
                         <p className="text-gray-400 mb-4">
@@ -31,7 +30,6 @@ const Footer = () => {
                         </div>
                     </div>
 
-                    {/* Quick Links */}
                     <div>
                         <h3 className="text-xl font-bold mb-4">Quick Links</h3>
                         <ul className="space-y-2">
@@ -63,7 +61,6 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* Customer Service */}
                     <div>
                         <h3 className="text-xl font-bold mb-4">Customer Service</h3>
                         <ul className="space-y-2">
@@ -95,7 +92,6 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* Contact Info */}
                     <div>
                         <h3 className="text-xl font-bold mb-4">Contact Us</h3>
                         <ul className="space-y-3">
@@ -121,7 +117,6 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* Payment Methods */}
                 <div className="mt-10 pt-6 border-t border-gray-800">
                     <div className="flex flex-col md:flex-row justify-between items-center">
                         <p className="text-gray-400 text-sm mb-4 md:mb-0">

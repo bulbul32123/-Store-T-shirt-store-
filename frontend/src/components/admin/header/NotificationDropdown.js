@@ -9,11 +9,9 @@ export default function NotificationDropdown() {
     const [isOpen, setIsOpen] = useState(false);
     const [notifying, setNotifying] = useState(true);
     
- 
     function toggleDropdown(e) {
         setIsOpen((prev) => !prev);
     }
-
     function closeDropdown() {
         setIsOpen(false);
     }
@@ -79,7 +77,6 @@ export default function NotificationDropdown() {
                     </button>
                 </div>
                 <ul className="flex flex-col h-auto overflow-y-auto custom-scrollbar">
-                    {/* Example notification items */}
                     <li>
                         <DropdownItem
                             onItemClick={closeDropdown}
@@ -370,7 +367,6 @@ export default function NotificationDropdown() {
                             </span>
                         </DropdownItem>
                     </li>
-                    {/* Add more items as needed */}
                 </ul>
                 <Link
                     href="/"

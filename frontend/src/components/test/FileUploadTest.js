@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useRef } from 'react';
 import axios from 'axios';
 
@@ -17,26 +16,20 @@ const FileUploadTest = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (!file) {
             setStatus('Please select a file first');
             return;
         }
 
         setStatus('Uploading...');
-
-        // Create a simple FormData with just one file
         const formData = new FormData();
         formData.append('testImage', file);
 
         try {
-            // Log FormData contents
             console.log('FormData contents:');
             for (let [key, value] of formData.entries()) {
                 console.log(`${key}: ${value instanceof File ? value.name : value}`);
             }
-
-            // Send the file to a test endpoint
             const response = await axios.post(
                 `${process.env.NEXT_PUBLIC_API_URL}/api/upload/test`,
                 formData

@@ -19,11 +19,7 @@ const Newsletter = () => {
         try {
             setLoading(true);
 
-            // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 1000));
-
-            // In a real application, you would make an API call to subscribe the user
-            // await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/newsletter/subscribe`, { email });
 
             toast.success('Thank you for subscribing to our newsletter!');
             setEmail('');

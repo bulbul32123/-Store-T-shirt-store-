@@ -1,18 +1,11 @@
 const handleAddProduct = async (formData) => {
     setLoading(true);
     try {
-        // Log the FormData keys and files
-        console.log("FormData keys:");
         for (let key of formData.keys()) {
             console.log(`- ${key}`);
         }
-
-        // Check if there are image files
         if (formData.has('productImages')) {
-            console.log("FormData contains product images");
-            // Log the number of files
             const imageFiles = formData.getAll('productImages');
-            console.log(`Number of image files: ${imageFiles.length}`);
         } else {
             console.log("No product images in FormData");
         }
@@ -22,8 +15,6 @@ const handleAddProduct = async (formData) => {
                 'Content-Type': 'multipart/form-data',
             },
         });
-
-        console.log("Product created successfully:", response.data);
         toast.success('Product added successfully');
         fetchProducts();
         setShowForm(false);

@@ -1,5 +1,4 @@
 import { FiUsers, FiShoppingBag, FiDollarSign, FiBox } from 'react-icons/fi';
-
 const AdminStats = ({ stats }) => {
   const statCards = [
     {

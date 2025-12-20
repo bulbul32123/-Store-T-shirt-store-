@@ -2,13 +2,14 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import axios from 'axios';
-import { FiShoppingCart, FiHeart, FiShare2, FiStar, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiShoppingCart, FiHeart, FiStar, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-import ProductReviews from '@/components/products/ProductReviews';
-import RelatedProducts from '@/components/products/RelatedProducts';
 import toast from 'react-hot-toast';
+import SizeSelection from '@/components/products/SizeSelection';
+import DiscountedPrice from '@/components/products/DiscountedPrice';
+import Quantity from '@/components/products/Quantity';
 
 export default function ProductDetail() {
     const { id } = useParams();
@@ -22,6 +23,7 @@ export default function ProductDetail() {
     const [selectedSize, setSelectedSize] = useState('');
     const [selectedColor, setSelectedColor] = useState('');
     const [activeImage, setActiveImage] = useState(0);
+    const [currentImages, setCurrentImages] = useState([]); // Current image set based on selected color
 
     // Fetch product data
     useEffect(() => {
@@ -30,17 +32,23 @@ export default function ProductDetail() {
                 setLoading(true);
                 const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`);
                 setProduct(data);
-                console.log(data);
 
-
-                // Set default selections
+                // Set default size
                 if (data.sizes && data.sizes.length > 0) {
                     setSelectedSize(data.sizes[0]);
                 }
 
+                // Set default color and initialize images
                 if (data.colors && data.colors.length > 0) {
                     setSelectedColor(data.colors[0].name);
+                    setCurrentImages(data.colors[0].images || []);
+                } else if (data.images && data.images.length > 0) {
+                    // Fallback to legacy images if no color variants
+                    setCurrentImages(data.images);
                 }
+
+                // Reset active image when product changes
+                setActiveImage(0);
             } catch (error) {
                 console.error('Error fetching product:', error);
                 setError('Failed to load product. Please try again later.');
@@ -54,6 +62,24 @@ export default function ProductDetail() {
         }
     }, [id]);
 
+    // Handle color change - switch image gallery
+    const handleColorChange = (colorName) => {
+        setSelectedColor(colorName);
+
+        // Find the selected color variant
+        const selectedColorVariant = product.colors.find(color => color.name === colorName);
+
+        if (selectedColorVariant && selectedColorVariant.images.length > 0) {
+            // Switch to the selected color's image gallery
+            setCurrentImages(selectedColorVariant.images);
+            setActiveImage(0); // Reset to first image of the new color
+        } else {
+            // Fallback to legacy images if color variant has no images
+            setCurrentImages(product.images || []);
+            setActiveImage(0);
+        }
+    };
+
     // Handle quantity change
     const handleQuantityChange = (value) => {
         const newQuantity = quantity + value;
@@ -63,8 +89,9 @@ export default function ProductDetail() {
     };
 
     const handleOrderPlace = () => {
+        // Order placement logic
+    };
 
-    }
     // Handle add to cart
     const handleAddToCart = () => {
         if (product.stock === 0) {
@@ -92,16 +119,9 @@ export default function ProductDetail() {
                 toast.error('Please login to add items to your wishlist');
                 return;
             }
-
-            const token = localStorage.getItem('token');
             await axios.post(
                 `${process.env.NEXT_PUBLIC_API_URL}/api/users/wishlist`,
                 { productId: product._id },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
             );
 
             toast.success('Added to wishlist!');
@@ -111,16 +131,16 @@ export default function ProductDetail() {
         }
     };
 
-    // Navigate through product images
+    // Navigate through current image set
     const nextImage = () => {
-        if (product?.images?.length > 1) {
-            setActiveImage((prev) => (prev === product?.images.length - 1 ? 0 : prev + 1));
+        if (currentImages.length > 1) {
+            setActiveImage((prev) => (prev === currentImages.length - 1 ? 0 : prev + 1));
         }
     };
 
     const prevImage = () => {
-        if (product?.images?.length > 1) {
-            setActiveImage((prev) => (prev === 0 ? product?.images?.length - 1 : prev - 1));
+        if (currentImages.length > 1) {
+            setActiveImage((prev) => (prev === 0 ? currentImages.length - 1 : prev - 1));
         }
     };
 
@@ -160,15 +180,15 @@ export default function ProductDetail() {
                     {/* Main Image */}
                     <div className="relative h-96 bg-gray-100 rounded-lg overflow-hidden">
                         <img
-                            src={product?.images && product?.images.length > 0
-                                ? product?.images[activeImage]?.url
+                            src={currentImages.length > 0
+                                ? currentImages[activeImage]?.url
                                 : '/images/placeholder.jpg'}
-                            alt={product?.name}
+                            alt={`${product?.name} - ${selectedColor}`}
                             className="w-full h-full object-contain"
                         />
 
                         {/* Image Navigation Arrows */}
-                        {product?.images && product?.images?.length > 1 && (
+                        {currentImages.length > 1 && (
                             <>
                                 <button
                                     onClick={prevImage}
@@ -193,16 +213,23 @@ export default function ProductDetail() {
                                 {product?.discount}% OFF
                             </span>
                         )}
+
+                        {/* Image Counter */}
+                        {currentImages.length > 1 && (
+                            <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
+                                {activeImage + 1} / {currentImages.length}
+                            </div>
+                        )}
                     </div>
 
                     {/* Thumbnail Images */}
-                    {product?.images && product?.images?.length > 1 && (
+                    {currentImages.length > 1 && (
                         <div className="flex space-x-2 overflow-x-auto pb-2">
-                            {product?.images?.map((image, index) => (
+                            {currentImages.map((image, index) => (
                                 <button
                                     key={index}
                                     onClick={() => setActiveImage(index)}
-                                    className={`w-20 h-20 rounded-md overflow-hidden border-2 ${activeImage === index ? 'border-blue-500' : 'border-transparent'
+                                    className={`w-20 h-20 rounded-md overflow-hidden border-2 flex-shrink-0 ${activeImage === index ? 'border-blue-500' : 'border-transparent'
                                         }`}
                                 >
                                     <img
@@ -227,8 +254,8 @@ export default function ProductDetail() {
                                     <FiStar
                                         key={i}
                                         className={`w-5 h-5 ${i < Math.round(product.averageRating)
-                                            ? 'text-yellow-400 fill-current'
-                                            : 'text-gray-300'
+                                                ? 'text-yellow-400 fill-current'
+                                                : 'text-gray-300'
                                             }`}
                                     />
                                 ))}
@@ -238,48 +265,20 @@ export default function ProductDetail() {
                             </div>
                         </div>
 
-                        <div className="flex items-center mb-6">
-                            {discountedPrice ? (
-                                <>
-                                    <span className="text-3xl font-bold text-gray-900">
-                                        ${discountedPrice?.toFixed(2)}
-                                    </span>
-                                    <span className="text-xl text-gray-500 line-through ml-3">
-                                        ${product.price?.toFixed(2)}
-                                    </span>
-                                </>
-                            ) : (
-                                <span className="text-3xl font-bold text-gray-900">
-                                    ${product.price?.toFixed(2)}
-                                </span>
-                            )}
-                        </div>
+                        <DiscountedPrice discountedPrice={discountedPrice} product={product} />
 
                         <p className="text-gray-700 mb-6">{product.description}</p>
 
                         <div className="space-y-6">
-                            {/* Size Selection */}
                             {product.sizes && product.sizes.length > 0 && (
-                                <div>
-                                    <h3 className="text-sm font-medium text-gray-900 mb-2">Size</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {product.sizes.map((size) => (
-                                            <button
-                                                key={size}
-                                                onClick={() => setSelectedSize(size)}
-                                                className={`px-4 py-2 border rounded-md ${selectedSize === size
-                                                    ? 'border-blue-500 bg-blue-50 text-blue-600'
-                                                    : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                                                    }`}
-                                            >
-                                                {size}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
+                                <SizeSelection
+                                    product={product}
+                                    setSelectedSize={setSelectedSize}
+                                    selectedSize={selectedSize}
+                                />
                             )}
 
-                            {/* Color Selection */}
+                            {/* Color Selection with Amazon-style behavior */}
                             {product?.colors?.length > 0 && (
                                 <div>
                                     <h3 className="text-sm font-medium text-gray-900 mb-2">Color</h3>
@@ -287,75 +286,54 @@ export default function ProductDetail() {
                                         {product?.colors?.map((color) => (
                                             <button
                                                 key={color?.name}
-                                                onClick={() => setSelectedColor(color?.name)}
-                                                className={`w-10 h-10 rounded-full border-2 ${selectedColor === color?.name
-                                                    ? 'border-blue-500 ring-2 ring-blue-200'
-                                                    : 'border-gray-300'
+                                                onClick={() => handleColorChange(color?.name)}
+                                                className={`w-12 h-12 rounded-lg border-2 transition-all duration-200 ${selectedColor === color?.name
+                                                        ? 'border-blue-500 ring-2 ring-blue-200 scale-105'
+                                                        : 'border-gray-300 hover:border-gray-400'
                                                     }`}
                                                 style={{ backgroundColor: color?.code }}
                                                 title={color?.name}
-                                            ></button>
+                                            >
+                                                {selectedColor === color?.name && (
+                                                    <div className="w-full h-full rounded-lg bg-white bg-opacity-20 flex items-center justify-center">
+                                                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                                                    </div>
+                                                )}
+                                            </button>
                                         ))}
                                     </div>
-                                    <p className="text-sm text-gray-500 mt-1">
-                                        Selected: {selectedColor}
+                                    <p className="text-sm text-gray-500 mt-2">
+                                        <span className="font-medium">Selected:</span> {selectedColor}
+                                        {product.colors.find(c => c.name === selectedColor)?.images.length > 0 && (
+                                            <span className="ml-2">
+                                                ({product.colors.find(c => c.name === selectedColor)?.images.length} images)
+                                            </span>
+                                        )}
                                     </p>
                                 </div>
                             )}
 
-                            {/* Quantity */}
-                            <div>
-                                <h3 className="text-sm font-medium text-gray-900 mb-2">Quantity</h3>
-                                <div className="flex items-center">
-                                    <button
-                                        onClick={() => handleQuantityChange(-1)}
-                                        disabled={quantity <= 1}
-                                        className={`w-10 h-10 rounded-l-md border border-gray-300 flex items-center justify-center ${quantity <= 1 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'
-                                            }`}
-                                    >
-                                        -
-                                    </button>
-                                    <input
-                                        type="number"
-                                        value={quantity}
-                                        onChange={(e) => {
-                                            const val = parseInt(e.target.value);
-                                            if (val > 0 && val <= product?.stock) {
-                                                setQuantity(val);
-                                            }
-                                        }}
-                                        min="1"
-                                        max={product?.stock}
-                                        className="w-16 h-10 border-t text-black border-b border-gray-300 text-center"
-                                    />
-                                    <button
-                                        onClick={() => handleQuantityChange(1)}
-                                        disabled={quantity >= product?.stock}
-                                        className={`w-10 h-10 rounded-r-md border border-gray-300 flex items-center justify-center ${quantity >= product?.stock ? 'text-gray-400 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'
-                                            }`}
-                                    >
-                                        +
-                                    </button>
-                                    <span className="text-sm text-gray-500 ml-4">
-                                        {product?.stock} available
-                                    </span>
-                                </div>
-                            </div>
+                            <Quantity
+                                handleQuantityChange={handleQuantityChange}
+                                quantity={quantity}
+                                setQuantity={setQuantity}
+                                product={product}
+                            />
 
                             {/* Action Buttons */}
                             <div className="flex flex-col sm:flex-row gap-4">
                                 <button
                                     onClick={handleOrderPlace}
-                                    className="flex-1 py-3 px-6  rounded-lg border border-gray-300 flex items-center justify-center bg-blue-600 text-white hover:text-black cursor-pointer font-medium text-gray-700 hover:bg-gray-50"
+                                    className="flex-1 py-3 px-6 rounded-lg border border-gray-300 flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors"
                                 >
                                     Order Now
                                 </button>
                                 <button
                                     onClick={handleAddToCart}
                                     disabled={product?.stock === 0}
-                                    className={`flex-1 py-3 px-6 rounded-lg flex items-center justify-center font-medium ${product?.stock === 0
-                                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                        : 'hover:bg-blue-600 hover:text-white text-black border border-gray-300 cursor-pointer hover:bg-blue-700'
+                                    className={`flex-1 py-3 px-6 rounded-lg flex items-center justify-center font-medium transition-colors ${product?.stock === 0
+                                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                            : 'hover:bg-blue-700 hover:text-white text-black border border-gray-300'
                                         }`}
                                 >
                                     <FiShoppingCart className="mr-2" />
@@ -364,9 +342,9 @@ export default function ProductDetail() {
 
                                 <button
                                     onClick={handleAddToWishlist}
-                                    className="py-3 px-4  rounded-lg border border-gray-300 flex items-center justify-center cursor-pointer font-medium text-gray-700 hover:bg-gray-50"
+                                    className="py-3 px-4 rounded-lg border border-gray-300 flex items-center justify-center font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                                 >
-                                    <FiHeart className="" />
+                                    <FiHeart />
                                 </button>
                             </div>
 
@@ -382,23 +360,40 @@ export default function ProductDetail() {
                                         </li>
                                     )}
                                     <li><span className="font-medium">In Stock:</span> {product?.stock ? 'Yes' : 'No'}</li>
+                                    {product?.colors?.length > 0 && (
+                                        <li>
+                                            <span className="font-medium">Available Colors:</span>{' '}
+                                            {product.colors.map(color => color.name).join(', ')}
+                                        </li>
+                                    )}
+                                    {product?.sizes?.length > 0 && (
+                                        <li>
+                                            <span className="font-medium">Available Sizes:</span>{' '}
+                                            {product.sizes.join(', ')}
+                                        </li>
+                                    )}
                                 </ul>
                             </div>
+
+                            {/* Color Variant Info */}
+                            {product?.colors?.length > 0 && selectedColor && (
+                                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <h4 className="font-medium text-blue-900 mb-2">About {selectedColor} Variant</h4>
+                                    <p className="text-sm text-blue-800">
+                                        You're viewing the {selectedColor.toLowerCase()} variant of this product.
+                                        {currentImages.length > 1 && (
+                                            ` This variant has ${currentImages.length} high-quality images showing different angles and details.`
+                                        )}
+                                        {product.colors.length > 1 && (
+                                            ` Choose from ${product.colors.length} different color options above to see their respective image galleries.`
+                                        )}
+                                    </p>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
             </div>
-
-            {/* Product Reviews */}
-            <div className="mt-16">
-                <ProductReviews productId={id} reviews={product.ratings || []} />
-            </div>
-
-            {/* Related Products */}
-            <div className="mt-16">
-                <h2 className="text-2xl font-bold mb-6">You May Also Like</h2>
-                {/* <RelatedProducts category={product.category} currentProductId={id} /> */}
-            </div>
         </div>
     );
-} 
+}

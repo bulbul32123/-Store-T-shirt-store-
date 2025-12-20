@@ -9,8 +9,6 @@ import { API_URL } from '@/utils/config';
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
-
-// Configure axios defaults for cookie-based authentication
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
@@ -19,14 +17,11 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const router = useRouter();
-
-    // Configure axios interceptor for handling responses
     useEffect(() => {
         const responseInterceptor = axios.interceptors.response.use(
             (response) => response,
             (error) => {
                 if (error.response?.status === 401) {
-                    // Token expired or invalid, clear user state
                     setUser(null);
                     if (window.location.pathname !== '/auth/login') {
                         toast.error('Session expired. Please login again.');
@@ -36,18 +31,12 @@ export const AuthProvider = ({ children }) => {
                 return Promise.reject(error);
             }
         );
-
-        // Cleanup interceptor on unmount
         return () => axios.interceptors.response.eject(responseInterceptor);
     }, [router]);
-
-    // Check if user is logged in on initial load
     useEffect(() => {
         const checkUserLoggedIn = async () => {
             try {
                 setLoading(true);
-
-                // Try to get current user using cookies
                 const { data } = await axios.get(`${API_URL}/api/auth/me`);
 
                 if (data.success && data.user) {
@@ -58,8 +47,6 @@ export const AuthProvider = ({ children }) => {
             } catch (error) {
                 console.log('No active session found');
                 setUser(null);
-
-                // Only show error if it's not a simple 401 (no token)
                 if (error.response?.status !== 401) {
                     console.error('Auth check error:', error.response?.data?.message || error.message);
                 }
@@ -71,7 +58,6 @@ export const AuthProvider = ({ children }) => {
         checkUserLoggedIn();
     }, []);
 
-    // Register user
     const register = async (userData) => {
         try {
             setLoading(true);
@@ -97,8 +83,6 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
         }
     };
-
-    // Login user
     const login = async (email, password) => {
         try {
             setLoading(true);
@@ -116,8 +100,6 @@ export const AuthProvider = ({ children }) => {
             if (data.success && data.user) {
                 setUser(data.user);
                 toast.success(data.message || 'Login successful!');
-
-                // Redirect to dashboard or intended page
                 const redirectUrl = sessionStorage.getItem('redirectAfterLogin') || '/';
                 sessionStorage.removeItem('redirectAfterLogin');
                 router.push(redirectUrl);
@@ -172,25 +154,20 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // Logout user
     const logout = async () => {
         try {
-            // Call logout endpoint to clear the cookie
             await axios.post(`${API_URL}/api/auth/logout`);
 
             setUser(null);
             toast.success('Logged out successfully');
             router.push('/');
         } catch (error) {
-            // Even if the request fails, clear the user state
             console.error('Logout error:', error);
             setUser(null);
             toast.success('Logged out successfully');
             router.push('/');
         }
     };
-
-    // Update user profile
     const updateProfile = async (userData) => {
         try {
             setLoading(true);
@@ -216,8 +193,6 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
         }
     };
-
-    // Forgot password
     const forgotPassword = async (email) => {
         try {
             setLoading(true);
@@ -240,14 +215,10 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
         }
     };
-
-    // Reset password
     const resetPassword = async (token, password) => {
         try {
             setLoading(true);
             setError(null);
-
-            // Note: Updated to match your backend route structure
             const { data } = await axios.put(`${API_URL}/api/auth/reset-password?token=${token}`, {
                 password
             });
@@ -268,14 +239,10 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
         }
     };
-
-    // Verify email
     const verifyEmail = async (token) => {
         try {
             setLoading(true);
             setError(null);
-
-            // Note: Updated to match your backend route structure
             const { data } = await axios.get(`${API_URL}/api/auth/verify-email?token=${token}`);
 
             if (data.success) {
@@ -293,8 +260,6 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
         }
     };
-
-    // Refresh user data
     const refreshUser = async () => {
         try {
             const { data } = await axios.get(`${API_URL}/api/auth/me`);
@@ -308,28 +273,19 @@ export const AuthProvider = ({ children }) => {
             return null;
         }
     };
-
-    // Check if user is authenticated
     const isAuthenticated = !!user;
-
-    // Check if user has specific role
     const hasRole = (role) => {
         return user?.role === role;
     };
-
-    // Check if user is verified
     const isVerified = () => {
         return user?.isVerified === true;
     };
 
     const value = {
-        // State
         user,
         loading,
         error,
         isAuthenticated,
-
-        // Actions
         register,
         login,
         logout,
@@ -341,8 +297,6 @@ export const AuthProvider = ({ children }) => {
 
         hasRole,
         isVerified,
-
-        // Clear error function
         clearError: () => setError(null)
     };
 

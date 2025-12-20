@@ -1,8 +1,6 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Link from 'next/link';
 import ProductCard from '@/components/products/ProductCard';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 

@@ -1,5 +1,4 @@
 'use client';
-
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FiHome, FiBox, FiShoppingBag, FiUsers, FiSettings, FiFileText, FiMessageSquare } from 'react-icons/fi';

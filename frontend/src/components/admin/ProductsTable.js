@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useRef, useEffect } from 'react';
 import { FiEdit2, FiTrash2, FiEye, FiChevronUp, FiChevronDown, FiArrowLeft, FiArrowRight, FiCalendar, FiClock } from 'react-icons/fi';
 import Image from 'next/image';
@@ -36,7 +35,6 @@ export default function ProductsTable({
             ) {
                 setStatusDropdownOpen(null);
             }
-    
             if (
                 dateFilterRef.current &&
                 !dateFilterRef.current.contains(event.target)
@@ -44,72 +42,12 @@ export default function ProductsTable({
                 setIsDateFilterOpen(false);
             }
         } 
-    
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, []); // Working on Products Status Dropdown
+    }, []); 
     
-
-    const renderStatusBadge = (status, productId) => {
-        const productStatus = status || 'active';
-
-        let bgColor, textColor;
-
-        switch (productStatus.toLowerCase()) {
-            case 'pending':
-                bgColor = 'bg-yellow-100';
-                textColor = 'text-yellow-800';
-                break;
-            case 'inactive':
-                bgColor = 'bg-red-100';
-                textColor = 'text-red-800';
-                break;
-            case 'active':
-            default:
-                bgColor = 'bg-green-100';
-                textColor = 'text-green-800';
-                break;
-        }
-
-        return (
-            <div className="relative" ref={statusDropdownRef}>
-            <button
-              onClick={() => setStatusDropdownOpen(statusDropdownOpen === productId ? null : productId)}
-              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${bgColor} ${textColor} capitalize hover:opacity-80 transition-opacity`}
-            >
-              {productStatus}
-              <FiChevronDown className="ml-1" />
-            </button>
-          
-            {statusDropdownOpen === productId && (
-              <div className="absolute z-10 mt-1 w-32 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5">
-                <button
-                  className="block w-full text-left px-4 py-2 text-sm text-green-800 hover:bg-green-100"
-                  onClick={() => handleStatusChange(productId, 'active')}
-                >
-                  Active
-                </button>
-                <button
-                  className="block w-full text-left px-4 py-2 text-sm text-yellow-800 hover:bg-yellow-100"
-                  onClick={() => handleStatusChange(productId, 'pending')}
-                >
-                  Pending
-                </button>
-                <button
-                  className="block w-full text-left px-4 py-2 text-sm text-red-800 hover:bg-red-100"
-                  onClick={() => handleStatusChange(productId, 'inactive')}
-                >
-                  Inactive
-                </button>
-              </div>
-            )}
-          </div>
-          
-        );
-    };
-
     const handleStatusChange = (productId, newStatus) => {
         if (onStatusChange) {
             onStatusChange(productId, newStatus);
