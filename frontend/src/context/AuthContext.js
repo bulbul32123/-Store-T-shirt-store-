@@ -1,5 +1,5 @@
+// /src/context/AuthContext.js
 'use client';
-
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -17,29 +17,30 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const router = useRouter();
-    useEffect(() => {
-        const responseInterceptor = axios.interceptors.response.use(
-            (response) => response,
-            (error) => {
-                if (error.response?.status === 401) {
-                    setUser(null);
-                    if (window.location.pathname !== '/auth/login') {
-                        toast.error('Session expired. Please login again.');
-                        router.push('/auth/login');
-                    }
+ useEffect(() => {
+    const responseInterceptor = axios.interceptors.response.use(
+        (response) => response,
+        (error) => {
+            if (error.response?.status === 401) {
+                setUser(null);
+                if (window.location.pathname !== '/auth/login') {
+                    toast.error('Session expired. Please login again.');
                 }
-                return Promise.reject(error);
             }
-        );
-        return () => axios.interceptors.response.eject(responseInterceptor);
-    }, [router]);
+            
+            // ✅ CRUCIAL: Forward the error so the calling function's catch block runs
+            return Promise.reject(error); 
+        }
+    );
+    return () => axios.interceptors.response.eject(responseInterceptor);
+}, [router]);
     useEffect(() => {
         const checkUserLoggedIn = async () => {
             try {
                 setLoading(true);
                 const { data } = await axios.get(`${API_URL}/api/auth/me`);
-
-                if (data.success && data.user) {
+                 console.log(data)  
+             if (data.success && data.user) {
                     setUser(data.user);
                 } else {
                     setUser(null);
