@@ -54,7 +54,4 @@ export function getWatchlistMood(items, updatedAt, now = Date.now()) {
 }
 
 
-git add src/helpers
-git commit -m 'updated helpers files'
-git push -u origin main
       
