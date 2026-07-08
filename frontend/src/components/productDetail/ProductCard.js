@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { FiShoppingCart, FiHeart, FiEye } from 'react-icons/fi';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
@@ -52,7 +53,6 @@ const ProductCard = ({ product }) => {
 
         addToCart(product, 1, selectedSize, selectedColor);
     };
-
     return (
         <div
             className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl"
@@ -61,9 +61,12 @@ const ProductCard = ({ product }) => {
         >
             <div className="relative h-64 overflow-hidden">
                 <Link href={`/product/${product._id}`}>
-                    <img
-                        src={product.images && product.images.length > 0 ? product.images[0].url : '/images/placeholder.jpg'}
+                    <Image
+                        src={product.colors[0].images[0].url}
                         alt={product.name}
+                        height={100}
+                        width={100}
+                        priority
                         className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                     />
                 </Link>
@@ -78,7 +81,7 @@ const ProductCard = ({ product }) => {
                             Featured
                         </span>
                     )}
-                    {!product.inStock && (
+                    {!product.stock && (
                         <span className="bg-gray-700 text-white text-xs font-bold px-2 py-1 rounded">
                             Out of Stock
                         </span>
@@ -149,9 +152,6 @@ const ProductCard = ({ product }) => {
                             </span>
                         )}
                     </div>
-                    <span className="text-sm text-gray-500">
-                        {product.category}
-                    </span>
                 </div>
                 {isHovered && (
                     <div className="mb-3 space-y-2">
@@ -199,14 +199,14 @@ const ProductCard = ({ product }) => {
 
                 <button
                     onClick={handleQuickAddToCart}
-                    disabled={!product.inStock || product.stockQuantity === 0}
-                    className={`w-full py-2 rounded-lg flex items-center justify-center transition-colors ${!product.inStock || product.stockQuantity === 0
+                    disabled={!product.stock || product.stock === 0}
+                    className={`w-full py-2 rounded-lg flex items-center justify-center transition-colors ${!product.stock || product.stock === 0
                             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             : 'bg-blue-600 text-white hover:bg-blue-700'
                         }`}
                 >
                     <FiShoppingCart className="mr-2" />
-                    {!product.inStock || product.stockQuantity === 0 ? 'Out of Stock' : 'Add to Cart'}
+                    {!product.stock || product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
                 </button>
             </div>
         </div>

@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import ProductCard from '@/components/products/ProductCard';
+import ProductCard from '@/components/productDetail/ProductCard';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 const PopularProducts = () => {

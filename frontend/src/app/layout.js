@@ -1,8 +1,11 @@
 import './globals.css'
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
+import { WatchlistProvider } from '@/context/WatchlistContext';
+import { CompareProvider } from '@/context/CompareContext';
 import { Toaster } from "react-hot-toast";
 import AppLayer from '@/components/layout/AppLayer';
+import { NotificationProvider } from '@/context/NotificationContext';
 
 
 export const metadata = {
@@ -14,16 +17,20 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className={''}>
+      <body className={'h-full w-full'}>
         <AuthProvider>
-          <CartProvider>
+        <NotificationProvider>
+        <CartProvider>
+        <WatchlistProvider>
+        <CompareProvider>
             <Toaster position="top-center" />
-            <div className="flex flex-col min-h-screen">
               <AppLayer>
                 {children}
               </AppLayer>
-            </div>
-          </CartProvider>
+        </CompareProvider>
+        </WatchlistProvider>
+        </CartProvider>
+        </NotificationProvider>
         </AuthProvider>
       </body>
     </html>

@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -165,12 +164,6 @@ export default function AdminCategories() {
                                         Category
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Description
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Parent
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Featured
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -201,16 +194,6 @@ export default function AdminCategories() {
                                                         <div className="text-sm font-medium text-gray-900">{category.name}</div>
                                                         <div className="text-sm text-gray-500">{category.slug}</div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="text-sm text-gray-900 max-w-xs truncate">
-                                                    {category.description || 'No description'}
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-gray-900">
-                                                    {category.parent?.name || 'None'}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">

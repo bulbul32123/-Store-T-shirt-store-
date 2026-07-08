@@ -4,7 +4,6 @@ const User = require('../models/User');
 const { errorHandler } = require('../utils/errorHandler');
 exports.getStats = async (req, res) => {
     try {
-        console.log("working");
         if (req.user.role !== 'admin') {
             return res.status(403).json({
                 success: false,

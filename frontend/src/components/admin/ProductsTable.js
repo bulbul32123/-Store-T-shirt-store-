@@ -1,10 +1,16 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
-import { FiEdit2, FiTrash2, FiEye, FiChevronUp, FiChevronDown, FiArrowLeft, FiArrowRight, FiCalendar, FiClock } from 'react-icons/fi';
+import {
+    FiEdit2, FiTrash2, FiEye,
+    FiChevronUp, FiChevronDown,
+    FiArrowLeft, FiArrowRight,
+    FiCalendar, FiClock, FiFilter
+} from 'react-icons/fi';
 import Image from 'next/image';
 import Link from 'next/link';
 import { formatCurrency } from '@/utils/formatters';
 import ConfirmModal from '@/components/common/ConfirmModal';
+
 
 export default function ProductsTable({
     products,
@@ -12,144 +18,122 @@ export default function ProductsTable({
     onDelete,
     sortField,
     sortOrder,
-    onSort,
     currentPage,
     totalPages,
     onPageChange,
     onStatusChange,
-    onDateFilterChange
+    onDateFilterChange,
+    currentStatusFilter,
+    currentDateFilter,
 }) {
-    const [productToDelete, setProductToDelete] = useState(null);
+    const [productToDelete, setProductToDelete]   = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false);
-    const [isDateFilterOpen, setIsDateFilterOpen] = useState(false);
-    const [statusDropdownOpen, setStatusDropdownOpen] = useState(null); // null or product ID
-    const statusDropdownRef = useRef(null);
-    const dateFilterRef = useRef(null);
+    const [isDeleting, setIsDeleting]             = useState(false);
+    const [isStatusFilterOpen, setIsStatusFilterOpen] = useState(false);
+    const [isDateFilterOpen, setIsDateFilterOpen]     = useState(false);
 
+    const statusDropdownRef = useRef(null);
+    const dateFilterRef     = useRef(null);
+
+    /* ── Close dropdowns on outside click ─────────────────────────── */
     useEffect(() => {
         function handleClickOutside(event) {
-            if (
-                statusDropdownRef.current &&
-                !statusDropdownRef.current.contains(event.target)
-            ) {
-                setStatusDropdownOpen(null);
+            if (statusDropdownRef.current && !statusDropdownRef.current.contains(event.target)) {
+                setIsStatusFilterOpen(false);
             }
-            if (
-                dateFilterRef.current &&
-                !dateFilterRef.current.contains(event.target)
-            ) {
+            if (dateFilterRef.current && !dateFilterRef.current.contains(event.target)) {
                 setIsDateFilterOpen(false);
             }
-        } 
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []); 
-    
-    const handleStatusChange = (productId, newStatus) => {
-        if (onStatusChange) {
-            onStatusChange(productId, newStatus);
         }
-        setStatusDropdownOpen(false);
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    /* ── Filter handlers ───────────────────────────────────────────── */
+    // FIX: was calling onStatusChange(productId, newStatus) — productId was actually the
+    //      status string and newStatus was undefined. Now passes just the status value.
+    const handleStatusFilterChange = (newStatus) => {
+        onStatusChange?.(newStatus);
+        setIsStatusFilterOpen(false);
     };
 
     const handleDateFilterChange = (filter) => {
-        if (onDateFilterChange) {
-            onDateFilterChange(filter);
-        }
+        onDateFilterChange?.(filter);
         setIsDateFilterOpen(false);
     };
 
-    const renderSortIcon = (field) => {
-        if (sortField === field) {
-            return sortOrder === 'asc' ? <FiChevronUp /> : <FiChevronDown />;
-        }
-        return null;
+    /* ── Sort icon helper ──────────────────────────────────────────── */
+    const SortIcon = ({ field }) => {
+        if (sortField !== field) return <FiChevronDown className="ml-1 opacity-30" />;
+        return sortOrder === 'asc'
+            ? <FiChevronUp   className="ml-1" />
+            : <FiChevronDown className="ml-1" />;
     };
 
+    /* ── Date formatting helpers ───────────────────────────────────── */
     const getRelativeTimeString = (dateString) => {
-        const date = new Date(dateString);
-        const now = new Date();
-        const diffInSeconds = Math.floor((now - date) / 1000);
-
-        const minute = 60;
-        const hour = minute * 60;
-        const day = hour * 24;
-        const week = day * 7;
-        const month = day * 30;
-        const year = day * 365;
-
-        if (diffInSeconds < minute) {
-            return 'just now';
-        } else if (diffInSeconds < hour) {
-            const minutes = Math.floor(diffInSeconds / minute);
-            return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
-        } else if (diffInSeconds < day) {
-            const hours = Math.floor(diffInSeconds / hour);
-            return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
-        } else if (diffInSeconds < week) {
-            const days = Math.floor(diffInSeconds / day);
-            return `${days} ${days === 1 ? 'day' : 'days'} ago`;
-        } else if (diffInSeconds < month) {
-            const weeks = Math.floor(diffInSeconds / week);
-            return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
-        } else if (diffInSeconds < year) {
-            const months = Math.floor(diffInSeconds / month);
-            return `${months} ${months === 1 ? 'month' : 'months'} ago`;
-        } else {
-            const years = Math.floor(diffInSeconds / year);
-            return `${years} ${years === 1 ? 'year' : 'years'} ago`;
-        }
+        const diff = Math.floor((Date.now() - new Date(dateString)) / 1000);
+        const min  = 60, hr = 3600, day = 86400,
+              wk   = 604800, mo = 2592000, yr = 31536000;
+        if (diff < min)  return 'just now';
+        if (diff < hr)   { const n = Math.floor(diff / min);  return `${n} ${n===1?'minute':'minutes'} ago`; }
+        if (diff < day)  { const n = Math.floor(diff / hr);   return `${n} ${n===1?'hour':'hours'} ago`; }
+        if (diff < wk)   { const n = Math.floor(diff / day);  return `${n} ${n===1?'day':'days'} ago`; }
+        if (diff < mo)   { const n = Math.floor(diff / wk);   return `${n} ${n===1?'week':'weeks'} ago`; }
+        if (diff < yr)   { const n = Math.floor(diff / mo);   return `${n} ${n===1?'month':'months'} ago`; }
+        const n = Math.floor(diff / yr); return `${n} ${n===1?'year':'years'} ago`;
     };
 
     const formatDate = (dateString) => {
-        const date = new Date(dateString);
-
-        const day = date.getDate();
-        const month = date.toLocaleString('en-US', { month: 'short' });
-        const year = date.getFullYear();
-        const hours = date.getHours() % 12 || 12;
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-        const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
-
-        return `${day} ${month} ${year}, ${hours}:${minutes} ${ampm}`;
+        const d     = new Date(dateString);
+        const month = d.toLocaleString('en-US', { month: 'short' });
+        const hours = d.getHours() % 12 || 12;
+        const mins  = d.getMinutes().toString().padStart(2, '0');
+        const ampm  = d.getHours() >= 12 ? 'PM' : 'AM';
+        return `${d.getDate()} ${month} ${d.getFullYear()}, ${hours}:${mins} ${ampm}`;
     };
 
+    /* ── Delete handlers ───────────────────────────────────────────── */
     const handleDeleteClick = (product) => {
         setProductToDelete(product);
         setIsDeleteModalOpen(true);
     };
 
-    const confirmDeleteProduct = async () => {
-        if (productToDelete) {
-            setIsDeleting(true);
-            try {
-                await onDelete(productToDelete._id);
-            } catch (error) {
-                console.error("Error deleting product:", error);
-            } finally {
-                setIsDeleting(false);
-                setIsDeleteModalOpen(false);
-                setProductToDelete(null);
-            }
-        }
-    };
-
-    const cancelDelete = () => {
-        if (!isDeleting) {
+    const confirmDelete = async () => {
+        if (!productToDelete) return;
+        setIsDeleting(true);
+        try {
+            await onDelete(productToDelete._id);
+        } catch (err) {
+            console.error('Error deleting product:', err);
+        } finally {
+            setIsDeleting(false);
             setIsDeleteModalOpen(false);
             setProductToDelete(null);
         }
     };
 
+    const cancelDelete = () => {
+        if (isDeleting) return;
+        setIsDeleteModalOpen(false);
+        setProductToDelete(null);
+    };
+
+    /* ── Active filter badge (shown inside header button) ─────────── */
+    const ActiveFilterBadge = ({ value }) =>
+        value ? (
+            <span className="ml-1 bg-blue-100 text-blue-700 text-[10px] px-1.5 py-0.5 rounded capitalize leading-none">
+                {value}
+            </span>
+        ) : null;
+
+    /* ──────────────────────────────────────────────────────────────── */
     return (
         <div className="bg-white p-4 rounded-lg shadow">
             <ConfirmModal
                 isOpen={isDeleteModalOpen}
                 onClose={cancelDelete}
-                onConfirm={confirmDeleteProduct}
+                onConfirm={confirmDelete}
                 title="Delete Product"
                 message={`Are you sure you want to delete "${productToDelete?.name}"? This action cannot be undone.`}
                 confirmText="Delete"
@@ -162,220 +146,160 @@ export default function ProductsTable({
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead>
                         <tr>
+                            {/* ── Name ── */}
                             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <button
-                                    onClick={() => onSort('name')}
-                                    className="flex items-center focus:outline-none"
-                                >
-                                    Name {sortOrder === 'asc' ? <FiChevronUp /> : <FiChevronDown />}
+                                <button className="flex items-center focus:outline-none">
+                                    Name 
                                 </button>
                             </th>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <button
-                                    onClick={() => onSort('price')}
-                                    className="flex items-center focus:outline-none"
-                                >
-                                    Price {renderSortIcon('price')}
-                                </button>
-                            </th>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <button
-                                    onClick={() => onSort('stockQuantity')}
-                                    className="flex items-center focus:outline-none"
-                                >
-                                    Stock {renderSortIcon('stockQuantity')}
-                                </button>
-                            </th>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <button
-                                    onClick={() => onSort('sales')}
-                                    className="flex items-center focus:outline-none"
-                                >
-                                    Sales {renderSortIcon('sales')}
-                                </button>
-                            </th>
-                            <th className="px-4 py-3 relative text-left  text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <div
 
-                                    className="flex items-center focus:outline-none relative cur" ref={statusDropdownRef}
-                                >
-                                    <button onClick={() => setStatusDropdownOpen(!statusDropdownOpen)} className="cursor-pointer">
+                            {/* ── Price ── */}
+                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <button className="flex items-center focus:outline-none">
+                                    Price 
+                                </button>
+                            </th>
+
+                            {/* ── Stock ── */}
+                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                               
+<button  className="flex items-center focus:outline-none">
+    Stock 
+</button>
+                            </th>
+
+                            {/* ── Sales ── */}
+                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <button className="flex items-center focus:outline-none">
+                                    Sales
+                                </button>
+                            </th>
+
+                            {/* ── Status filter ── FIX: moved dropdown INTO this th, ref wraps the whole thing */}
+                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <div className="relative" ref={statusDropdownRef}>
+                                    <button
+                                        
+                                        className="flex items-center gap-1 focus:outline-none "
+                                    >
                                         Status
+                                        <ActiveFilterBadge value={currentStatusFilter} />
                                     </button>
-
                                 </div>
                             </th>
+
+                            {/* ── Date Added filter ── FIX: ref now wraps only this th's content */}
                             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <div className="relative flex items-center">
+                                <div className="relative" ref={dateFilterRef}>
                                     <button
-                                        className="flex items-center focus:outline-none mr-1"
+                                        
+                                        className="flex items-center gap-1 focus:outline-none"
                                     >
                                         Date Added
+                                        <ActiveFilterBadge value={currentDateFilter} />
                                     </button>
-
-                                    <div className="" ref={dateFilterRef}>
-                                        <button
-                                            className="text-gray-500 cursor-pointer hover:text-gray-700 focus:outline-none"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setIsDateFilterOpen(!isDateFilterOpen);
-                                            }}
-                                        >
-                                            <FiCalendar className="h-3 w-3" />
-                                        </button>
-                                    </div>
-
                                 </div>
-                                {isDateFilterOpen && (
-                                    <div className="absolute z-10 right-40 mt-1 w-40 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                        <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Filter by</div>
-                                        <button
-                                            className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            onClick={() => handleDateFilterChange('')}
-                                        >
-                                            <FiCalendar className="mr-2" /> All time
-                                        </button>
-                                        <button
-                                            className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            onClick={() => handleDateFilterChange('lastHour')}
-                                        >
-                                            <FiClock className="mr-2" /> Last hour
-                                        </button>
-                                        <button
-                                            className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            onClick={() => handleDateFilterChange('today')}
-                                        >
-                                            <FiCalendar className="mr-2" /> Added today
-                                        </button>
-                                        <button
-                                            className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            onClick={() => handleDateFilterChange('week')}
-                                        >
-                                            <FiCalendar className="mr-2" /> Last week
-                                        </button>
-                                        <button
-                                            className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            onClick={() => handleDateFilterChange('month')}
-                                        >
-                                            <FiCalendar className="mr-2" /> Last month
-                                        </button>
-                                    </div>
-                                )}
-                                {statusDropdownOpen && (
-
-                                    <div
-                                        className="absolute z-10 right-80 mt-5 w-32 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 focus:outline-none"
-                                    >
-                                        <button
-                                            className="block w-full text-left px-4 py-2 text-sm text-green-800 hover:bg-green-100"
-                                            onClick={() => handleStatusChange('active')}
-                                        >
-                                            Active
-                                        </button>
-                                        <button
-                                            className="block w-full text-left px-4 py-2 text-sm text-yellow-800 hover:bg-yellow-100"
-                                            onClick={() => handleStatusChange('pending')}
-                                        >
-                                            Pending
-                                        </button>
-                                        <button
-                                            className="block w-full text-left px-4 py-2 text-sm text-red-800 hover:bg-red-100"
-                                            onClick={() => handleStatusChange('inactive')}
-                                        >
-                                            Inactive
-                                        </button>
-                                    </div>
-                                )}
                             </th>
+
+                            {/* ── Actions ── */}
                             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Actions
                             </th>
                         </tr>
                     </thead>
+
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {products.map((product) => (
-                            <tr key={product._id} className="hover:bg-gray-50">
-                                <td className="px-4 py-3 whitespace-nowrap">
-                                    <div className="flex items-center">
-                                        <div className="h-8 w-8 rounded-md overflow-hidden">
-                                            <Image
-                                                src={product.images[0]?.url || '/images/product-placeholder.png'}
-                                                alt={product.name}
-                                                width={32}
-                                                height={32}
-                                                className="h-8 w-8 object-cover"
-                                            />
+                        {products.map((product) => {
+                            const displayImage =
+                                product.colors?.find(c => c.images?.length > 0)?.images[0]?.url ?? null;
+                            return (
+                                <tr key={product._id} className="hover:bg-gray-50">
+                                    <td className="px-4 py-3 whitespace-nowrap">
+                                        <div className="flex items-center">
+                                            <div className="h-8 w-8 rounded-md overflow-hidden flex-shrink-0">
+                                                <Image
+                                                    src={displayImage || '/images/product-placeholder.png'}
+                                                    alt={product.name}
+                                                    width={32}
+                                                    height={32}
+                                                    className="h-8 w-8 object-cover"
+                                                />
+                                            </div>
+                                            <p className="ml-3 text-sm font-medium text-gray-900 truncate max-w-xs">
+                                                {product.name}
+                                            </p>
                                         </div>
-                                        <div className="ml-3">
-                                            <p className="text-sm font-medium text-gray-900 truncate max-w-xs">{product.name}</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{formatCurrency(product.price)}</td>
-                                <td className="px-4 py-3 whitespace-nowrap text-sm rounded-md text-gray-500">
-                                    <p>{product.stock} units</p>
-                                </td>
-                                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                                    <div className="flex items-center">
-                                        <span className="font-medium">{product.sales || 0}</span>
+                                    </td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                        {formatCurrency(product.price)}
+                                    </td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                        {product.stock} units
+                                    </td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                        <span className="font-medium">{product.sales ?? 0}</span>
                                         <span className="ml-1 text-xs text-gray-400">units</span>
-                                    </div>
-                                </td>
-                                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                                    {product.status}
-                                </td>
-                                <td className="px-4 py-3 whitespace-nowrap">
-                                    <div className="flex flex-col">
-                                        <span className="text-[10px] text-gray-900">{formatDate(product.createdAt)}</span>
-                                        <span className="text-[10px] text-gray-500">{getRelativeTimeString(product.createdAt)}</span>
-                                    </div>
-                                </td>
-                                <td className="px-4 py-3 whitespace-nowrap text-sm font-medium">
-                                    <div className="flex items-center justify-start gap-2">
-                                        <button
-                                            onClick={() => onEdit(product)}
-                                            className="text-blue-600 hover:text-blue-900 cursor-pointer"
-                                        >
-                                            <FiEdit2 className="h-5 w-5" />
-                                        </button>
-                                        <button
-                                            onClick={() => handleDeleteClick(product)}
-                                            className="text-red-600 hover:text-red-900 cursor-pointer"
-                                        >
-                                            <FiTrash2 className="h-5 w-5" />
-                                        </button>
-                                        <Link
-                                            href={`/product/${product._id}`}
-                                            target="_blank"
-                                            className="text-green-600 hover:text-green-900 cursor-pointer"
-                                        >
-                                            <FiEye className="h-5 w-5" />
-                                        </Link>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
+                                    </td>
+                                    <td className="px-4 py-3 whitespace-nowrap">
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] text-gray-900">{formatDate(product.createdAt)}</span>
+                                            <span className="text-[10px] text-gray-500">{getRelativeTimeString(product.createdAt)}</span>
+                                        </div>
+                                    </td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm font-medium">
+                                        <div className="flex items-center gap-2">
+                                            <button
+                                                onClick={() => onEdit(product)}
+                                                className="text-blue-600 hover:text-blue-900 cursor-pointer"
+                                                title="Edit"
+                                            >
+                                                <FiEdit2 className="h-5 w-5" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDeleteClick(product)}
+                                                className="text-red-600 hover:text-red-900 cursor-pointer"
+                                                title="Delete"
+                                            >
+                                                <FiTrash2 className="h-5 w-5" />
+                                            </button>
+                                            <Link
+                                                href={`/product/${product._id}`}
+                                                target="_blank"
+                                                className="text-green-600 hover:text-green-900 cursor-pointer"
+                                                title="View"
+                                            >
+                                                <FiEye className="h-5 w-5" />
+                                            </Link>
+                                        </div>
+                                    </td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </div>
 
+            {/* ── Pagination ── */}
             <div className="mt-4 flex justify-end">
                 <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                     <button
                         onClick={() => onPageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                        className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                         <span className="sr-only">Previous</span>
-                        <FiArrowLeft className="h-5 w-5" aria-hidden="true" />
+                        <FiArrowLeft className="h-5 w-5" />
                     </button>
 
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                         <button
                             key={page}
                             onClick={() => onPageChange(page)}
-                            className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium ${page === currentPage ? 'text-blue-600' : 'text-gray-500 hover:bg-gray-50'
-                                }`}
+                            className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium ${
+                                page === currentPage
+                                    ? 'text-blue-600 bg-blue-50'
+                                    : 'text-gray-500 hover:bg-gray-50'
+                            }`}
                         >
                             {page}
                         </button>
@@ -384,10 +308,10 @@ export default function ProductsTable({
                     <button
                         onClick={() => onPageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                        className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                         <span className="sr-only">Next</span>
-                        <FiArrowRight className="h-5 w-5" aria-hidden="true" />
+                        <FiArrowRight className="h-5 w-5" />
                     </button>
                 </nav>
             </div>

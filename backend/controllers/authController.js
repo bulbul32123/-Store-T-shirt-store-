@@ -1,3 +1,5 @@
+
+// authController
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
@@ -132,8 +134,6 @@ exports.verifyEmail = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        console.log(email,password);
-
 
         if (!email || !password) {
             return res.status(400).json({
@@ -142,7 +142,6 @@ exports.login = async (req, res) => {
             });
         }
         const user = await User.findOne({ email: email.toLowerCase() }).select('+password');
-
         if (!user) {
             return res.status(401).json({
                 success: false,
@@ -157,13 +156,14 @@ exports.login = async (req, res) => {
                 message: 'Invalid credentials'
             });
         }
+        console.log(isMatch);
 
-        if (!user.isVerified) {
-            return res.status(401).json({
-                success: false,
-                message: 'Please verify your email first'
-            });
-        }
+        // if (!user.isVerified) {
+        //     return res.status(401).json({
+        //         success: false,
+        //         message: 'Please verify your email first'
+        //     });
+        // }
         const token = generateToken(user._id);
         setTokenCookie(res, token);
 
@@ -310,7 +310,7 @@ exports.getMe = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, gender, phoneNumber, dateOfBirth } = req.body;
 
         const user = await User.findById(req.user.id);
         if (!user) {
@@ -321,8 +321,11 @@ exports.updateProfile = async (req, res) => {
         }
 
         if (name) user.name = name.trim();
-        if (email) {
+        if (gender) user.gender = gender;
+        if (phoneNumber) user.phoneNumber = phoneNumber.trim();
+        if (dateOfBirth) user.dateOfBirth = new Date(dateOfBirth);
 
+        if (email) {
             const emailExists = await User.findOne({
                 email: email.toLowerCase(),
                 _id: { $ne: user._id }
@@ -337,8 +340,8 @@ exports.updateProfile = async (req, res) => {
 
             user.email = email.toLowerCase().trim();
             user.isVerified = false;
-            user.verificationToken = uuidv4();
-            user.verificationTokenExpires = Date.now() + 60 * 60 * 1000; // 1h
+            user.verificationToken = require('uuid').v4();
+            user.verificationTokenExpires = Date.now() + 60 * 60 * 1000;
         }
 
         if (password) {

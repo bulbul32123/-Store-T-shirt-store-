@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import axios from 'axios';
 import { API_URL } from '@/utils/config';
-import ProductCard from '@/components/products/ProductCard';
+import ProductCard from '@/components/productDetail/ProductCard';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import Breadcrumb from '@/components/common/Breadcrumb';
 
