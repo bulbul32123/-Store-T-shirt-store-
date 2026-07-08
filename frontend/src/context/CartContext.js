@@ -1,118 +1,183 @@
 'use client';
-import { createContext, useContext, useState, useEffect } from 'react';
+
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 import toast from 'react-hot-toast';
+import { API_URL } from '@/utils/config';
+import { useSyncQueue } from '@/hooks/useSyncQueue';
+import { getImageForColor } from '@/utils/productImage';
 
 const CartContext = createContext();
-
 export const useCart = () => useContext(CartContext);
 
+const STORAGE_KEY = 'cart_v1';
+const SYNC_KEY = 'cart_sync';
+const DEBOUNCE_MS = 20000; // within the 15–30s window
+
+function computeFinalPrice(product) {
+    const discount = Number(product.discount || 0);
+    return discount > 0
+        ? +(product.price - (product.price * discount) / 100).toFixed(2)
+        : product.price;
+}
+
+async function syncCartToServer(items) {
+    const payload = items.map((i) => ({
+        product: i.productId,
+        quantity: i.quantity,
+        size: i.size,
+        color: i.color,
+    }));
+    await axios.put(`${API_URL}/api/cart/sync`, { items: payload });
+}
+
 export const CartProvider = ({ children }) => {
-    const [cartItems, setCartItems] = useState([]);
-    const [loading, setLoading] = useState(true);
-    useEffect(() => {
-        const storedCart = localStorage.getItem('cart');
-        if (storedCart) {
-            setCartItems(JSON.parse(storedCart));
-        }
-        setLoading(false);
-    }, []);
-    useEffect(() => {
-        if (!loading) {
-            localStorage.setItem('cart', JSON.stringify(cartItems));
-        }
-    }, [cartItems, loading]);
+    const [items, setItems] = useState([]);
+    const [updatedAt, setUpdatedAt] = useState(null);
+    const [hydrated, setHydrated] = useState(false);
+    const itemsRef = useRef(items);
+    itemsRef.current = items;
+    const skipNextSyncRef = useRef(true); // don't sync on initial hydration load
 
-    const addToCart = (product, quantity = 1, size, color, customization = null) => {
-        setCartItems(prevItems => {
-            const existingItemIndex = prevItems.findIndex(
-                item =>
-                    item.product._id === product._id &&
-                    item.size === size &&
-                    item.color === color &&
-                    JSON.stringify(item.customization) === JSON.stringify(customization)
-            );
+    const { scheduleSync, flushNow, syncing, lastError, pending } = useSyncQueue({
+        syncKey: SYNC_KEY,
+        syncFn: syncCartToServer,
+        debounceMs: DEBOUNCE_MS,
+    });
 
-            if (existingItemIndex !== -1) {
-                const updatedItems = [...prevItems];
-                updatedItems[existingItemIndex].quantity += quantity;
-                toast.success('Cart updated!');
-                return updatedItems;
-            } else {
-                toast.success('Item added to cart!');
-                return [...prevItems, { product, quantity, size, color, customization }];
+    // hydrate from localStorage
+    useEffect(() => {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                setItems(parsed.items || []);
+                setUpdatedAt(parsed.updatedAt || null);
             }
-        });
+        } catch {
+            // ignore corrupt storage
+        } finally {
+            setHydrated(true);
+        }
+    }, []);
+
+    // persist to localStorage instantly on every change
+    useEffect(() => {
+        if (!hydrated) return;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ items, updatedAt }));
+    }, [items, updatedAt, hydrated]);
+
+    // schedule a debounced server sync whenever items actually change
+    useEffect(() => {
+        if (!hydrated) return;
+        if (skipNextSyncRef.current) {
+            skipNextSyncRef.current = false;
+            return;
+        }
+        setUpdatedAt(Date.now());
+        scheduleSync(itemsRef.current);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [items, hydrated]);
+
+    // app init: flush immediately if unsynced local data exists from last session
+    useEffect(() => {
+        if (!hydrated) return;
+        if (pending && itemsRef.current.length > 0) {
+            flushNow(itemsRef.current);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [hydrated]);
+
+    // sync on tab/window close
+    useEffect(() => {
+        const handler = () => {
+            flushNow(itemsRef.current);
+        };
+        window.addEventListener('beforeunload', handler);
+        return () => window.removeEventListener('beforeunload', handler);
+    }, [flushNow]);
+
+ const addToCart = (product, { size, color, quantity = 1 } = {}) => {
+    const resolvedSize = size || product.sizes?.[0] || 'M';
+    const resolvedColor = color || product.colors?.[0]?.name || null;
+
+    const image = getImageForColor(product, resolvedColor);
+
+    const lineId = `${product._id}-${resolvedSize}-${resolvedColor}`;
+
+    const existing = items.find((i) => i.lineId === lineId);
+
+    if (existing) {
+        setItems((prev) =>
+            prev.map((i) =>
+                i.lineId === lineId
+                    ? { ...i, quantity: i.quantity + quantity }
+                    : i
+            )
+        );
+
+        toast.success(
+            `${product.name} quantity updated (${existing.quantity + quantity} in cart)`
+        );
+
+        return;
+    }
+
+    setItems((prev) => [
+        ...prev,
+        {
+            lineId,
+            productId: product._id,
+            name: product.name,
+            slug: product.slug,
+            price: computeFinalPrice(product),
+            image,
+            size: resolvedSize,
+            color: resolvedColor,
+            quantity,
+            addedAt: Date.now(),
+        },
+    ]);
+
+    toast.success(`${product.name} added to cart`);
+};
+
+const getProductQuantityInCart = (productId) =>
+    items.filter((i) => i.productId === productId).reduce((sum, i) => sum + i.quantity, 0);
+    const removeFromCart = (lineId) => {
+        setItems((prev) => prev.filter((i) => i.lineId !== lineId));
     };
 
-    const updateCartItem = (index, quantity, size, color, customization = null) => {
-        setCartItems(prevItems => {
-            const updatedItems = [...prevItems];
-            updatedItems[index] = {
-                ...updatedItems[index],
-                quantity,
-                size,
-                color,
-                customization
-            };
-            toast.success('Cart updated!');
-            return updatedItems;
-        });
-    };
-    const removeFromCart = (index) => {
-        setCartItems(prevItems => {
-            const updatedItems = prevItems.filter((_, i) => i !== index);
-            toast.success('Item removed from cart!');
-            return updatedItems;
-        });
+    const updateQuantity = (lineId, quantity) => {
+        if (quantity < 1) return removeFromCart(lineId);
+        setItems((prev) => prev.map((i) => (i.lineId === lineId ? { ...i, quantity } : i)));
     };
 
     const clearCart = () => {
-        setCartItems([]);
-        toast.success('Cart cleared!');
+        setItems([]);
     };
 
-    const getCartTotals = () => {
-        const subtotal = cartItems.reduce(
-            (total, item) => total + item.product.price * item.quantity,
-            0
-        );
-        const discount = cartItems.reduce(
-            (total, item) => {
-                if (item.product.discount) {
-                    return total + (item.product.price * item.product.discount / 100) * item.quantity;
-                }
-                return total;
-            },
-            0
-        );
+    // exposed so logout / checkout / any manual trigger can force an immediate sync
+    const syncNow = () => flushNow(itemsRef.current);
 
-        const tax = (subtotal - discount) * 0.1; 
-        const shipping = subtotal > 100 ? 0 : 10; 
-        const total = subtotal - discount + tax + shipping;
+    const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
+    const subtotal = +items.reduce((sum, i) => sum + i.price * i.quantity, 0).toFixed(2);
 
-        return {
-            subtotal: parseFloat(subtotal.toFixed(2)),
-            discount: parseFloat(discount.toFixed(2)),
-            tax: parseFloat(tax.toFixed(2)),
-            shipping: parseFloat(shipping.toFixed(2)),
-            total: parseFloat(total.toFixed(2))
-        };
+    const value = {
+        items,
+        itemCount,
+        subtotal,
+        updatedAt,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        clearCart,
+        syncNow,
+        syncing,
+        getProductQuantityInCart,
+        lastError,
+        pending,
     };
 
-    return (
-        <CartContext.Provider
-            value={{
-                cartItems,
-                loading,
-                addToCart,
-                updateCartItem,
-                removeFromCart,
-                clearCart,
-                getCartTotals
-            }}
-        >
-            {children}
-        </CartContext.Provider>
-    );
-}; 
-
+    return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+};
