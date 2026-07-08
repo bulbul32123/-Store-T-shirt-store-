@@ -1,3 +1,4 @@
+//server
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -70,18 +71,18 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/products', require('./routes/products'));
 app.use('/api/admin', require('./routes/admin'));
+app.use('/api', require('./routes/storeReviews')); 
+app.use('/api/products', require('./routes/products'));
 app.use('/api/orders', require('./routes/orders'));
 app.use('/api/chats', require('./routes/chats'));
+app.use('/api/cart', require('./routes/cart'));
+app.use('/api/wishlist', require('./routes/wishlist'));
 app.use('/api/categories', require('./routes/categories'));
+app.use('/api/notifications', require('./routes/notifications'));
 const uploadRoutes = require('./routes/upload');
 
 app.use('/api/upload', uploadRoutes);
-
-app.get('/api/test', (req, res) => {
-    res.json({ message: 'API is working' });
-});
 
 app.use((err, req, res, next) => {
     console.error('Unhandled error:', err);
