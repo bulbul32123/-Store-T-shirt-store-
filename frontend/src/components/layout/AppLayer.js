@@ -47,21 +47,19 @@ export default function AppLayer({ children }) {
     }, []);
     
     return (
-        <div className='h-full w-full'>
-            {!isAdmin && <>
+        <div>
+          
             <header className="md:inline hidden py-3">
             <Header />
           </header>
-           <div className="mx-auto h-full w-full xl:max-w-[1500px] pl-5 pr-5 md:pl-10 md:pr-10 relative">
+           <div className="mx-auto w-full xl:max-w-[1500px] pl-5 pr-5 md:pl-10 md:pr-10 relative">
             <Navbar />
           </div>
           <div className="">
             <Nav />
           </div>
-          </>
-          }
             <main className="mx-auto h-full w-full xl:max-w-[1500px]  relative overflow-x-hidden">{children}</main>
-            {!isAdmin && <Footer />}
+             <Footer />
         </div>
     )
 }

@@ -12,7 +12,7 @@ export default function Links({index, href, text}) {
                 transition={{ duration: 0.3, delay: index * 0.1 }}
                 className="font-medium  border-b-[2px] border-[#f7f5f5] hover:border-black pb-1 list-none"
             >
-            <Link href={`/shop`} className="">{text}</Link>
+            <Link href={`${href}`} className="">{text}</Link>
             </motion.li>
         </>
     )

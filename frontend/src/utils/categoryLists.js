@@ -23,6 +23,7 @@ export const categoryLists = {
         },
     ]
 }
+
 export const profileLists =
 {
     title: "My Account", lists: [

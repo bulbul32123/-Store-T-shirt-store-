@@ -4,20 +4,19 @@ import Links from "./Links";
 
 export default function Nav() {
     const links = [
-        {
-            href: `/shop?category=new-drops`,
-            text: `New Drops`
-        },
-        {
-            href: `/shop?category=nike-shoes`,
-            text: `Nike Shoes`
-        },
-        {
-            href: `/shop?category=special-offer`,
-            text: `% Special Offer`
-        },
-
-    ]
+      {
+        href: `/products?status=new`,
+        text: `New Drops`,
+      },
+      {
+        href: `/products?minRating=4`,
+        text: `Top Rated`,
+      },
+      {
+        href: `/products?sale=true`,
+        text: `% Special Offer`,
+      },
+    ];
 
     return (
         <div className="bg-[#f7f5f5] border-b border-gray-300 w-full h-full py-4 max-md:hidden relative">

@@ -27,18 +27,19 @@ export default function EditProduct({ params: paramsPromise }) {
   const [uploadingColorIndex, setUploadingColorIndex] = useState(null);
 
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    price: '',
-    category: '',
-    stock: '',
+    name: "",
+    description: "",
+    price: "",
+    category: "",
+    stock: "",
     sizes: [],
     colors: [],
-    discount: '0',
+    newDrop: product.newDrop ?? true,
+    discount: "0",
     featured: false,
     popular: false,
     trending: false,
-    isFreeShipping: false
+    isFreeShipping: false,
   });
 
   // Fetch product and categories on mount
