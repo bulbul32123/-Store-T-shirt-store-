@@ -1,5 +1,6 @@
 // My current Register page code. this code is primary and important 
 'use client';
+import { BsGenderTrans } from "react-icons/bs";
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -13,7 +14,8 @@ export default function Register() {
         email: '',
         password: '',
         confirmPassword: '',
-        phone: ''
+        phone: '',
+        gender: ''
     });
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -55,6 +57,11 @@ export default function Register() {
         if (formData.phone && !/^\d{11}$/.test(formData.phone.replace(/[^0-9]/g, ''))) {
             newErrors.phone = 'Phone number is invalid';
         }
+     if (formData.gender &&
+    !['male', 'female', 'other'].includes(formData.gender)
+) {
+    newErrors.gender = 'Please select a valid gender';
+}
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -174,22 +181,25 @@ export default function Register() {
                             </label>
                             <div className="mt-1 relative rounded-md ">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <FiPhone className="h-5 w-5 text-gray-400" />
+                                    <BsGenderTrans className="h-5 w-5 text-gray-400" />
                                 </div>
-                                <input
-                                    id="gender"
-                                    name="gender"
-                                    type="tel"
-                                    autoComplete="tel"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                    className={`block w-full pl-10 pr-3 py-2 border !text-black ${errors.phone ? 'border-red-300' : 'border-gray-300'
-                                        } rounded-md  placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
-                                    placeholder="Enter you gender"
-                                />
+                              <select
+    id="gender"
+    name="gender"
+    value={formData.gender}
+    onChange={handleChange}
+    className={`block w-full pl-8 pr-10 py-2 border !text-black ${
+        errors.gender ? 'border-red-300' : 'border-gray-300'
+    } rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+>
+    <option value="">Select Gender</option>
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+    <option value="other">Other</option>
+</select>
                             </div>
-                            {errors.phone && (
-                                <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
+                            {errors.gender && (
+                                <p className="mt-1 text-sm text-red-600">{errors.gender}</p>
                             )}
                         </div>
 

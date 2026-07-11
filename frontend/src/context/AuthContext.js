@@ -63,9 +63,6 @@ export const AuthProvider = ({ children }) => {
         try {
             setLoading(true);
             setError(null);
-
-            console.log('Registering user:', userData);
-
             const { data } = await axios.post(`${API_URL}/api/auth/register`, userData);
 
             if (data.success) {
@@ -84,76 +81,75 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
         }
     };
-    const login = async (email, password) => {
-        try {
-            setLoading(true);
-            setError(null);
+const login = async (email, password, { requireAdmin = false } = {}) => {
+    try {
+        setLoading(true);
+        setError(null);
 
-            console.log('Attempting login with email:', email);
+        const { data } = await axios.post(`${API_URL}/api/auth/login`, { email, password });
 
-            const { data } = await axios.post(`${API_URL}/api/auth/login`, {
-                email,
-                password
-            });
+        if (data.success && data.user) {
+            if (requireAdmin && data.user.role !== 'admin') {
+                await axios.post(`${API_URL}/api/auth/logout`); // clear the cookie immediately
+                setUser(null);
+                const msg = 'You are not authorized to access the admin panel';
+                toast.error(msg);
+                throw new Error(msg);
+            }
 
-            console.log('Login response:', data);
+            setUser(data.user);
+            toast.success(data.message || 'Login successful!');
 
-            if (data.success && data.user) {
-                setUser(data.user);
-                toast.success(data.message || 'Login successful!');
+            if (requireAdmin) {
+                router.push('/admin/dashboard');
+            } else {
                 const redirectUrl = sessionStorage.getItem('redirectAfterLogin') || '/';
                 sessionStorage.removeItem('redirectAfterLogin');
                 router.push(redirectUrl);
-
-                return data;
-            } else {
-                throw new Error(data.message || 'Login failed');
             }
-        } catch (error) {
-            const errorMessage = error.response?.data?.message || error.message || 'Login failed';
-            setError(errorMessage);
-            toast.error(errorMessage);
-            throw error;
-        } finally {
-            setLoading(false);
+            return data;
+        } else {
+            throw new Error(data.message || 'Login failed');
         }
-    };
-    const adminLogin = async (email, password) => {
-        try {
-            setLoading(true);
-            setError(null);
+    } catch (error) {
+        const errorMessage = error.response?.data?.message || error.message || 'Login failed';
+        setError(errorMessage);
+        toast.error(errorMessage);
+        throw error;
+    } finally {
+        setLoading(false);
+    }
+};
+const adminLogin = async (email, password) => {
+    try {
+        setLoading(true);
+        setError(null);
 
-            console.log('Attempting login with email:', email);
+        const { data } = await axios.post(`${API_URL}/api/auth/login`, { email, password });
 
-            const { data } = await axios.post(`${API_URL}/api/admin/login`, {
-                email,
-                password
-            });
-
-            console.log('Login response:', data);
-
-            if (data.success && data.user) {
-                setUser(data.user);
-                toast.success(data.message || 'Login successful!');
-
-                // Redirect to dashboard or intended page
-                const redirectUrl = sessionStorage.getItem('redirectAfterLogin') || '/admin/dashboard';
-                sessionStorage.removeItem('redirectAfterLogin');
-                router.push(redirectUrl);
-
-                return data;
-            } else {
-                throw new Error(data.message || 'Login failed');
+        if (data.success && data.user) {
+            if (data.user.role !== 'admin') {
+                await axios.post(`${API_URL}/api/auth/logout`);
+                setUser(null);
+                const msg = 'This login is for admin accounts only';
+                toast.error(msg);
+                throw new Error(msg);
             }
-        } catch (error) {
-            const errorMessage = error.response?.data?.message || error.message || 'Login failed';
-            setError(errorMessage);
-            toast.error(errorMessage);
-            throw error;
-        } finally {
-            setLoading(false);
+            setUser(data.user);
+            toast.success('Login successful!');
+            router.push('/admin/dashboard');
+            return data;
         }
-    };
+        throw new Error(data.message || 'Login failed');
+    } catch (error) {
+        const errorMessage = error.response?.data?.message || error.message || 'Login failed';
+        setError(errorMessage);
+        toast.error(errorMessage);
+        throw error;
+    } finally {
+        setLoading(false);
+    }
+};
 
     const logout = async () => {
         try {
@@ -173,9 +169,6 @@ export const AuthProvider = ({ children }) => {
         try {
             setLoading(true);
             setError(null);
-
-            console.log('Updating profile with:', userData);
-
             const { data } = await axios.put(`${API_URL}/api/auth/update-profile`, userData);
 
             if (data.success && data.user) {
@@ -286,6 +279,7 @@ export const AuthProvider = ({ children }) => {
         user,
         loading,
         error,
+        adminLogin,
         isAuthenticated,
         register,
         login,

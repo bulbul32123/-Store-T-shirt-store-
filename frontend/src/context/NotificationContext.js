@@ -1,9 +1,11 @@
+// NotificationContext.js
 'use client';
-
 import { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import axios from 'axios';
 import { API_URL } from '@/utils/config';
 import { useAuth } from '@/context/AuthContext';
+import toast from 'react-hot-toast';
+import { getSocket } from '@/lib/socket';
 
 const NotificationContext = createContext();
 export const useNotifications = () => useContext(NotificationContext);
@@ -55,7 +57,8 @@ export const NotificationProvider = ({ children }) => {
             await axios.put(`${API_URL}/api/notifications/${id}/read`);
         } catch {
             fetchUnreadCount(); // resync on failure
-        }
+        } 
+
     };
 
     const markAllAsRead = async () => {
@@ -81,8 +84,7 @@ export const NotificationProvider = ({ children }) => {
     const loadMore = () => {
         if (page < totalPages && !loading) fetchNotifications(page + 1);
     };
-
-    useEffect(() => {
+useEffect(() => {
         if (!isAuthenticated) {
             setNotifications([]);
             setUnreadCount(0);
@@ -92,8 +94,27 @@ export const NotificationProvider = ({ children }) => {
         fetchUnreadCount();
         fetchNotifications(1);
 
+        // Polling stays as a safety net in case the socket drops silently
         pollRef.current = setInterval(fetchUnreadCount, POLL_MS);
-        return () => clearInterval(pollRef.current);
+
+        const socket = getSocket();
+        socket.connect();
+
+        const handleNewNotification = (notification) => {
+            setNotifications((prev) => [notification, ...prev]);
+            setUnreadCount((prev) => prev + 1);
+            toast(notification.title, {
+                icon: '🔔',
+            });
+        };
+
+        socket.on('notification:new', handleNewNotification);
+
+        return () => {
+            clearInterval(pollRef.current);
+            socket.off('notification:new', handleNewNotification);
+            socket.disconnect();
+        };
     }, [isAuthenticated, fetchUnreadCount, fetchNotifications]);
 
     const value = {

@@ -1,5 +1,5 @@
+// CartContext.js
 'use client';
-
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -172,6 +172,7 @@ const getProductQuantityInCart = (productId) =>
         removeFromCart,
         updateQuantity,
         clearCart,
+        hydrated,
         syncNow,
         syncing,
         getProductQuantityInCart,

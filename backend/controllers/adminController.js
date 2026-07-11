@@ -10,40 +10,109 @@ exports.getStats = async (req, res) => {
                 message: 'Access denied. Admin privileges required.'
             });
         }
+
+        const now = new Date();
+        const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+
         const totalProducts = await Product.countDocuments();
         const totalOrders = await Order.countDocuments();
-        const totalUsers = await User.countDocuments();
-        const revenue = await Order.aggregate([
-            {
-                $match: {
-                    status: { $nin: ['cancelled', 'refunded'] }
-                }
-            },
-            {
-                $group: {
-                    _id: null,
-                    total: { $sum: '$totalAmount' }
-                }
-            }
+        const totalCustomers = await User.countDocuments({ role: 'user' });
+
+        const revenueAgg = await Order.aggregate([
+            { $match: { orderStatus: { $nin: ['cancelled'] }, paymentStatus: 'paid' } },
+            { $group: { _id: null, total: { $sum: '$totalPrice' } } }
+        ]);
+        const totalRevenue = revenueAgg.length > 0 ? revenueAgg[0].total : 0;
+
+        // --- Month-over-month change calculations ---
+        const [thisMonthRevenue, lastMonthRevenue] = await Promise.all([
+            Order.aggregate([
+                { $match: { paymentStatus: 'paid', createdAt: { $gte: startOfThisMonth } } },
+                { $group: { _id: null, total: { $sum: '$totalPrice' } } }
+            ]),
+            Order.aggregate([
+                { $match: { paymentStatus: 'paid', createdAt: { $gte: startOfLastMonth, $lt: startOfThisMonth } } },
+                { $group: { _id: null, total: { $sum: '$totalPrice' } } }
+            ])
         ]);
 
-        const totalRevenue = revenue.length > 0 ? revenue[0].total : 0;
+        const [thisMonthOrders, lastMonthOrders] = await Promise.all([
+            Order.countDocuments({ createdAt: { $gte: startOfThisMonth } }),
+            Order.countDocuments({ createdAt: { $gte: startOfLastMonth, $lt: startOfThisMonth } })
+        ]);
+
+        const [thisMonthCustomers, lastMonthCustomers] = await Promise.all([
+            User.countDocuments({ role: 'user', createdAt: { $gte: startOfThisMonth } }),
+            User.countDocuments({ role: 'user', createdAt: { $gte: startOfLastMonth, $lt: startOfThisMonth } })
+        ]);
+
+        const pctChange = (current, previous) => {
+            if (previous === 0) return current > 0 ? 100 : 0;
+            return +(((current - previous) / previous) * 100).toFixed(1);
+        };
+
+        const revenueChange = pctChange(thisMonthRevenue[0]?.total || 0, lastMonthRevenue[0]?.total || 0);
+        const ordersChange = pctChange(thisMonthOrders, lastMonthOrders);
+        const customersChange = pctChange(thisMonthCustomers, lastMonthCustomers);
+
+        // --- Revenue trend (last 6 months) ---
+        const sixMonthsAgo = new Date();
+        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+        sixMonthsAgo.setDate(1);
+
+        const revenueTrend = await Order.aggregate([
+            { $match: { paymentStatus: 'paid', createdAt: { $gte: sixMonthsAgo } } },
+            {
+                $group: {
+                    _id: { year: { $year: '$createdAt' }, month: { $month: '$createdAt' } },
+                    revenue: { $sum: '$totalPrice' },
+                    orders: { $sum: 1 }
+                }
+            },
+            { $sort: { '_id.year': 1, '_id.month': 1 } }
+        ]);
+
+        // --- Top products by revenue ---
+        const topProducts = await Order.aggregate([
+            { $match: { paymentStatus: 'paid' } },
+            { $unwind: '$orderItems' },
+            {
+                $group: {
+                    _id: '$orderItems.product',
+                    name: { $first: '$orderItems.name' },
+                    image: { $first: '$orderItems.image' },
+                    unitsSold: { $sum: '$orderItems.quantity' },
+                    revenue: { $sum: { $multiply: ['$orderItems.price', '$orderItems.quantity'] } }
+                }
+            },
+            { $sort: { revenue: -1 } },
+            { $limit: 5 }
+        ]);
+
         const recentOrders = await Order.find()
             .sort({ createdAt: -1 })
             .limit(5)
             .populate('user', 'name email')
             .lean();
+
         const lowStockProducts = await Product.find({ stockQuantity: { $lt: 10 } })
             .sort({ stockQuantity: 1 })
             .limit(5)
             .populate('category', 'name')
             .lean();
+
         res.json({
             success: true,
             totalProducts,
             totalOrders,
-            totalUsers,
+            totalCustomers,
             totalRevenue,
+            revenueChange,
+            ordersChange,
+            customersChange,
+            revenueTrend,
+            topProducts,
             recentOrders,
             lowStockProducts
         });

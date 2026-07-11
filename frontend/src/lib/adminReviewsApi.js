@@ -1,6 +1,4 @@
-// Mirrors the shape of lib/adminOrdersApi.js — fetch with credentials:include,
-// no Bearer tokens, errors thrown as Error objects.
-
+// adminReviewsApi
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 async function apiFetch(path, options = {}) {
@@ -10,15 +8,11 @@ async function apiFetch(path, options = {}) {
         ...options
     });
 
-    // Parse body regardless of status so we can surface the server message
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.message || `HTTP ${res.status}`);
     return data;
 }
 
-/**
- * Build a query string from an object, dropping null / undefined / '' values.
- */
 function toQS(params = {}) {
     const clean = Object.fromEntries(
         Object.entries(params).filter(([, v]) => v !== '' && v !== null && v !== undefined)
@@ -28,35 +22,18 @@ function toQS(params = {}) {
 }
 
 export const adminReviewsApi = {
-    /**
-     * GET /api/admin/reviews
-     * Supported params: status, rating, ratingMin, product (id), search,
-     *                   dateFrom, dateTo, sort, page, limit
-     */
     getReviews: (params = {}) =>
         apiFetch(`/api/admin/reviews${toQS(params)}`),
 
-    /** GET /api/admin/reviews/stats */
+    getReportedReviews: () =>
+        apiFetch('/api/admin/reviews/reports'),
+
     getReviewStats: () =>
         apiFetch('/api/admin/reviews/stats'),
 
-    /** PATCH /api/admin/reviews/:id/approve */
-    approveReview: (id) =>
-        apiFetch(`/api/admin/reviews/${id}/approve`, { method: 'PATCH' }),
-
-    /** PATCH /api/admin/reviews/:id/reject */
-    rejectReview: (id) =>
-        apiFetch(`/api/admin/reviews/${id}/reject`, { method: 'PATCH' }),
-
-    /** DELETE /api/admin/reviews/:id */
     deleteReview: (id) =>
         apiFetch(`/api/admin/reviews/${id}`, { method: 'DELETE' }),
 
-    /**
-     * PATCH /api/admin/reviews/bulk
-     * @param {string[]} ids   - array of review _id strings
-     * @param {'approve'|'reject'|'delete'} action
-     */
     bulkUpdateStatus: (ids, action) =>
         apiFetch('/api/admin/reviews/bulk', {
             method: 'PATCH',

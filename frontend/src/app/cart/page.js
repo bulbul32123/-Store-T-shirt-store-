@@ -1,5 +1,5 @@
+// cart Page
 'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -7,6 +7,9 @@ import {
     Plus,
     Trash2,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { couponApi } from '@/lib/couponApi';
+import { useState } from 'react';
 import CouponBox from '@/components/profile/cart/CouponBox';
 import DeliveryAndTrust from '@/components/profile/cart/DeliveryAndTrust';
 import FreeShippingProgress from '@/components/profile/cart/FreeShippingProgress';
@@ -19,6 +22,13 @@ export default function CartPage() {
         updateQuantity,
         removeFromCart,
     } = useCart();
+    const router = useRouter();
+const [appliedCoupon, setAppliedCoupon] = useState(() => {
+    if (typeof window === 'undefined') return null;
+    const saved = sessionStorage.getItem('appliedCoupon');
+    return saved ? JSON.parse(saved) : null;
+});
+const [couponLoading, setCouponLoading] = useState(false);
 
     const shipping = subtotal >= 100 ? 0 : 10;
     const tax = 5
@@ -217,14 +227,9 @@ export default function CartPage() {
                                 </span>
                             </div>
                         </div>
-<button className="w-full mt-6 bg-black text-white rounded-xl py-4 font-medium">
+<button className="w-full mt-6 bg-black text-white rounded-xl py-4 font-medium" onClick={() => router.push('/checkout')}>
     Proceed To Checkout
 </button>
-                        <CouponBox
-    onApply={(code) => {
-        console.log('Coupon:', code);
-    }}
-/>
 
 <DeliveryAndTrust />
                     </div>

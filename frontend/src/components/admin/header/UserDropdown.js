@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { FaUserAstronaut } from "react-icons/fa";
 import Link from "next/link";
 import React, { useState } from "react";
 import { Dropdown } from "@/components/ui/dropdown/Dropdown";
@@ -22,36 +23,15 @@ export default function UserDropdown() {
     <div className="relative">
       <button
         onClick={toggleDropdown}
-        className="flex items-center text-gray-700 dropdown-toggle"
+        className="flex items-center cursor-pointer text-gray-700 dropdown-toggle"
       >
-        <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-          <Image
-            width={44}
-            height={44}
-            src="/images/user.jpeg"
-            alt="User"
-          />
+        <span className="mr-3 rounded-full h-11 w-11 flex items-center justify-center bg-[#F5F5F5] overflow-hidden">
+              {user?.profilePicture?.url ? (
+                              <Image src={user.profilePicture.url} alt={user?.name} className="h-full rounded-full w-full object-cover" height={100} width={100} />
+                          ) : (
+                               <FaUserAstronaut size={23} className="h-8 w-8 rounded-full object-cover" />
+                          )}
         </span>
-
-        <span className="block mr-1 font-medium text-theme-sm">{user?.name}</span>
-
-        <svg
-          className={`stroke-gray-500 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
-            }`}
-          width="18"
-          height="20"
-          viewBox="0 0 18 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M4.3125 8.65625L9 13.3437L13.6875 8.65625"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
       </button>
 
       <Dropdown
@@ -147,10 +127,10 @@ export default function UserDropdown() {
         </ul>
         <button
           onClick={() => logout()}
-          className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 "
+          className="flex items-center bg-white z-40 gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 "
         >
           <svg
-            className="fill-gray-500 group-hover:fill-gray-700"
+            className="fill-gray-500 group-hover:fill-gray-700 bg-white"
             width="24"
             height="24"
             viewBox="0 0 24 24"

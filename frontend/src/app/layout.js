@@ -6,6 +6,8 @@ import { CompareProvider } from '@/context/CompareContext';
 import { Toaster } from "react-hot-toast";
 import AppLayer from '@/components/layout/AppLayer';
 import { NotificationProvider } from '@/context/NotificationContext';
+import { VisitPopupProvider } from '@/context/VisitPopupContext';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 
 export const metadata = {
@@ -22,12 +24,15 @@ export default function RootLayout({ children }) {
         <NotificationProvider>
         <CartProvider>
         <WatchlistProvider>
+          <VisitPopupProvider>
         <CompareProvider>
+
             <Toaster position="top-center" />
               <AppLayer>
                 {children}
               </AppLayer>
         </CompareProvider>
+        </VisitPopupProvider>
         </WatchlistProvider>
         </CartProvider>
         </NotificationProvider>

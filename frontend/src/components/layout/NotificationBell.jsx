@@ -1,7 +1,7 @@
+// NotificationBell on the navbar component
 'use client';
-
 import Link from 'next/link';
-import { Bell, Tag, Percent, Star, Package, Info } from 'lucide-react';
+import { Bell, Tag, Percent, Star, Package, Info,AlertTriangle } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useNotifications } from '@/context/NotificationContext';
 import { formatDistanceToNow } from '@/utils/formatters';
@@ -13,6 +13,7 @@ const ICONS = {
     review_added: Star,
     order_update: Package,
     system: Info,
+    review_deleted: AlertTriangle,
 };
 
 export default function NotificationBell() {
@@ -23,7 +24,7 @@ export default function NotificationBell() {
         <Popover>
             <PopoverTrigger asChild>
                 <button type="button" aria-label="Notifications" className="relative hover:text-gray-500 transition-colors">
-                    <Bell size={20} />
+                    <Bell size={25} />
                     {unreadCount > 0 && (
                         <span className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-[#FF5A1F] text-white text-[10px] font-bold flex items-center justify-center">
                             {unreadCount > 9 ? '9+' : unreadCount}

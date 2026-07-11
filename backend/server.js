@@ -5,6 +5,11 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const http = require('http');
+const jwt = require('jsonwebtoken');
+const { Server } = require('socket.io');
+const { initSocket } = require('./utils/socket');
+
 const fs = require('fs');
 dotenv.config();
 const app = express();
@@ -14,6 +19,8 @@ app.use(cors({
     origin: process.env.CLIENT_URL || 'http://localhost:3000',
     credentials: true
 }));
+app.use('/api/stripe/webhook', require('./routes/stripeWebhook'));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -37,6 +44,8 @@ mongoose.connect(process.env.MONGODB_URI)
 mongoose.connection.on('error', err => {
     console.error('MongoDB connection error:', err);
 });
+
+
 const User = require('./models/User');
 const bcrypt = require('bcryptjs');
 async function ensureAdmin() {
@@ -64,7 +73,14 @@ async function ensureAdmin() {
     }
 }
 
-
+function parseCookieHeader(cookieHeader = '') {
+    return Object.fromEntries(
+        cookieHeader.split(';')
+            .map((c) => c.trim().split('='))
+            .filter((pair) => pair.length === 2)
+            .map(([k, v]) => [k, decodeURIComponent(v)])
+    );
+}
 app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl}`);
     next();
@@ -80,6 +96,7 @@ app.use('/api/cart', require('./routes/cart'));
 app.use('/api/wishlist', require('./routes/wishlist'));
 app.use('/api/categories', require('./routes/categories'));
 app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/coupons', require('./routes/coupons'));
 const uploadRoutes = require('./routes/upload');
 
 app.use('/api/upload', uploadRoutes);
@@ -89,7 +106,45 @@ app.use((err, req, res, next) => {
     res.status(500).json({ message: 'Server error', error: err.message });
 });
 
+const server = http.createServer(app);
+
+const io = new Server(server, {
+    cors: {
+        origin: process.env.CLIENT_URL || 'http://localhost:3000',
+        credentials: true,
+    },
+});
+
+io.use((socket, next) => {
+    try {
+        const cookies = parseCookieHeader(socket.handshake.headers.cookie);
+        const token = cookies.token;
+
+        if (!token) return next(new Error('Not authorized'));
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        socket.userId = decoded.id;
+        socket.userRole = decoded.role || null;
+        next();
+    } catch (err) {
+        next(new Error('Not authorized'));
+    }
+});
+
+io.on('connection', (socket) => {
+    socket.join(`user_${socket.userId}`);
+    if (socket.userRole === 'admin') {
+        socket.join('admins');
+    }
+
+    socket.on('disconnect', () => {
+        // no-op — room membership is cleaned up automatically
+    });
+});
+
+initSocket(io);
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running`);
 });

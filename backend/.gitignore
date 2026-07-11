@@ -20,7 +20,7 @@
 /scripts
 /uploads
 /utils
-
+.env
 # next.js
 /.next/
 /out/

@@ -1,5 +1,5 @@
+// src/components/profile/notifications/NotificationsPanel.jsx
 'use client';
-
 import Link from 'next/link';
 import { Bell, Tag, Percent, Star, Package, Info, Trash2 } from 'lucide-react';
 import { useNotifications } from '@/context/NotificationContext';

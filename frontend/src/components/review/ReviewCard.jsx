@@ -1,3 +1,4 @@
+// Review card.jsx
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { FiThumbsUp, FiThumbsDown, FiMoreVertical, FiEdit2, FiFlag, FiShield, FiVideo } from 'react-icons/fi';
@@ -105,9 +106,13 @@ export default function ReviewCard({ review }) {
         ...(review.video?.url ? [{ type: 'video', url: review.video.url }] : []),
     ];
 
-    const handleReportSelect = async (reason) => {
-        await handleReport(review._id, reason);
-    };
+const handleReportSelect = async (title) => {
+    const details = window.prompt('Add any extra detail for this report (optional):') || '';
+    await handleReport(review._id, title, details);
+};
+console.log('review data', review);
+
+    
 
     return (
         <div className="bg-white rounded-2xl border border-gray-100 p-5 hover:border-gray-200 transition-colors">

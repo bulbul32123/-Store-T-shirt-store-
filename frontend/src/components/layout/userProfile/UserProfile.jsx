@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useRef, useEffect } from 'react'
+import { GrUserAdmin } from "react-icons/gr";
 import { FaUserAstronaut, FaHeart, FaShoppingCart, FaCog, FaSignOutAlt, FaBoxOpen } from 'react-icons/fa'
 // 1. Import the useAuth hook
 import { useAuth } from '@/context/AuthContext'
@@ -13,7 +14,7 @@ export default function UserProfile({ user }) {
     const dropdownRef = useRef(null);
     const { syncNow: syncCartNow } = useCart();
 const { syncNow: syncWatchlistNow } = useWatchlist();
-    const { logout } = useAuth();
+    const { logout,hasRole } = useAuth();
 
     const handleLogout = async () => {
         setIsOpen(false);
@@ -39,6 +40,7 @@ const { syncNow: syncWatchlistNow } = useWatchlist();
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+const isAdmin = hasRole('admin'); // Check if the user has the 'admin' role
 
     return (
         <div className="relative z-40" ref={dropdownRef}>
@@ -48,8 +50,14 @@ const { syncNow: syncWatchlistNow } = useWatchlist();
                 onClick={() => setIsOpen(!isOpen)} // Toggle dropdown cleanly on click
                 onMouseEnter={() => setIsOpen(true)}
             >
-                <span className='text-base'>Hi, {user?.name || 'User'}</span>
-                <FaUserAstronaut size={23} />
+                <span className='text-base flexCenter gap-2'>Hi, {" "}<p className={`${isAdmin&& 'text-primary'}`}>{user?.name || 'User'}</p></span>
+               <div className="h-7 w-7 rounded-full bg-[#F5F5F5] overflow-hidden flex items-center justify-center ">
+                {user?.profilePicture?.url ? (
+                    <img src={user.profilePicture.url} alt={user?.name} className="h-full w-full object-cover" />
+                ) : (
+                     <FaUserAstronaut size={23} />
+                )}
+            </div>
             </div>
 
             {/* Dropdown Menu */}
@@ -64,7 +72,13 @@ const { syncNow: syncWatchlistNow } = useWatchlist();
                     <p className="text-xs text-gray-500">{user?.email}</p>
                 </div>
 
-                <Link href="/profile" className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2" onClick={() => setIsOpen(false)}>
+                {isAdmin && (
+                    <Link href="/admin/dashboard" className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2" onClick={() => setIsOpen(false)}>
+                        <GrUserAdmin className="text-gray-500" />
+                        Admin Dashboard
+                    </Link>
+                )}
+                <Link href="/profile/account" className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2" onClick={() => setIsOpen(false)}>
                     <FaUserAstronaut className="text-gray-500" />
                     Profile
                 </Link>
@@ -74,19 +88,14 @@ const { syncNow: syncWatchlistNow } = useWatchlist();
                     Orders
                 </Link>
 
-                <Link href="/favorites" className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2" onClick={() => setIsOpen(false)}>
+                <Link href="/watchlist" className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2" onClick={() => setIsOpen(false)}>
                     <FaHeart className="text-gray-500" />
-                    Favorites
+                    WatchList
                 </Link>
 
                 <Link href="/cart" className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2" onClick={() => setIsOpen(false)}>
                     <FaShoppingCart className="text-gray-500" />
                     Cart
-                </Link>
-
-                <Link href="/account/settings" className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2" onClick={() => setIsOpen(false)}>
-                    <FaCog className="text-gray-500" />
-                    Account Settings
                 </Link>
 
                 <button

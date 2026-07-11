@@ -11,7 +11,7 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
-    const { login, loading } = useAuth();
+    const { adminLogin, loading } = useAuth();
     const router = useRouter();
 
     const validateForm = () => {
@@ -41,7 +41,7 @@ export default function Login() {
         }
 
         try {
-            await login(email, password);
+            await adminLogin(email, password);
             // Redirect is handled in the login function
         } catch (error) {
             console.error('Login error:', error);

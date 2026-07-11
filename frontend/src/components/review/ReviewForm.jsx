@@ -1,6 +1,7 @@
+// REviewForm
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import { FiX, FiUpload, FiTrash2, FiLoader } from 'react-icons/fi';
+import { FiX, FiUpload, FiTrash2, FiLoader, FiVideo } from 'react-icons/fi';
 import { useReviews } from '@/context/ReviewContext';
 import toast from 'react-hot-toast';
 import axios from 'axios';
@@ -60,19 +61,24 @@ function ImageUploadTile({ image, onRemove }) {
     );
 }
 
+
+
 export default function ReviewForm() {
     const { showForm, editingReview, closeForm, handleSubmit, handleEdit, product, currentUser } = useReviews();
     const isEdit = Boolean(editingReview);
 
-    const [form, setForm] = useState({
-        rating:        0,
-        reviewText:    '',
-        sizePurchased: '',
-        colorPurchased:'',
-        fitFeedback:   '',
-        isAnonymous:   false,
-        videoUrl:      '',
-    });
+  const [form, setForm] = useState({
+    rating: 0,
+    reviewText: '',
+    sizePurchased: '',
+    colorPurchased: '',
+    fitFeedback: '',
+    isAnonymous: false,
+});
+
+const [video, setVideo] = useState(null); // { url, public_id } | null
+const [uploadingVideo, setUploadingVideo] = useState(false);
+const videoRef = useRef(null);
     const [images,       setImages]       = useState([]);  // [{url, public_id}]
     const [uploading,    setUploading]    = useState(false);
     const [submitting,   setSubmitting]   = useState(false);
@@ -81,21 +87,57 @@ export default function ReviewForm() {
     // Pre-fill on edit
     useEffect(() => {
         if (editingReview) {
-            setForm({
-                rating:         editingReview.rating        || 0,
-                reviewText:     editingReview.reviewText    || '',
-                sizePurchased:  editingReview.sizePurchased || '',
-                colorPurchased: editingReview.colorPurchased|| '',
-                fitFeedback:    editingReview.fitFeedback   || '',
-                isAnonymous:    editingReview.isAnonymous   || false,
-                videoUrl:       editingReview.video?.url    || '',
-            });
-            setImages(editingReview.images || []);
+           setForm({
+    rating: editingReview.rating || 0,
+    reviewText: editingReview.reviewText || '',
+    sizePurchased: editingReview.sizePurchased || '',
+    colorPurchased: editingReview.colorPurchased || '',
+    fitFeedback: editingReview.fitFeedback || '',
+    isAnonymous: editingReview.isAnonymous || false,
+});
+
+setImages(editingReview.images || []);
+setVideo(editingReview.video || null);
         } else {
-            setForm({ rating: 0, reviewText: '', sizePurchased: '', colorPurchased: '', fitFeedback: '', isAnonymous: false, videoUrl: '' });
-            setImages([]);
+           setForm({
+    rating: 0,
+    reviewText: '',
+    sizePurchased: '',
+    colorPurchased: '',
+    fitFeedback: '',
+    isAnonymous: false,
+});
+
+setImages([]);
+setVideo(null);
         }
     }, [editingReview, showForm]);
+
+    const handleVideoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 50 * 1024 * 1024) {
+        toast.error('Video must be under 50MB');
+        return;
+    }
+
+    setUploadingVideo(true);
+    try {
+        const fd = new FormData();
+        fd.append('video', file);
+        const { data } = await axios.post(`${API}/api/upload/video`, fd, {
+            withCredentials: true,
+            headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        setVideo({ url: data.url, public_id: data.public_id });
+    } catch (err) {
+        toast.error(err.response?.data?.message || 'Video upload failed');
+    } finally {
+        setUploadingVideo(false);
+        if (videoRef.current) videoRef.current.value = '';
+    }
+};
 
     // Close on Escape
     useEffect(() => {
@@ -120,7 +162,7 @@ export default function ReviewForm() {
             // 🔴 CHANGE THIS FROM 'file' TO MATCH WHAT YOUR BACKEND EXPECTS (e.g., 'image')
             fd.append('image', file); 
             
-            const { data } = await axios.post(`${API}/api/upload`, fd, {
+            const { data } = await axios.post(`${API}/api/upload/review-image`, fd, {
                 withCredentials: true,
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
@@ -146,11 +188,11 @@ export default function ReviewForm() {
 
         setSubmitting(true);
         try {
-            const payload = {
-                ...form,
-                images,
-                video: form.videoUrl ? { url: form.videoUrl, public_id: '' } : undefined,
-            };
+           const payload = {
+    ...form,
+    images,
+    video,
+};
             if (isEdit) {
                 await handleEdit(editingReview._id, payload);
             } else {
@@ -296,19 +338,41 @@ export default function ReviewForm() {
                         />
                     </div>
 
-                    {/* Video URL */}
-                    <div>
-                        <label className="block text-xs font-semibold text-gray-600 mb-1.5">
-                            Video URL <span className="text-gray-400 font-normal">(optional — YouTube or direct link)</span>
-                        </label>
-                        <input
-                            type="url"
-                            value={form.videoUrl}
-                            onChange={(e) => setForm(f => ({ ...f, videoUrl: e.target.value }))}
-                            placeholder="https://youtube.com/watch?v=..."
-                            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent placeholder-gray-400"
-                        />
-                    </div>
+           <div>
+    <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+        Video <span className="text-gray-400 font-normal">(optional — record a quick clip)</span>
+    </label>
+    {video ? (
+        <div className="relative rounded-xl overflow-hidden border border-gray-200 w-40">
+            <video src={video.url} className="w-full h-24 object-cover" controls />
+            <button
+                type="button"
+                onClick={() => setVideo(null)}
+                className="absolute top-1 right-1 p-1 bg-black/60 rounded-full text-white hover:bg-black/80"
+            >
+                <FiTrash2 size={12} />
+            </button>
+        </div>
+    ) : (
+        <button
+            type="button"
+            onClick={() => videoRef.current?.click()}
+            disabled={uploadingVideo}
+            className="flex items-center gap-2 px-4 py-2.5 text-sm border-2 border-dashed border-gray-200 hover:border-gray-400 rounded-xl text-gray-500 hover:text-gray-700 transition-colors disabled:opacity-50"
+        >
+            {uploadingVideo ? <FiLoader size={16} className="animate-spin" /> : <FiVideo size={16} />}
+            {uploadingVideo ? 'Uploading…' : 'Record or upload a video'}
+        </button>
+    )}
+    <input
+        ref={videoRef}
+        type="file"
+        accept="video/*"
+        capture="environment"
+        className="hidden"
+        onChange={handleVideoUpload}
+    />
+</div>
 
                     {/* Anonymous toggle */}
                     <div className="flex items-center justify-between">

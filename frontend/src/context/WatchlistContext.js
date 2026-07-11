@@ -133,6 +133,7 @@ const exists = items.some(
         itemCount: items.length,
         updatedAt,
         isInWatchlist,
+        hydrated,
         toggleWatchlist,
         removeFromWatchlist,
         syncNow,

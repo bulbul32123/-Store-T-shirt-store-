@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 const User = require('../models/User');
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
+const generateToken = (id, role) => {
+    return jwt.sign({ id, role }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN || '7d',
     });
 };
@@ -38,7 +38,13 @@ const clearTokenCookie = (res) => {
 
 exports.register = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const {
+    name,
+    email,
+    password,
+    phone,
+    gender
+} = req.body;
 
         if (!name || !email || !password) {
             return res.status(400).json({
@@ -63,15 +69,15 @@ exports.register = async (req, res) => {
         }
 
         const verificationToken = uuidv4();
-
-        const user = await User.create({
-            name: name.trim(),
-            email: email.toLowerCase().trim(),
-            password,
-            verificationToken,
-            verificationTokenExpires: Date.now() + 60 * 60 * 1000,
-        });
-
+const user = await User.create({
+    name: name.trim(),
+    email: email.toLowerCase().trim(),
+    password,
+    phone: phone?.trim() || '',
+    gender: gender || '',
+    verificationToken,
+    verificationTokenExpires: Date.now() + 60 * 60 * 1000,
+});
         res.status(201).json({
             success: true,
             message: 'Registered successfully. Please verify your email.',
@@ -156,7 +162,6 @@ exports.login = async (req, res) => {
                 message: 'Invalid credentials'
             });
         }
-        console.log(isMatch);
 
         // if (!user.isVerified) {
         //     return res.status(401).json({
@@ -164,7 +169,7 @@ exports.login = async (req, res) => {
         //         message: 'Please verify your email first'
         //     });
         // }
-        const token = generateToken(user._id);
+       const token = generateToken(user._id, user.role);
         setTokenCookie(res, token);
 
         res.json({
@@ -310,8 +315,7 @@ exports.getMe = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
     try {
-        const { name, email, password, gender, phoneNumber, dateOfBirth } = req.body;
-
+      const { name, email, password, gender, phoneNumber, dateOfBirth, profilePicture, address } = req.body;
         const user = await User.findById(req.user.id);
         if (!user) {
             return res.status(404).json({
@@ -320,10 +324,12 @@ exports.updateProfile = async (req, res) => {
             });
         }
 
-        if (name) user.name = name.trim();
+       if (name) user.name = name.trim();
         if (gender) user.gender = gender;
         if (phoneNumber) user.phoneNumber = phoneNumber.trim();
         if (dateOfBirth) user.dateOfBirth = new Date(dateOfBirth);
+        if (profilePicture) user.profilePicture = profilePicture;
+        if (address) user.address = { ...user.address?.toObject?.(), ...address };
 
         if (email) {
             const emailExists = await User.findOne({

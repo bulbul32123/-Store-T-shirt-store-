@@ -43,7 +43,7 @@ export default function AccountForm() {
 
     return (
         <div className="space-y-10">
-            <section>
+            <section className="flexCenter flex-col">
                 <h3 className="text-xs font-bold uppercase tracking-widest text-[#6F6F6F] mb-4">Photo</h3>
                 <AvatarUploader />
             </section>

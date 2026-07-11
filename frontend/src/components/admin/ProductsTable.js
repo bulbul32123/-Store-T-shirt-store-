@@ -175,18 +175,6 @@ export default function ProductsTable({
                                 </button>
                             </th>
 
-                            {/* ── Status filter ── FIX: moved dropdown INTO this th, ref wraps the whole thing */}
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <div className="relative" ref={statusDropdownRef}>
-                                    <button
-                                        
-                                        className="flex items-center gap-1 focus:outline-none "
-                                    >
-                                        Status
-                                        <ActiveFilterBadge value={currentStatusFilter} />
-                                    </button>
-                                </div>
-                            </th>
 
                             {/* ── Date Added filter ── FIX: ref now wraps only this th's content */}
                             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">

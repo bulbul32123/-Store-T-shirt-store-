@@ -1,3 +1,4 @@
+// Review Context
 'use client';
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
@@ -9,26 +10,18 @@ const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export function ReviewProvider({ children, product }) {
     const { user } = useAuth();
-
-    // ── Data ─────────────────────────────────────────────────────────────────
     const [reviews,    setReviews]    = useState([]);
     const [stats,      setStats]      = useState(null);
     const [pagination, setPagination] = useState({ page: 1, pages: 1, total: 0, limit: 10 });
-
-    // ── UI ────────────────────────────────────────────────────────────────────
     const [loading,      setLoading]      = useState(true);
     const [loadingMore,  setLoadingMore]  = useState(false);
     const [sortBy,       setSortBy]       = useState('newest');
     const [filterRating, setFilterRating] = useState(null);
-
-    // ── Modals ────────────────────────────────────────────────────────────────
     const [mediaModal,     setMediaModal]     = useState({ open: false, items: [], startIndex: 0 });
     const [showForm,       setShowForm]       = useState(false);
     const [editingReview,  setEditingReview]  = useState(null);
 
     const statsRef = useRef(false);
-
-    // ── Fetch ─────────────────────────────────────────────────────────────────
     const fetchReviews = useCallback(async (page = 1, append = false) => {
         if (page === 1) setLoading(true); else setLoadingMore(true);
         try {
@@ -59,8 +52,6 @@ export function ReviewProvider({ children, product }) {
         statsRef.current = false;
         fetchReviews(1, false);
     }, [fetchReviews]);
-
-    // ── Like — optimistic ─────────────────────────────────────────────────────
     const handleLike = async (reviewId) => {
         if (!user) { toast.error('Please login to like reviews'); return; }
         const snapshot = [...reviews];
@@ -83,8 +74,6 @@ export function ReviewProvider({ children, product }) {
             toast.error('Failed to update');
         }
     };
-
-    // ── Dislike — optimistic ──────────────────────────────────────────────────
     const handleDislike = async (reviewId) => {
         if (!user) { toast.error('Please login to rate reviews'); return; }
         const snapshot = [...reviews];
@@ -107,37 +96,119 @@ export function ReviewProvider({ children, product }) {
             toast.error('Failed to update');
         }
     };
+ const handleReport = async (reviewId, title, details) => {
+    try {
+        await axios.post(`${API}/api/reviews/${reviewId}/report`, { title, details }, { withCredentials: true });
+        toast.success('Review reported. Thank you.');
+    } catch (err) {
+        toast.error(err.response?.data?.message || 'Failed to report review');
+    }
+};
+const handleEdit = async (reviewId, formData) => {
+    const oldReview = editingReview;
+    const { data } = await axios.put(`${API}/api/reviews/${reviewId}`, formData, { withCredentials: true });
+    const updated = data.review;
 
-    // ── Report ────────────────────────────────────────────────────────────────
-    const handleReport = async (reviewId, reason) => {
-        try {
-            await axios.post(`${API}/api/reviews/${reviewId}/report`, { reason }, { withCredentials: true });
-            toast.success('Review reported. Thank you.');
-        } catch (err) {
-            toast.error(err.response?.data?.message || 'Failed to report review');
-        }
-    };
+    setReviews(prev => prev.map(r => r._id === reviewId ? {
+        ...r,
+        ...updated,
+        displayName: updated.isAnonymous ? 'Anonymous' : (updated.user?.name || r.displayName),
+        userAvatar:  updated.isAnonymous ? null : (updated.user?.profilePicture?.url || r.userAvatar),
+        likesCount:    r.likesCount,
+        dislikesCount: r.dislikesCount,
+        isLiked:       r.isLiked,
+        isDisliked:    r.isDisliked,
+        isOwner:       r.isOwner,
+    } : r));
 
-    // ── Edit (owner only — resets to pending) ─────────────────────────────────
-    const handleEdit = async (reviewId, formData) => {
-        await axios.put(`${API}/api/reviews/${reviewId}`, formData, { withCredentials: true });
-        setReviews(prev => prev.filter(r => r._id !== reviewId));
-        closeForm();
-        statsRef.current = false;
-        toast.success('Review updated! It will reappear after re-moderation.');
-    };
+    // Rebalance rating average + fit-feedback counts if either changed
+    if (oldReview) {
+        setStats(prev => {
+            if (!prev) return prev;
+            let next = { ...prev };
+
+            if (oldReview.rating !== updated.rating) {
+                const total  = prev.totalReviews;
+                const newAvg = ((prev.avgRating * total) - oldReview.rating + updated.rating) / total;
+                const dist   = { ...prev.ratingDistribution };
+                dist[oldReview.rating] = Math.max(0, (dist[oldReview.rating] || 0) - 1);
+                dist[updated.rating]   = (dist[updated.rating] || 0) + 1;
+                next = { ...next, avgRating: Math.round(newAvg * 10) / 10, ratingDistribution: dist };
+            }
+
+            if (oldReview.fitFeedback !== updated.fitFeedback) {
+                const fitCounts = { ...prev.fitCounts };
+                if (oldReview.fitFeedback) {
+                    fitCounts[oldReview.fitFeedback] = Math.max(0, (fitCounts[oldReview.fitFeedback] || 0) - 1);
+                }
+                if (updated.fitFeedback) {
+                    fitCounts[updated.fitFeedback] = (fitCounts[updated.fitFeedback] || 0) + 1;
+                }
+                next = { ...next, fitCounts };
+            }
+
+            return next;
+        });
+    }
+
+    closeForm();
+    toast.success('Review updated!');
+};
 
     // ── Submit new ────────────────────────────────────────────────────────────
-    const handleSubmit = async (formData) => {
-        await axios.post(
-            `${API}/api/products/${product._id}/reviews`,
-            formData,
-            { withCredentials: true }
-        );
-        closeForm();
-        toast.success('Review submitted! It will appear after moderation.');
+const handleSubmit = async (formData) => {
+    const { data } = await axios.post(
+        `${API}/api/products/${product._id}/reviews`,
+        formData,
+        { withCredentials: true }
+    );
+
+    const newReview = {
+        ...data.review,
+        displayName:   data.review.isAnonymous ? 'Anonymous' : (data.review.user?.name || 'You'),
+        userAvatar:    data.review.isAnonymous ? null : (data.review.user?.profilePicture?.url || null),
+        likesCount:    0,
+        dislikesCount: 0,
+        isLiked:       false,
+        isDisliked:    false,
+        isOwner:       true,
     };
 
+    setReviews(prev => [newReview, ...prev]);
+    setPagination(prev => ({ ...prev, total: prev.total + 1 }));
+
+    // Recompute stats locally instead of waiting for a refetch
+ setStats(prev => {
+    if (!prev) {
+        return {
+            avgRating:          newReview.rating,
+            totalReviews:       1,
+            ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, [newReview.rating]: 1 },
+            fitCounts:          newReview.fitFeedback ? { [newReview.fitFeedback]: 1 } : {},
+        };
+    }
+    const newTotal = prev.totalReviews + 1;
+    const newAvg   = ((prev.avgRating * prev.totalReviews) + newReview.rating) / newTotal;
+    const dist     = { ...prev.ratingDistribution };
+    dist[newReview.rating] = (dist[newReview.rating] || 0) + 1;
+
+    const fitCounts = { ...prev.fitCounts };
+    if (newReview.fitFeedback) {
+        fitCounts[newReview.fitFeedback] = (fitCounts[newReview.fitFeedback] || 0) + 1;
+    }
+
+    return {
+        ...prev,
+        avgRating:          Math.round(newAvg * 10) / 10,
+        totalReviews:       newTotal,
+        ratingDistribution: dist,
+        fitCounts,
+    };
+});
+
+    closeForm();
+    toast.success('Review published!');
+};
     // ── Load more ─────────────────────────────────────────────────────────────
     const loadMore = () => {
         if (pagination.page < pagination.pages && !loadingMore)

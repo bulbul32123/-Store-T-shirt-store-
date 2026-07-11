@@ -1,3 +1,4 @@
+//
 const LoadingSpinner = ({ size = 'medium' }) => {
     const sizeClasses = {
         small: 'w-5 h-5',

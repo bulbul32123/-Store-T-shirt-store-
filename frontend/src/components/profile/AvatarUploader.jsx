@@ -1,11 +1,11 @@
 'use client';
-
 import { useRef, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useAuth } from '@/context/AuthContext';
 import { API_URL } from '@/utils/config';
 import { Button } from '@/components/ui/button';
+import { Camera, Loader2 } from 'lucide-react'; // Added icons
 
 export default function AvatarUploader() {
     const { user, refreshUser } = useAuth();
@@ -24,7 +24,7 @@ export default function AvatarUploader() {
             const { data: uploadData } = await axios.post(`${API_URL}/api/upload`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
-console.log('uploadData:', uploadData);
+            
             await axios.put(`${API_URL}/api/auth/update-profile`, {
                 profilePicture: { url: uploadData.url, public_id: uploadData.public_id },
             });
@@ -38,10 +38,20 @@ console.log('uploadData:', uploadData);
             if (inputRef.current) inputRef.current.value = '';
         }
     };
-console.log('user profile data:', user);
+
     return (
-        <div className="flex items-center gap-4">
-            <div className="h-20 w-20 rounded-full bg-[#F5F5F5] overflow-hidden flex items-center justify-center text-2xl font-bold uppercase text-[#111]">
+        <div className="relative inline-block">
+            {/* Hidden File Input */}
+            <input 
+                ref={inputRef} 
+                type="file" 
+                accept="image/*" 
+                className="hidden" 
+                onChange={handleFile} 
+            />
+            
+            {/* Circular Avatar Container */}
+            <div className="h-32 w-32 rounded-full bg-[#F5F5F5] overflow-hidden flex items-center justify-center text-3xl font-bold uppercase text-[#111] border border-gray-100 shadow-sm">
                 {user?.profilePicture?.url ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={user.profilePicture.url} alt={user?.name} className="h-full w-full object-cover" />
@@ -49,18 +59,21 @@ console.log('user profile data:', user);
                     user?.name?.charAt(0) || '?'
                 )}
             </div>
-            <div>
-                <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
-                <Button
-                    type="button"
-                    variant="outline"
-                    disabled={uploading}
-                    onClick={() => inputRef.current?.click()}
-                    className="rounded-full border-[#111] text-[#111] hover:bg-[#111] hover:text-white font-bold uppercase tracking-wide"
-                >
-                    {uploading ? 'Uploading…' : 'Change photo'}
-                </Button>
-            </div>
+
+            {/* Absolute Positioned Camera Button */}
+            <Button
+                type="button"
+                disabled={uploading}
+                onClick={() => inputRef.current?.click()}
+                className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-white p-0 text-[#111] shadow-md border border-gray-200 hover:bg-[#111] hover:text-white transition-colors flex items-center justify-center"
+                title="Change photo"
+            >
+                {uploading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                    <Camera className="h-4 w-4" />
+                )}
+            </Button>
         </div>
     );
 }
