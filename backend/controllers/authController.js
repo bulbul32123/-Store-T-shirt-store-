@@ -3,6 +3,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
+const { notifyAdmins } = require("../utils/notify");
 const User = require('../models/User');
 const generateToken = (id, role) => {
     return jwt.sign({ id, role }, process.env.JWT_SECRET, {
@@ -78,6 +79,13 @@ const user = await User.create({
     verificationToken,
     verificationTokenExpires: Date.now() + 60 * 60 * 1000,
 });
+        
+        notifyAdmins({
+          type: "new_customer",
+          title: "New Customer",
+          message: `${user.name} just signed up`,
+          link: `/admin/customers?id=${user._id}`,
+        });
         res.status(201).json({
             success: true,
             message: 'Registered successfully. Please verify your email.',

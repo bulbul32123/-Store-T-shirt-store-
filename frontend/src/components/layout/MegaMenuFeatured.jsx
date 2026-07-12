@@ -4,7 +4,8 @@ import Link from "next/link";
 
 const STATUS_FILTERS = [
   { name: "Featured", url: "/products?status=featured" },
-  { name: "Sale", url: "/products?sale=true" },
+    { name: "Sale", url: "/products?sale=true" },
+  { name: "New Drops", url: "/products?status=newDrop" },
   { name: "Free Shipping", url: "/products?freeShipping=true" },
   { name: "Best Selling", url: "/products?status=bestselling" },
 ];
