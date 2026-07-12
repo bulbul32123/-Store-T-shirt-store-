@@ -1,7 +1,8 @@
 // Admin Order page
 'use client';
-import { useState } from 'react';
-import toast from 'react-hot-toast'; // already used elsewhere in this project (RootLayout)
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { useOrders } from '@/hooks/useOrders';
 import { adminOrdersApi } from '@/lib/adminOrdersApi';
 import OrderMetricsCards from '@/components/OrderMetricsCards';
@@ -35,94 +36,121 @@ function exportOrdersAsCsv(orders) {
 }
 
 export default function AdminOrdersPage() {
-    const {
-        orders,
-        loading,
-        currentPage,
-        totalPages,
-        totalOrders,
-        summary,
-        filters,
-        limit,
-        setCurrentPage,
-        updateFilters,
-        resetFilters,
-        refetch
-    } = useOrders();
+  const {
+    orders,
+    loading,
+    currentPage,
+    totalPages,
+    totalOrders,
+    summary,
+    filters,
+    limit,
+    setCurrentPage,
+    updateFilters,
+    resetFilters,
+    refetch,
+  } = useOrders();
 
-    const [selectedIds, setSelectedIds] = useState([]);
-    const [activeOrderId, setActiveOrderId] = useState(null);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [activeOrderId, setActiveOrderId] = useState(null);
 
-    const toggleSelect = (id) =>
-        setSelectedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-    const toggleSelectAll = (checked) => setSelectedIds(checked ? orders.map((o) => o.id) : []);
+  useEffect(() => {
+    const highlightId = searchParams.get("highlight");
+    if (highlightId) {
+      setActiveOrderId(highlightId);
+      // clean the URL so refresh/back doesn't reopen it
+      router.replace("/admin/orders", { scroll: false });
+    }
+  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const handleBulkStatusUpdate = async (orderStatus) => {
-        try {
-            const result = await adminOrdersApi.bulkUpdateStatus(selectedIds, orderStatus);
-            toast.success(result.message || 'Orders updated');
-            setSelectedIds([]);
-            refetch();
-        } catch (err) {
-            toast.error(err.message || 'Bulk update failed');
-        }
-    };
-
-    const handleBulkExport = (selectedOrders) => {
-        exportOrdersAsCsv(selectedOrders);
-        toast.success(`Exported ${selectedOrders.length} order(s) to CSV`);
-    };
-if (loading && orders.length === 0) {
-    return <OrdersPageSkeleton />;
-}
-    return (
-        <div className="p-6">
-            <div className="flex items-center justify-between mb-5">
-                <div>
-                    <h1 className="text-xl font-bold text-gray-900">Order Management</h1>
-                    <p className="text-sm text-gray-500">Track, fulfill, and manage every order in one place.</p>
-                </div>
-            </div>
-
-            <OrderMetricsCards summary={summary} loading={loading && orders.length === 0} />
-
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-                <OrderFiltersBar filters={filters} updateFilters={updateFilters} resetFilters={resetFilters} />
-
-                <div className="px-4 pt-3">
-                    <BulkActionsBar
-                        selectedIds={selectedIds}
-                        orders={orders}
-                        onClear={() => setSelectedIds([])}
-                        onBulkStatusUpdate={handleBulkStatusUpdate}
-                        onBulkExport={handleBulkExport}
-                    />
-                </div>
-
-                <OrdersTable
-                    orders={orders}
-                    loading={loading}
-                    selectedIds={selectedIds}
-                    onToggleSelect={toggleSelect}
-                    onToggleSelectAll={toggleSelectAll}
-                    onOpenOrder={setActiveOrderId}
-                />
-
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    totalOrders={totalOrders}
-                    limit={limit}
-                    onPageChange={setCurrentPage}
-                />
-            </div>
-
-            <OrderDetailDrawer
-                orderId={activeOrderId}
-                onClose={() => setActiveOrderId(null)}
-                onOrderUpdated={refetch}
-            />
-        </div>
+  const toggleSelect = (id) =>
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
+
+  const toggleSelectAll = (checked) =>
+    setSelectedIds(checked ? orders.map((o) => o.id) : []);
+
+  const handleBulkStatusUpdate = async (orderStatus) => {
+    try {
+      const result = await adminOrdersApi.bulkUpdateStatus(
+        selectedIds,
+        orderStatus,
+      );
+      toast.success(result.message || "Orders updated");
+      setSelectedIds([]);
+      refetch();
+    } catch (err) {
+      toast.error(err.message || "Bulk update failed");
+    }
+  };
+
+  const handleBulkExport = (selectedOrders) => {
+    exportOrdersAsCsv(selectedOrders);
+    toast.success(`Exported ${selectedOrders.length} order(s) to CSV`);
+  };
+  if (loading && orders.length === 0) {
+    return <OrdersPageSkeleton />;
+  }
+  return (
+    <div className="p-6">
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <h1 className="text-xl font-bold text-gray-900">Order Management</h1>
+          <p className="text-sm text-gray-500">
+            Track, fulfill, and manage every order in one place.
+          </p>
+        </div>
+      </div>
+
+      <OrderMetricsCards
+        summary={summary}
+        loading={loading && orders.length === 0}
+      />
+
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+        <OrderFiltersBar
+          filters={filters}
+          updateFilters={updateFilters}
+          resetFilters={resetFilters}
+        />
+
+        <div className="px-4 pt-3">
+          <BulkActionsBar
+            selectedIds={selectedIds}
+            orders={orders}
+            onClear={() => setSelectedIds([])}
+            onBulkStatusUpdate={handleBulkStatusUpdate}
+            onBulkExport={handleBulkExport}
+          />
+        </div>
+
+        <OrdersTable
+          orders={orders}
+          loading={loading}
+          selectedIds={selectedIds}
+          onToggleSelect={toggleSelect}
+          onToggleSelectAll={toggleSelectAll}
+          onOpenOrder={setActiveOrderId}
+        />
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalOrders={totalOrders}
+          limit={limit}
+          onPageChange={setCurrentPage}
+        />
+      </div>
+
+      <OrderDetailDrawer
+        orderId={activeOrderId}
+        onClose={() => setActiveOrderId(null)}
+        onOrderUpdated={refetch}
+      />
+    </div>
+  );
 }

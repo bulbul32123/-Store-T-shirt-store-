@@ -34,7 +34,7 @@ export default function EditProduct({ params: paramsPromise }) {
     stock: "",
     sizes: [],
     colors: [],
-    newDrop: product.newDrop ?? true,
+    newDrop: false,
     discount: "0",
     featured: false,
     popular: false,
@@ -69,6 +69,7 @@ export default function EditProduct({ params: paramsPromise }) {
           colors: product.colors || [],
           discount: product.discount || '0',
           featured: product.featured || false,
+          newDrop: product.newDrop || false,
           popular: product.popular || false,
           trending: product.trending || false,
           isFreeShipping: product.isFreeShipping || false
@@ -273,6 +274,7 @@ export default function EditProduct({ params: paramsPromise }) {
         discount: parseInt(formData.discount) || 0,
         featured: formData.featured,
         popular: formData.popular,
+        newDrop: formData.newDrop,
         trending: formData.trending,
         isFreeShipping: formData.isFreeShipping
       };
@@ -669,6 +671,16 @@ export default function EditProduct({ params: paramsPromise }) {
                 />
                 <span className="ml-2 text-sm text-gray-700">Popular</span>
               </label>
+              <label className="inline-flex items-center">
+  <input
+    type="checkbox"
+    name="newDrop"
+    checked={formData.newDrop}
+    onChange={handleChange}
+    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+  />
+  <span className="ml-2 text-sm text-gray-700">New Drop</span>
+</label>
 
               <label className="inline-flex items-center">
                 <input
