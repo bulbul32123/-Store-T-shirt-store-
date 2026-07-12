@@ -1,15 +1,22 @@
 // admin/product/new/page.js
-'use client';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
-import axios from 'axios';
-import { API_URL } from '@/utils/config';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
-import toast from 'react-hot-toast';
-import { RiArrowLeftLine, RiImageAddLine, RiCloseCircleLine, RiDeleteBin6Line, RiAddLine, RiEdit2Line } from 'react-icons/ri';
-import Link from 'next/link';
-import { SketchPicker } from 'react-color';
+"use client";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+import { useAuth } from "@/context/AuthContext";
+import { API_URL } from "@/utils/config";
+import axios from "axios";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { SketchPicker } from "react-color";
+import toast from "react-hot-toast";
+import {
+  RiAddLine,
+  RiArrowLeftLine,
+  RiCloseCircleLine,
+  RiDeleteBin6Line,
+  RiEdit2Line,
+  RiImageAddLine,
+} from "react-icons/ri";
 
 export default function NewProduct() {
   const router = useRouter();
@@ -17,28 +24,28 @@ export default function NewProduct() {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [categories, setCategories] = useState([]);
-  const [sizes, setSizes] = useState(['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL']);
+  const [sizes, setSizes] = useState(["XS", "S", "M", "L", "XL", "XXL", "3XL"]);
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [editingColorIndex, setEditingColorIndex] = useState(null);
-  const [tempColorName, setTempColorName] = useState('');
-  const [tempColorCode, setTempColorCode] = useState('#FF0000');
+  const [tempColorName, setTempColorName] = useState("");
+  const [tempColorCode, setTempColorCode] = useState("#FF0000");
   const [uploading, setUploading] = useState(false);
   const [uploadingColorIndex, setUploadingColorIndex] = useState(null);
 
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    price: '',
-    category: '',
-     newDrop: true,
-    stock: '',
+    name: "",
+    description: "",
+    price: "",
+    category: "",
+    newDrop: false,
+    stock: "",
     sizes: [],
     colors: [], // Array of {name, code, images: []}
-    discount: '0',
+    discount: "0",
     featured: false,
     popular: false,
     trending: false,
-    isFreeShipping: false
+    isFreeShipping: false,
   });
 
   useEffect(() => {
@@ -48,14 +55,14 @@ export default function NewProduct() {
         const { data } = await axios.get(`${API_URL}/api/categories`);
         setCategories(data.categories);
       } catch (error) {
-        console.error('Error fetching categories:', error);
-        toast.error('Failed to load categories. Please refresh the page.');
+        console.error("Error fetching categories:", error);
+        toast.error("Failed to load categories. Please refresh the page.");
       } finally {
         setInitialLoading(false);
       }
     };
 
-    if (user && user.role === 'admin') {
+    if (user && user.role === "admin") {
       fetchCategories();
     }
   }, [user]);
@@ -63,8 +70,8 @@ export default function NewProduct() {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    if (type === 'checkbox') {
-      if (name === 'sizes') {
+    if (type === "checkbox") {
+      if (name === "sizes") {
         const selectedSizes = [...formData.sizes];
         if (checked) {
           selectedSizes.push(value);
@@ -86,8 +93,8 @@ export default function NewProduct() {
   // Start creating new color variant
   const startNewColor = () => {
     setEditingColorIndex(-1); // -1 means new color
-    setTempColorName('');
-    setTempColorCode('#FF0000');
+    setTempColorName("");
+    setTempColorCode("#FF0000");
     setShowColorPicker(false);
   };
 
@@ -102,7 +109,7 @@ export default function NewProduct() {
   // Save color variant (new or edited)
   const saveColorVariant = () => {
     if (!tempColorName.trim()) {
-      toast.error('Please enter a color name');
+      toast.error("Please enter a color name");
       return;
     }
 
@@ -110,11 +117,11 @@ export default function NewProduct() {
     const colorExists = formData.colors.some(
       (color, index) =>
         color.name.toLowerCase() === tempColorName.toLowerCase() &&
-        index !== editingColorIndex
+        index !== editingColorIndex,
     );
 
     if (colorExists) {
-      toast.error('Color variant already exists');
+      toast.error("Color variant already exists");
       return;
     }
 
@@ -125,7 +132,7 @@ export default function NewProduct() {
       const newColor = {
         name: tempColorName.trim(),
         code: tempColorCode,
-        images: []
+        images: [],
       };
       updatedColors.push(newColor);
     } else {
@@ -133,22 +140,22 @@ export default function NewProduct() {
       updatedColors[editingColorIndex] = {
         ...updatedColors[editingColorIndex],
         name: tempColorName.trim(),
-        code: tempColorCode
+        code: tempColorCode,
       };
     }
 
     setFormData({ ...formData, colors: updatedColors });
     setEditingColorIndex(null);
-    setTempColorName('');
-    setTempColorCode('#FF0000');
+    setTempColorName("");
+    setTempColorCode("#FF0000");
     setShowColorPicker(false);
   };
 
   // Cancel color editing
   const cancelColorEdit = () => {
     setEditingColorIndex(null);
-    setTempColorName('');
-    setTempColorCode('#FF0000');
+    setTempColorName("");
+    setTempColorCode("#FF0000");
     setShowColorPicker(false);
   };
 
@@ -164,8 +171,10 @@ export default function NewProduct() {
   // Handle image upload for specific color
   const handleColorImageUpload = async (colorIndex, files) => {
     if (!files || files.length === 0) return;
-    console.log('Uploading files for color index:', colorIndex);
-    Array.from(files).forEach(file => console.log(file.name, file.size, file.type));
+    console.log("Uploading files for color index:", colorIndex);
+    Array.from(files).forEach((file) =>
+      console.log(file.name, file.size, file.type),
+    );
 
     setUploading(true);
     setUploadingColorIndex(colorIndex);
@@ -173,18 +182,24 @@ export default function NewProduct() {
     try {
       const uploadPromises = Array.from(files).map(async (file) => {
         const formDataUpload = new FormData();
-        formDataUpload.append('image', file);
+        formDataUpload.append("image", file);
 
         // Debug FormData content properly
         for (let pair of formDataUpload.entries()) {
           console.log(pair[0], pair[1]);
         }
 
-        const { data } = await axios.post(`${API_URL}/api/upload`, formDataUpload, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-        console.log(data)
-        return { url: data.url, public_id: `temp_${Date.now()}_${Math.random()}` };
+        const { data } = await axios.post(
+          `${API_URL}/api/upload`,
+          formDataUpload,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          },
+        );
+        return {
+          url: data.url,
+          public_id: `temp_${Date.now()}_${Math.random()}`,
+        };
       });
 
       const uploadedImages = await Promise.all(uploadPromises);
@@ -192,14 +207,15 @@ export default function NewProduct() {
       const updatedColors = [...formData.colors];
       updatedColors[colorIndex].images = [
         ...updatedColors[colorIndex].images,
-        ...uploadedImages
+        ...uploadedImages,
       ];
       setFormData({ ...formData, colors: updatedColors });
-      toast.success(`${uploadedImages.length} image(s) added to ${updatedColors[colorIndex].name} variant`);
-
+      toast.success(
+        `${uploadedImages.length} image(s) added to ${updatedColors[colorIndex].name} variant`,
+      );
     } catch (error) {
-      console.error('Image upload error:', error);
-      toast.error('Failed to upload images. Please try again.');
+      console.error("Image upload error:", error);
+      toast.error("Failed to upload images. Please try again.");
     } finally {
       setUploading(false);
       setUploadingColorIndex(null);
@@ -220,17 +236,27 @@ export default function NewProduct() {
       setLoading(true);
 
       // Validate form data
-      if (!formData.name || !formData.description || !formData.price || !formData.category || !formData.stock) {
-        toast.error('Please fill in all required fields');
+      if (
+        !formData.name ||
+        !formData.description ||
+        !formData.price ||
+        !formData.category ||
+        !formData.stock
+      ) {
+        toast.error("Please fill in all required fields");
         setLoading(false);
         return;
       }
 
       // Check if at least one color variant has images
       if (formData.colors.length > 0) {
-        const colorsWithoutImages = formData.colors.filter(color => color.images.length === 0);
+        const colorsWithoutImages = formData.colors.filter(
+          (color) => color.images.length === 0,
+        );
         if (colorsWithoutImages.length > 0) {
-          toast.error(`Please add at least one image to: ${colorsWithoutImages.map(c => c.name).join(', ')}`);
+          toast.error(
+            `Please add at least one image to: ${colorsWithoutImages.map((c) => c.name).join(", ")}`,
+          );
           setLoading(false);
           return;
         }
@@ -249,16 +275,16 @@ export default function NewProduct() {
         featured: formData.featured,
         popular: formData.popular,
         trending: formData.trending,
-        isFreeShipping: formData.isFreeShipping
+        newDrop: formData.newDrop,
+        isFreeShipping: formData.isFreeShipping,
       };
 
-      const { data } = await axios.post(`${API_URL}/api/products`, productData);
-
-      toast.success('Product created successfully');
-      router.push('/admin/products');
+      await axios.post(`${API_URL}/api/products`, productData);
+      toast.success("Product created successfully");
+      router.push("/admin/products");
     } catch (error) {
-      console.error('Error creating product:', error);
-      toast.error(error.response?.data?.message || 'Failed to create product');
+      console.error("Error creating product:", error);
+      toast.error(error.response?.data?.message || "Failed to create product");
     } finally {
       setLoading(false);
     }
@@ -276,21 +302,32 @@ export default function NewProduct() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <Link href="/admin/products" className="mr-4 p-2 bg-white rounded-full shadow-sm hover:bg-gray-100">
+          <Link
+            href="/admin/products"
+            className="mr-4 p-2 bg-white rounded-full shadow-sm hover:bg-gray-100"
+          >
             <RiArrowLeftLine className="text-gray-500" />
           </Link>
           <h1 className="text-2xl font-bold text-gray-800">Add New Product</h1>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm border border-gray-200">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white rounded-lg shadow-sm border border-gray-200"
+      >
         <div className="p-6 space-y-6">
           {/* Basic Information */}
           <div>
-            <h2 className="text-lg font-medium text-gray-800 mb-4">Basic Information</h2>
+            <h2 className="text-lg font-medium text-gray-800 mb-4">
+              Basic Information
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Product Name *
                 </label>
                 <input
@@ -305,7 +342,10 @@ export default function NewProduct() {
               </div>
 
               <div>
-                <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="category"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Category *
                 </label>
                 <select
@@ -326,7 +366,10 @@ export default function NewProduct() {
               </div>
 
               <div>
-                <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="price"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Price ($) *
                 </label>
                 <input
@@ -343,7 +386,10 @@ export default function NewProduct() {
               </div>
 
               <div>
-                <label htmlFor="stock" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="stock"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Stock Quantity *
                 </label>
                 <input
@@ -359,7 +405,10 @@ export default function NewProduct() {
               </div>
 
               <div>
-                <label htmlFor="discount" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="discount"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Discount (%)
                 </label>
                 <input
@@ -377,7 +426,10 @@ export default function NewProduct() {
 
             {/* Description */}
             <div className="mt-6">
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Description *
               </label>
               <textarea
@@ -417,7 +469,9 @@ export default function NewProduct() {
           {/* Color Variants Section */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-medium text-gray-800">Color Variants</h2>
+              <h2 className="text-lg font-medium text-gray-800">
+                Color Variants
+              </h2>
               <button
                 type="button"
                 onClick={startNewColor}
@@ -433,11 +487,15 @@ export default function NewProduct() {
             {editingColorIndex !== null && (
               <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-4">
                 <h3 className="text-sm font-medium text-blue-800 mb-3">
-                  {editingColorIndex === -1 ? 'Add New Color Variant' : `Edit ${formData.colors[editingColorIndex]?.name} Variant`}
+                  {editingColorIndex === -1
+                    ? "Add New Color Variant"
+                    : `Edit ${formData.colors[editingColorIndex]?.name} Variant`}
                 </h3>
                 <div className="flex items-end gap-4 mb-4">
                   <div className="flex-1">
-                    <label className="block text-xs text-blue-700 mb-1">Color Name</label>
+                    <label className="block text-xs text-blue-700 mb-1">
+                      Color Name
+                    </label>
                     <input
                       type="text"
                       value={tempColorName}
@@ -448,14 +506,18 @@ export default function NewProduct() {
                   </div>
 
                   <div>
-                    <label className="block text-xs text-blue-700 mb-1">Color</label>
+                    <label className="block text-xs text-blue-700 mb-1">
+                      Color
+                    </label>
                     <div className="flex items-center gap-2">
                       <div
                         className="w-10 h-10 rounded-md cursor-pointer border-2 border-blue-300"
                         style={{ backgroundColor: tempColorCode }}
                         onClick={() => setShowColorPicker(!showColorPicker)}
                       />
-                      <span className="text-sm text-blue-700">{tempColorCode}</span>
+                      <span className="text-sm text-blue-700">
+                        {tempColorCode}
+                      </span>
                     </div>
                   </div>
 
@@ -498,7 +560,10 @@ export default function NewProduct() {
             {formData.colors.length > 0 && (
               <div className="space-y-4">
                 {formData.colors.map((color, colorIndex) => (
-                  <div key={colorIndex} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                  <div
+                    key={colorIndex}
+                    className="border border-gray-200 rounded-lg p-4 bg-gray-50"
+                  >
                     {/* Color Header */}
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
@@ -507,10 +572,17 @@ export default function NewProduct() {
                           style={{ backgroundColor: color.code }}
                         />
                         <div>
-                          <span className="font-medium text-gray-800 text-lg">{color.name}</span>
+                          <span className="font-medium text-gray-800 text-lg">
+                            {color.name}
+                          </span>
                           <p className="text-sm text-gray-500">
-                            {color.images.length} image{color.images.length !== 1 ? 's' : ''} uploaded
-                            {color.images.length === 0 && <span className="text-red-500 ml-1">(Please add images)</span>}
+                            {color.images.length} image
+                            {color.images.length !== 1 ? "s" : ""} uploaded
+                            {color.images.length === 0 && (
+                              <span className="text-red-500 ml-1">
+                                (Please add images)
+                              </span>
+                            )}
                           </p>
                         </div>
                       </div>
@@ -539,28 +611,51 @@ export default function NewProduct() {
                       {/* Upload Area */}
                       <div
                         className={`border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:bg-gray-100 transition-colors mb-4 ${
-                          uploadingColorIndex === colorIndex ? 'opacity-50 cursor-not-allowed bg-gray-50' : ''
+                          uploadingColorIndex === colorIndex
+                            ? "opacity-50 cursor-not-allowed bg-gray-50"
+                            : ""
                         }`}
                         onClick={() => {
                           if (!uploading) {
-                            document.getElementById(`colorImages_${colorIndex}`).click();
+                            document
+                              .getElementById(`colorImages_${colorIndex}`)
+                              .click();
                           }
                         }}
                       >
                         <RiImageAddLine className="mx-auto h-12 w-12 text-gray-400 mb-2" />
                         <p className="text-sm text-gray-600 mb-1">
-                          Click to upload images for <strong>{color.name}</strong>
+                          Click to upload images for{" "}
+                          <strong>{color.name}</strong>
                         </p>
                         <p className="text-xs text-gray-400">
                           PNG, JPG, GIF up to 5MB each • 4-5 images recommended
                         </p>
                         {uploadingColorIndex === colorIndex && (
                           <div className="mt-3">
-                            <svg className="animate-spin mx-auto h-5 w-5 text-blue-600 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            <svg
+                              className="animate-spin mx-auto h-5 w-5 text-blue-600 mb-2"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
                             </svg>
-                            <p className="text-sm text-blue-600 font-medium">Uploading images...</p>
+                            <p className="text-sm text-blue-600 font-medium">
+                              Uploading images...
+                            </p>
                           </div>
                         )}
                         <input
@@ -569,10 +664,11 @@ export default function NewProduct() {
                           multiple
                           accept="image/*"
                           className="hidden"
-                          onChange={(e) => handleColorImageUpload(colorIndex, e.target.files)}
+                          onChange={(e) =>
+                            handleColorImageUpload(colorIndex, e.target.files)
+                          }
                           disabled={uploading}
                         />
-
                       </div>
 
                       {/* Image Preview Grid */}
@@ -587,7 +683,9 @@ export default function NewProduct() {
                               />
                               <button
                                 type="button"
-                                onClick={() => removeColorImage(colorIndex, imageIndex)}
+                                onClick={() =>
+                                  removeColorImage(colorIndex, imageIndex)
+                                }
                                 className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 text-xs opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
                                 title="Remove image"
                                 disabled={uploading}
@@ -612,14 +710,18 @@ export default function NewProduct() {
               <div className="text-center py-8 text-gray-500">
                 <RiImageAddLine className="mx-auto h-12 w-12 mb-2" />
                 <p>No color variants added yet</p>
-                <p className="text-sm">Add color variants to create image galleries for each color</p>
+                <p className="text-sm">
+                  Add color variants to create image galleries for each color
+                </p>
               </div>
             )}
           </div>
 
           {/* Product Status */}
           <div>
-            <h2 className="text-lg font-medium text-gray-800 mb-4">Product Status</h2>
+            <h2 className="text-lg font-medium text-gray-800 mb-4">
+              Product Status
+            </h2>
             <div className="flex flex-wrap gap-6">
               <label className="inline-flex items-center">
                 <input
@@ -642,6 +744,16 @@ export default function NewProduct() {
                 />
                 <span className="ml-2 text-sm text-gray-700">Popular</span>
               </label>
+              <label className="inline-flex items-center">
+                <input
+                  type="checkbox"
+                  name="newDrop"
+                  checked={formData.newDrop}
+                  onChange={handleChange}
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                />
+                <span className="ml-2 text-sm text-gray-700">New Drop</span>
+              </label>
 
               <label className="inline-flex items-center">
                 <input
@@ -662,7 +774,9 @@ export default function NewProduct() {
                   onChange={handleChange}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
-                <span className="ml-2 text-sm text-gray-700">Free Shipping</span>
+                <span className="ml-2 text-sm text-gray-700">
+                  Free Shipping
+                </span>
               </label>
             </div>
           </div>
@@ -682,22 +796,54 @@ export default function NewProduct() {
           >
             {loading ? (
               <>
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <svg
+                  className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
                 </svg>
                 Saving...
               </>
             ) : uploading ? (
               <>
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <svg
+                  className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
                 </svg>
                 Uploading Images...
               </>
             ) : (
-              'Save Product'
+              "Save Product"
             )}
           </button>
         </div>
@@ -705,8 +851,3 @@ export default function NewProduct() {
     </div>
   );
 }
-
-
-
-
-

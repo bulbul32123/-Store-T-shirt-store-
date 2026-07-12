@@ -1,14 +1,14 @@
 'use client';
-
-import { useState, useEffect, useCallback, useRef } from 'react';
+import ReviewDetailDrawer from '@/components/admin/reviews/ReviewDetailDrawer';
+import ReviewFiltersBar from '@/components/admin/reviews/ReviewFiltersBar';
+import ReviewsTable from '@/components/admin/reviews/ReviewsTable';
+import { useDebounce } from '@/hooks/useDebounce';
 import { adminReviewsApi } from '@/lib/adminReviewsApi';
-import { useDebounce }     from '@/hooks/useDebounce';
-import { getSocket }       from '@/lib/socket';
-import ReviewsTable        from '@/components/admin/reviews/ReviewsTable';
-import ReviewFiltersBar    from '@/components/admin/reviews/ReviewFiltersBar';
-import ReviewDetailDrawer  from '@/components/admin/reviews/ReviewDetailDrawer';
-import toast                from 'react-hot-toast';
-import { FiMessageSquare, FiFlag, FiStar, FiTrash2, FiLoader, FiX } from 'react-icons/fi';
+import { getSocket } from '@/lib/socket';
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
+import { FiFlag, FiLoader, FiMessageSquare, FiStar, FiTrash2, FiX } from 'react-icons/fi';
 
 function ConfirmModal({ title, message, confirmText, variant = 'danger', onConfirm, onClose }) {
     const btnCls = variant === 'danger' ? 'bg-rose-600 hover:bg-rose-700 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white';
@@ -92,244 +92,365 @@ function Pagination({ page, pages, total, limit, onPageChange }) {
 const DEFAULT_FILTERS = { rating: '', search: '', dateFrom: '', dateTo: '', sort: 'newest' };
 
 export default function ReviewsPage() {
-    const [activeTab, setActiveTab] = useState('all'); // 'all' | 'reported'
+  const [activeTab, setActiveTab] = useState("all"); // 'all' | 'reported'
 
-    const [reviews,    setReviews]    = useState([]);
-    const [stats,      setStats]      = useState(null);
-    const [pagination, setPagination] = useState({ total: 0, page: 1, pages: 1, limit: 20 });
+  const [reviews, setReviews] = useState([]);
+  const [stats, setStats] = useState(null);
+  const [pagination, setPagination] = useState({
+    total: 0,
+    page: 1,
+    pages: 1,
+    limit: 20,
+  });
 
-    const [loading,      setLoading]      = useState(true);
-    const [statsLoading, setStatsLoading] = useState(true);
-    const [selectedIds,  setSelectedIds]  = useState(new Set());
-    const [bulkLoading,  setBulkLoading]  = useState(false);
-    const [detailReview, setDetailReview] = useState(null);
-    const [modal,        setModal]        = useState(null);
-    const [newReportsBadge, setNewReportsBadge] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [statsLoading, setStatsLoading] = useState(true);
+  const [selectedIds, setSelectedIds] = useState(new Set());
+  const [bulkLoading, setBulkLoading] = useState(false);
+  const [detailReview, setDetailReview] = useState(null);
+  const [modal, setModal] = useState(null);
+  const [newReportsBadge, setNewReportsBadge] = useState(0);
 
-    const [filters, setFilters] = useState(DEFAULT_FILTERS);
-    const [page,    setPage]    = useState(1);
-    const debouncedSearch = useDebounce(filters.search, 400);
+  const [filters, setFilters] = useState(DEFAULT_FILTERS);
+  const [page, setPage] = useState(1);
+  const debouncedSearch = useDebounce(filters.search, 400);
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-    const fetchStats = useCallback(async () => {
-        setStatsLoading(true);
-        try {
-            const data = await adminReviewsApi.getReviewStats();
-            setStats(data);
-        } catch (err) {
-            console.error('Stats fetch failed:', err);
-        } finally {
-            setStatsLoading(false);
-        }
-    }, []);
+  useEffect(() => {
+    const id = searchParams.get("id");
+    const tabParam = searchParams.get("tab");
+    if (tabParam === "reported") setActiveTab("reported");
+if (id) {
+  adminReviewsApi
+    .getReviewById(id)
+    .then((data) => setDetailReview(data.review)) // ← also see note below
+    .catch((err) => toast.error(err.message || "Failed to load review"));
+  router.replace("/admin/reviews", { scroll: false });
+}
+  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const fetchAllReviews = useCallback(async (pageNum = 1) => {
-        setLoading(true);
-        try {
-            const isMin = filters.rating.startsWith('min');
-            const params = {
-                rating:    isMin ? '' : filters.rating || undefined,
-                ratingMin: isMin ? filters.rating.replace('min', '') : undefined,
-                search:    debouncedSearch || undefined,
-                dateFrom:  filters.dateFrom || undefined,
-                dateTo:    filters.dateTo   || undefined,
-                sort:      filters.sort,
-                page:      pageNum,
-                limit:     20
-            };
-            const data = await adminReviewsApi.getReviews(params);
-            setReviews(data.reviews);
-            setPagination(data.pagination);
-        } catch (err) {
-            toast.error(err.message || 'Failed to load reviews');
-        } finally {
-            setLoading(false);
-        }
-    }, [filters, debouncedSearch]);
+  const fetchStats = useCallback(async () => {
+    setStatsLoading(true);
+    try {
+      const data = await adminReviewsApi.getReviewStats();
+      setStats(data);
+    } catch (err) {
+      console.error("Stats fetch failed:", err);
+    } finally {
+      setStatsLoading(false);
+    }
+  }, []);
 
-    const fetchReportedReviews = useCallback(async () => {
-        setLoading(true);
-        try {
-            const data = await adminReviewsApi.getReportedReviews();
-            setReviews(data.reviews);
-            setPagination({ total: data.total, page: 1, pages: 1, limit: data.total || 1 });
-            setNewReportsBadge(0);
-        } catch (err) {
-            toast.error(err.message || 'Failed to load reported reviews');
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-
-    // Initial stats load
-    useEffect(() => { fetchStats(); }, [fetchStats]);
-
-    // Tab switch — reset everything and load the right dataset
-    useEffect(() => {
-        setPage(1);
-        setSelectedIds(new Set());
-        if (activeTab === 'all') fetchAllReviews(1);
-        else fetchReportedReviews();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [activeTab]);
-
-    // Filter changes only apply to the 'all' tab
-    const isFirstRender = useRef(true);
-    useEffect(() => {
-        if (activeTab !== 'all') return;
-        if (isFirstRender.current) { isFirstRender.current = false; return; }
-        setPage(1);
-        setSelectedIds(new Set());
-        fetchAllReviews(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [filters.rating, debouncedSearch, filters.dateFrom, filters.dateTo, filters.sort]);
-
-    const isPageInit = useRef(true);
-    useEffect(() => {
-        if (activeTab !== 'all') return;
-        if (isPageInit.current) { isPageInit.current = false; return; }
-        fetchAllReviews(page);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page]);
-
-    // Live socket badge for new reports
-    useEffect(() => {
-        const socket = getSocket();
-        socket.connect();
-        const handleReported = (payload) => {
-            setNewReportsBadge((n) => n + 1);
-            setStats((s) => s ? { ...s, reportedCount: (s.reportedCount || 0) } : s); // count itself updates via next fetchStats()
-            fetchStats();
-            toast(`New report: "${payload.reportTitle}" on ${payload.productName || 'a review'}`, { icon: '🚩' });
-            if (activeTab === 'reported') fetchReportedReviews();
+  const fetchAllReviews = useCallback(
+    async (pageNum = 1) => {
+      setLoading(true);
+      try {
+        const isMin = filters.rating.startsWith("min");
+        const params = {
+          rating: isMin ? "" : filters.rating || undefined,
+          ratingMin: isMin ? filters.rating.replace("min", "") : undefined,
+          search: debouncedSearch || undefined,
+          dateFrom: filters.dateFrom || undefined,
+          dateTo: filters.dateTo || undefined,
+          sort: filters.sort,
+          page: pageNum,
+          limit: 20,
         };
-        socket.on('review:reported', handleReported);
-        return () => {
-            socket.off('review:reported', handleReported);
-        };
+        const data = await adminReviewsApi.getReviews(params);
+        setReviews(data.reviews);
+        setPagination(data.pagination);
+      } catch (err) {
+        toast.error(err.message || "Failed to load reviews");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [filters, debouncedSearch],
+  );
+
+  const fetchReportedReviews = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await adminReviewsApi.getReportedReviews();
+      setReviews(data.reviews);
+      setPagination({
+        total: data.total,
+        page: 1,
+        pages: 1,
+        limit: data.total || 1,
+      });
+      setNewReportsBadge(0);
+    } catch (err) {
+      toast.error(err.message || "Failed to load reported reviews");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Initial stats load
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
+
+  // Tab switch — reset everything and load the right dataset
+  useEffect(() => {
+    setPage(1);
+    setSelectedIds(new Set());
+    if (activeTab === "all") fetchAllReviews(1);
+    else fetchReportedReviews();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [activeTab]);
+  }, [activeTab]);
 
-    const refetchCurrentTab = useCallback(() => {
-        if (activeTab === 'all') fetchAllReviews(page);
-        else fetchReportedReviews();
-    }, [activeTab, page, fetchAllReviews, fetchReportedReviews]);
+  // Filter changes only apply to the 'all' tab
+  const isFirstRender = useRef(true);
+  useEffect(() => {
+    if (activeTab !== "all") return;
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    setPage(1);
+    setSelectedIds(new Set());
+    fetchAllReviews(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    filters.rating,
+    debouncedSearch,
+    filters.dateFrom,
+    filters.dateTo,
+    filters.sort,
+  ]);
 
-    const handleDelete = useCallback((review) => {
-        setModal({
-            title:       'Delete Review',
-            message:     'This will permanently remove the review and notify the customer that it was removed for breaking the rules.',
-            confirmText: 'Delete',
-            variant:     'danger',
-            onConfirm:   async () => {
-                setModal(null);
-                const snapshot = reviews;
-                setReviews((prev) => prev.filter((r) => r._id !== review._id));
-                if (detailReview?._id === review._id) setDetailReview(null);
+  const isPageInit = useRef(true);
+  useEffect(() => {
+    if (activeTab !== "all") return;
+    if (isPageInit.current) {
+      isPageInit.current = false;
+      return;
+    }
+    fetchAllReviews(page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
-                try {
-                    await adminReviewsApi.deleteReview(review._id);
-                    setSelectedIds((s) => { const n = new Set(s); n.delete(review._id); return n; });
-                    fetchStats();
-                    toast.success('Review deleted and customer notified');
-                } catch (err) {
-                    setReviews(snapshot);
-                    toast.error(err.message || 'Failed to delete review');
-                }
-            }
-        });
-    }, [reviews, detailReview, fetchStats]);
-
-    const handleBulkDelete = () => {
-        setModal({
-            title:       `Delete ${selectedIds.size} Reviews`,
-            message:     `Permanently remove ${selectedIds.size} review${selectedIds.size !== 1 ? 's' : ''} and notify each customer? This cannot be undone.`,
-            confirmText: 'Delete all',
-            variant:     'danger',
-            onConfirm:   async () => {
-                setModal(null);
-                const ids = [...selectedIds];
-                setBulkLoading(true);
-                try {
-                    await adminReviewsApi.bulkUpdateStatus(ids, 'delete');
-                    setSelectedIds(new Set());
-                    await Promise.all([refetchCurrentTab(), fetchStats()]);
-                    toast.success(`${ids.length} review${ids.length !== 1 ? 's' : ''} deleted`);
-                } catch (err) {
-                    toast.error(err.message || 'Bulk delete failed');
-                } finally {
-                    setBulkLoading(false);
-                }
-            }
-        });
+  // Live socket badge for new reports
+  useEffect(() => {
+    const socket = getSocket();
+    socket.connect();
+    const handleReported = (payload) => {
+      setNewReportsBadge((n) => n + 1);
+      setStats((s) => (s ? { ...s, reportedCount: s.reportedCount || 0 } : s)); // count itself updates via next fetchStats()
+      fetchStats();
+      toast(
+        `New report: "${payload.reportTitle}" on ${payload.productName || "a review"}`,
+        { icon: "🚩" },
+      );
+      if (activeTab === "reported") fetchReportedReviews();
     };
+    socket.on("review:reported", handleReported);
+    return () => {
+      socket.off("review:reported", handleReported);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
 
-    const handleSelectAll = (checked) => setSelectedIds(checked ? new Set(reviews.map((r) => r._id)) : new Set());
-    const handleSelectRow = (id) => setSelectedIds((prev) => { const next = new Set(prev); next.has(id) ? next.delete(id) : next.add(id); return next; });
+  const refetchCurrentTab = useCallback(() => {
+    if (activeTab === "all") fetchAllReviews(page);
+    else fetchReportedReviews();
+  }, [activeTab, page, fetchAllReviews, fetchReportedReviews]);
 
-    const setFilter = (key, val) => setFilters((f) => ({ ...f, [key]: val }));
-    const resetFilters = () => setFilters(DEFAULT_FILTERS);
+  const handleDelete = useCallback(
+    (review) => {
+      setModal({
+        title: "Delete Review",
+        message:
+          "This will permanently remove the review and notify the customer that it was removed for breaking the rules.",
+        confirmText: "Delete",
+        variant: "danger",
+        onConfirm: async () => {
+          setModal(null);
+          const snapshot = reviews;
+          setReviews((prev) => prev.filter((r) => r._id !== review._id));
+          if (detailReview?._id === review._id) setDetailReview(null);
 
-    return (
-        <div className="p-4 md:p-6 space-y-5 max-w-screen-2xl mx-auto">
-            <div>
-                <h1 className="text-2xl font-bold text-gray-900">Reviews &amp; Ratings</h1>
-                <p className="text-sm text-gray-500 mt-0.5">Reviews publish automatically — manage reported content here</p>
-            </div>
+          try {
+            await adminReviewsApi.deleteReview(review._id);
+            setSelectedIds((s) => {
+              const n = new Set(s);
+              n.delete(review._id);
+              return n;
+            });
+            fetchStats();
+            toast.success("Review deleted and customer notified");
+          } catch (err) {
+            setReviews(snapshot);
+            toast.error(err.message || "Failed to delete review");
+          }
+        },
+      });
+    },
+    [reviews, detailReview, fetchStats],
+  );
 
-            <div className="grid grid-cols-3 gap-4">
-                <StatCard icon={<FiMessageSquare size={22} />} label="Total reviews" value={stats?.total} loading={statsLoading} color="indigo" />
-                <StatCard icon={<FiFlag size={22} />} label="Reported" value={stats?.reportedCount} badge={newReportsBadge} loading={statsLoading} color="rose" />
-                <StatCard icon={<FiStar size={22} />} label="Avg rating" value={stats?.averageRating != null ? `${stats.averageRating} ★` : null} loading={statsLoading} color="emerald" />
-            </div>
+  const handleBulkDelete = () => {
+    setModal({
+      title: `Delete ${selectedIds.size} Reviews`,
+      message: `Permanently remove ${selectedIds.size} review${selectedIds.size !== 1 ? "s" : ""} and notify each customer? This cannot be undone.`,
+      confirmText: "Delete all",
+      variant: "danger",
+      onConfirm: async () => {
+        setModal(null);
+        const ids = [...selectedIds];
+        setBulkLoading(true);
+        try {
+          await adminReviewsApi.bulkUpdateStatus(ids, "delete");
+          setSelectedIds(new Set());
+          await Promise.all([refetchCurrentTab(), fetchStats()]);
+          toast.success(
+            `${ids.length} review${ids.length !== 1 ? "s" : ""} deleted`,
+          );
+        } catch (err) {
+          toast.error(err.message || "Bulk delete failed");
+        } finally {
+          setBulkLoading(false);
+        }
+      },
+    });
+  };
 
-            {/* Tabs */}
-            <div className="flex items-center gap-1 bg-white rounded-xl border border-gray-100 p-1.5 w-fit">
-                <button onClick={() => setActiveTab('all')}
-                    className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'all' ? 'bg-[#CAEF96] text-black shadow-sm' : 'text-gray-600 hover:bg-gray-100'}`}>
-                    All
-                </button>
-                <button onClick={() => setActiveTab('reported')}
-                    className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${activeTab === 'reported' ? 'bg-[#CAEF96] text-black shadow-sm' : 'text-gray-600 hover:bg-gray-100'}`}>
-                    Reported
-                    {newReportsBadge > 0 && <span className="px-1.5 py-0.5 bg-rose-500 text-white text-xs font-bold rounded-full">{newReportsBadge}</span>}
-                </button>
-            </div>
+  const handleSelectAll = (checked) =>
+    setSelectedIds(checked ? new Set(reviews.map((r) => r._id)) : new Set());
+  const handleSelectRow = (id) =>
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
 
-            {activeTab === 'all' && (
-                <ReviewFiltersBar
-                    rating={filters.rating}     onRatingChange={(v) => setFilter('rating', v)}
-                    search={filters.search}     onSearchChange={(v) => setFilter('search', v)}
-                    dateFrom={filters.dateFrom} onDateFromChange={(v) => setFilter('dateFrom', v)}
-                    dateTo={filters.dateTo}     onDateToChange={(v) => setFilter('dateTo', v)}
-                    sort={filters.sort}         onSortChange={(v) => setFilter('sort', v)}
-                    onReset={resetFilters}
-                />
-            )}
+  const setFilter = (key, val) => setFilters((f) => ({ ...f, [key]: val }));
+  const resetFilters = () => setFilters(DEFAULT_FILTERS);
 
-            {selectedIds.size > 0 && (
-                <BulkBar count={selectedIds.size} loading={bulkLoading} onDelete={handleBulkDelete} onClear={() => setSelectedIds(new Set())} />
-            )}
+  return (
+    <div className="p-4 md:p-6 space-y-5 max-w-screen-2xl mx-auto">
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">
+          Reviews &amp; Ratings
+        </h1>
+        <p className="text-sm text-gray-500 mt-0.5">
+          Reviews publish automatically — manage reported content here
+        </p>
+      </div>
 
-            <ReviewsTable
-                reviews={reviews}
-                loading={loading}
-                mode={activeTab}
-                selectedIds={selectedIds}
-                onSelectAll={handleSelectAll}
-                onSelectRow={handleSelectRow}
-                onDelete={handleDelete}
-                onViewDetail={setDetailReview}
-            />
+      <div className="grid grid-cols-3 gap-4">
+        <StatCard
+          icon={<FiMessageSquare size={22} />}
+          label="Total reviews"
+          value={stats?.total}
+          loading={statsLoading}
+          color="indigo"
+        />
+        <StatCard
+          icon={<FiFlag size={22} />}
+          label="Reported"
+          value={stats?.reportedCount}
+          badge={newReportsBadge}
+          loading={statsLoading}
+          color="rose"
+        />
+        <StatCard
+          icon={<FiStar size={22} />}
+          label="Avg rating"
+          value={
+            stats?.averageRating != null ? `${stats.averageRating} ★` : null
+          }
+          loading={statsLoading}
+          color="emerald"
+        />
+      </div>
 
-            {activeTab === 'all' && !loading && pagination.pages > 1 && (
-                <Pagination page={pagination.page} pages={pagination.pages} total={pagination.total} limit={pagination.limit} onPageChange={setPage} />
-            )}
+      {/* Tabs */}
+      <div className="flex items-center gap-1 bg-white rounded-xl border border-gray-100 p-1.5 w-fit">
+        <button
+          onClick={() => setActiveTab("all")}
+          className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeTab === "all" ? "bg-[#CAEF96] text-black shadow-sm" : "text-gray-600 hover:bg-gray-100"}`}
+        >
+          All
+        </button>
+        <button
+          onClick={() => setActiveTab("reported")}
+          className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${activeTab === "reported" ? "bg-[#CAEF96] text-black shadow-sm" : "text-gray-600 hover:bg-gray-100"}`}
+        >
+          Reported
+          {newReportsBadge > 0 && (
+            <span className="px-1.5 py-0.5 bg-rose-500 text-white text-xs font-bold rounded-full">
+              {newReportsBadge}
+            </span>
+          )}
+        </button>
+      </div>
 
-            <ReviewDetailDrawer review={detailReview} onClose={() => setDetailReview(null)} onDelete={handleDelete} />
+      {activeTab === "all" && (
+        <ReviewFiltersBar
+          rating={filters.rating}
+          onRatingChange={(v) => setFilter("rating", v)}
+          search={filters.search}
+          onSearchChange={(v) => setFilter("search", v)}
+          dateFrom={filters.dateFrom}
+          onDateFromChange={(v) => setFilter("dateFrom", v)}
+          dateTo={filters.dateTo}
+          onDateToChange={(v) => setFilter("dateTo", v)}
+          sort={filters.sort}
+          onSortChange={(v) => setFilter("sort", v)}
+          onReset={resetFilters}
+        />
+      )}
 
-            {modal && (
-                <ConfirmModal title={modal.title} message={modal.message} confirmText={modal.confirmText} variant={modal.variant} onConfirm={modal.onConfirm} onClose={() => setModal(null)} />
-            )}
-        </div>
-    );
+      {selectedIds.size > 0 && (
+        <BulkBar
+          count={selectedIds.size}
+          loading={bulkLoading}
+          onDelete={handleBulkDelete}
+          onClear={() => setSelectedIds(new Set())}
+        />
+      )}
+
+      <ReviewsTable
+        reviews={reviews}
+        loading={loading}
+        mode={activeTab}
+        selectedIds={selectedIds}
+        onSelectAll={handleSelectAll}
+        onSelectRow={handleSelectRow}
+        onDelete={handleDelete}
+        onViewDetail={setDetailReview}
+      />
+
+      {activeTab === "all" && !loading && pagination.pages > 1 && (
+        <Pagination
+          page={pagination.page}
+          pages={pagination.pages}
+          total={pagination.total}
+          limit={pagination.limit}
+          onPageChange={setPage}
+        />
+      )}
+
+      <ReviewDetailDrawer
+        review={detailReview}
+        onClose={() => setDetailReview(null)}
+        onDelete={handleDelete}
+      />
+
+      {modal && (
+        <ConfirmModal
+          title={modal.title}
+          message={modal.message}
+          confirmText={modal.confirmText}
+          variant={modal.variant}
+          onConfirm={modal.onConfirm}
+          onClose={() => setModal(null)}
+        />
+      )}
+    </div>
+  );
 }

@@ -38,7 +38,7 @@ const sidebarLinks = [
   { href: "/admin/customers", label: "Customers", icon: FiUsers },
   { href: "/admin/coupons", label: "Coupons", icon: FiTag },
   { href: "/admin/reviews", label: "Reviews", icon: FiTag },
-  { href: "/admin/chat", label: "Customer Support", icon: FiMessageCircle },
+  { href: "/admin/support", label: "Customer Support", icon: FiMessageCircle },
   { href: "/admin/marketing", label: "Marketing", icon: FiTag },
   { href: "/admin/reports", label: "Reports", icon: FiBarChart2 },
   { href: "/admin/settings", label: "Settings", icon: FiSettings },
