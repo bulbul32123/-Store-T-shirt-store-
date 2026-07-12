@@ -9,6 +9,7 @@ const http = require('http');
 const jwt = require('jsonwebtoken');
 const { Server } = require('socket.io');
 const { initSocket } = require('./utils/socket');
+const { registerChatEvents } = require("./utils/chatSocket");
 
 const fs = require('fs');
 dotenv.config();
@@ -136,6 +137,7 @@ io.on('connection', (socket) => {
     if (socket.userRole === 'admin') {
         socket.join('admins');
     }
+    registerChatEvents(io, socket);
 
     socket.on('disconnect', () => {
         // no-op — room membership is cleaned up automatically
