@@ -5,7 +5,7 @@ import Links from "./Links";
 export default function Nav() {
     const links = [
       {
-        href: `/products?status=new`,
+        href: `/products?status=newDrop`,
         text: `New Drops`,
       },
       {

@@ -50,8 +50,8 @@ export default function ProductCardShop({ product, status, selectedFilters = [] 
               Sale
             </span>
           )}
-          {status === "new" && (
-            <span className="text-white bg-black py-1 px-16 rounded-full text-xs font-semibold">
+          {product.newDrop && (
+            <span className="text-white bg-black py-1 px-2 rounded-full text-xs font-semibold">
               New
             </span>
           )}

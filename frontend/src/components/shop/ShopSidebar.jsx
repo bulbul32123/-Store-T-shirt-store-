@@ -223,6 +223,19 @@ export default function ShopSidebar({
             />
             Trending
           </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={filters.status === "newDrop"}
+              onChange={() =>
+                onChange(
+                  "status",
+                  filters.status === "newDrop" ? "" : "newDrop",
+                )
+              }
+            />
+            New Drop
+          </label>
           <label className="flex items-center gap-2">
             <input
               type="checkbox"
