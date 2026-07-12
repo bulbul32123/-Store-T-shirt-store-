@@ -1,3 +1,12 @@
+      
+      
+        Task:
+         1. Remove all the trendding status from product create, edit to products page.
+         2. Add Recommandation System from carts,watchlist,orders, search data
+         3. Fix Admin's notification, Create,Delete,Edit Carsousels Data, Create,Delete,Edit Upcomming products add on banners,MegaMenu
+         4. Search Result Page, Search Bar, Save Search data. and Watchlist page
+         5. Email verification
+         6. Language
 
 
 Admin Sidebar layout:
