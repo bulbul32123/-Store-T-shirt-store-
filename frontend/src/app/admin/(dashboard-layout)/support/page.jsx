@@ -1,7 +1,9 @@
 "use client";
+import toast from "react-hot-toast";
 import ChatSidebar from "@/components/admin/support/ChatSidebar";
 import ChatThread from "@/components/admin/support/ChatThread";
 import CustomerPanel from "@/components/admin/support/CustomerPanel";
+import { useAdminNotifications } from "@/context/AdminNotificationContext";
 import { adminChatApi } from "@/lib/adminChatApi";
 import { getSocket } from "@/lib/socket";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -18,6 +20,7 @@ export default function AdminSupportPage() {
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(false);
   const joinedRoom = useRef(null);
+  const { markChatRead } = useAdminNotifications();
 
   const fetchChats = useCallback(() => {
     adminChatApi
@@ -30,26 +33,29 @@ export default function AdminSupportPage() {
     fetchChats();
   }, [fetchChats]);
 
-  const selectChat = useCallback((id) => {
-    setThreadLoading(true);
-    adminChatApi
-      .getChatById(id)
-      .then(({ chat }) => {
-        setActiveChat(chat);
-        setChats((prev) =>
-          prev.map((c) => (c._id === id ? { ...c, unreadByAdmin: 0 } : c)),
-        );
-        const socket = getSocket();
-        if (!socket.connected) socket.connect();
-        if (joinedRoom.current !== id) {
-          socket.emit("join_admin_room", id);
-          joinedRoom.current = id;
-        }
-      })
-      .catch((err) => console.error(err))
-      .finally(() => setThreadLoading(false));
-  }, []);
-
+  const selectChat = useCallback(
+    (id) => {
+      setThreadLoading(true);
+      adminChatApi
+        .getChatById(id)
+        .then(({ chat }) => {
+          setActiveChat(chat);
+          setChats((prev) =>
+            prev.map((c) => (c._id === id ? { ...c, unreadByAdmin: 0 } : c)),
+          );
+          markChatRead(id); // ADD
+          const socket = getSocket();
+          if (!socket.connected) socket.connect();
+          if (joinedRoom.current !== id) {
+            socket.emit("join_admin_room", id);
+            joinedRoom.current = id;
+          }
+        })
+        .catch(() => toast.error("This chat no longer exists"))
+        .finally(() => setThreadLoading(false));
+    },
+    [markChatRead],
+  );
   // Auto-open from a notification link like /admin/support?chatId=...
   useEffect(() => {
     const chatId = searchParams.get("chatId");
@@ -59,9 +65,9 @@ export default function AdminSupportPage() {
     }
   }, [searchParams, selectChat, router]);
 
-  const handleCloseChat = async (id) => {
+  const handleDeleteChat = async (id) => {
     try {
-      await adminChatApi.closeChat(id);
+      await adminChatApi.deleteChat(id);
       setChats((prev) => prev.filter((c) => c._id !== id));
       if (activeChat?._id === id) setActiveChat(null);
     } catch (err) {
@@ -126,12 +132,7 @@ export default function AdminSupportPage() {
     };
   }, [activeChat, fetchChats]);
 
-  const handleOptimisticSend = (msg) => {
-    setActiveChat((prev) => ({
-      ...prev,
-      messages: [...(prev.messages || []), msg],
-    }));
-  };
+  // inside component:
 
   return (
     <div className="flex h-[calc(100vh-4rem)] overflow-hidden bg-white rounded-xl border border-gray-200">
@@ -140,7 +141,7 @@ export default function AdminSupportPage() {
         activeId={activeChat?._id}
         onlineIds={onlineIds}
         onSelect={selectChat}
-        onClose={handleCloseChat}
+        onClose={handleDeleteChat}
         collapsed={leftCollapsed}
         onToggleCollapse={() => setLeftCollapsed((v) => !v)}
       />
@@ -148,7 +149,6 @@ export default function AdminSupportPage() {
         chat={activeChat}
         loading={threadLoading}
         online={onlineIds.has(activeChat?.user?._id)}
-        onNewMessage={handleOptimisticSend}
       />
       <CustomerPanel
         chat={activeChat}

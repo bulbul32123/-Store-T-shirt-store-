@@ -6,6 +6,8 @@ import {
   Trash2,
   Package,
   Bell,
+  MessageCircle,
+  XCircle,
 } from "lucide-react";
 
 export const TYPE_CONFIG = {
@@ -45,6 +47,18 @@ export const TYPE_CONFIG = {
     fg: "text-purple-600",
     label: "Order Update",
   },
+  order_cancelled: {
+    icon: XCircle,
+    bg: "bg-rose-50",
+    fg: "text-rose-600",
+    label: "Order Cancelled",
+  }, // ADD
+  chat_message: {
+    icon: MessageCircle,
+    bg: "bg-cyan-50",
+    fg: "text-cyan-600",
+    label: "Support Chat",
+  }, // ADD
   system: {
     icon: Bell,
     bg: "bg-gray-100",
@@ -56,7 +70,11 @@ export const TYPE_CONFIG = {
 export const FILTER_TABS = [
   { key: "all", label: "All", types: null },
   { key: "unread", label: "Unread", types: null, statusOnly: true },
-  { key: "orders", label: "Orders", types: ["new_order", "order_update"] },
+  {
+    key: "orders",
+    label: "Orders",
+    types: ["new_order", "order_update", "order_cancelled"],
+  }, // updated
   {
     key: "reviews",
     label: "Reviews",
@@ -64,6 +82,7 @@ export const FILTER_TABS = [
   },
   { key: "reported", label: "Reported", types: ["review_reported"] },
   { key: "customers", label: "Customers", types: ["new_customer"] },
+  { key: "messages", label: "Messages", types: ["chat_message"] }, // ADD
 ];
 
 export function timeAgo(date) {

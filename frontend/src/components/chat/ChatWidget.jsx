@@ -1,9 +1,10 @@
 "use client";
-import { useState, useEffect, useRef, useCallback } from "react";
-import { MessageCircle, X, Send, Loader2 } from "lucide-react";
-import { getSocket } from "@/lib/socket";
-import { chatApi } from "@/lib/chatApi";
+  import { useNotifications } from "@/context/NotificationContext";
 import { useAuth } from "@/context/AuthContext";
+import { chatApi } from "@/lib/chatApi";
+import { getSocket } from "@/lib/socket";
+import { Loader2, MessageCircle, Send, X } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 function formatTime(iso) {
   return new Date(iso).toLocaleTimeString("en-US", {
@@ -16,6 +17,7 @@ export default function ChatWidget() {
   const { isAuthenticated, user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [chatId, setChatId] = useState(null);
+    const { markChatRead } = useNotifications();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(true);
@@ -67,21 +69,18 @@ export default function ChatWidget() {
   }, [messages, isOpen]);
 
   const toggleOpen = () => {
-    setIsOpen((v) => !v);
+    setIsOpen((v) => {
+      if (!v && chatId) markChatRead(chatId);
+      return !v;
+    });
     setHasUnread(false);
   };
-
   const sendMessage = useCallback(() => {
     const text = input.trim();
     if (!text || !chatId) return;
     const socket = getSocket();
     socket.emit("send_message", { roomId: chatId, sender: "user", text });
-    // optimistic append — server echoes back via 'new_message' too, but this keeps typing feel instant
-    setMessages((prev) => [
-      ...prev,
-      { sender: "user", content: text, timestamp: new Date().toISOString() },
-    ]);
-    setInput("");
+    setInput(""); // removed the setMessages(...) optimistic line — socket echo handles it
   }, [input, chatId]);
 
   const handleKeyDown = (e) => {
@@ -90,6 +89,60 @@ export default function ChatWidget() {
       sendMessage();
     }
   };
+
+  useEffect(() => {
+    const socket = getSocket();
+    const handleClosed = ({ chatId: closedId }) => {
+        if (closedId !== chatId) return;
+        setMessages([{ sender: 'admin', content: 'This conversation has ended. Send a message to start a new chat.', timestamp: new Date().toISOString(), system: true }]);
+        joinedRoom.current = null;
+        chatApi.getMyChat()
+            .then(({ chat }) => { setChatId(chat._id); setMessages([]); })
+            .catch((err) => console.error('Failed to start new chat:', err));
+    };
+    socket.on('chat_closed', handleClosed);
+    return () => socket.off('chat_closed', handleClosed);
+}, [chatId]);
+
+useEffect(() => {
+  const handleOpenRequest = (e) => {
+    const requestedChatId = e.detail?.chatId;
+    // only auto-open if it matches this customer's own chat (or no chatId given)
+    if (requestedChatId && chatId && requestedChatId !== chatId) return;
+    setIsOpen(true);
+    setHasUnread(false);
+    if (chatId) markChatRead(chatId);
+  };
+  window.addEventListener("open-support-chat", handleOpenRequest);
+  return () =>
+    window.removeEventListener("open-support-chat", handleOpenRequest);
+}, [chatId, markChatRead]);
+  
+  useEffect(() => {
+    const socket = getSocket();
+    const handleClosed = ({ chatId: closedId }) => {
+      if (closedId !== chatId) return;
+      setMessages([
+        {
+          sender: "admin",
+          content:
+            "This conversation has ended. Send a message to start a new chat.",
+          timestamp: new Date().toISOString(),
+          system: true,
+        },
+      ]);
+      joinedRoom.current = null;
+      chatApi
+        .getMyChat()
+        .then(({ chat }) => {
+          setChatId(chat._id);
+          setMessages([]);
+        })
+        .catch((err) => console.error("Failed to start new chat:", err));
+    };
+    socket.on("chat_closed", handleClosed);
+    return () => socket.off("chat_closed", handleClosed);
+  }, [chatId]);
 
   if (!isAuthenticated) return null;
 

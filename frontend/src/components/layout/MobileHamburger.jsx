@@ -27,9 +27,6 @@ export default function MobileHamburger() {
         <div>
             <div className="flex gap-2 items-center w-full">
                 <MobileSearchBox />
-                <button className='p-3 rounded-full bg-gray-100 hover:bg-green-500 hover:text-white transitions'>
-                    <FaUserAstronaut size={23} />
-                </button>
                 <button onClick={() => setOpenHamburger((prv) => !prv)} className='p-3 rounded-full bg-gray-100 hover:bg-green-500 hover:text-white transitions'>
                     <CgMenuRight size={23} />
                 </button>

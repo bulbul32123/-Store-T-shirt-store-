@@ -19,18 +19,13 @@ export default function ChatThread({ chat, loading, online, onNewMessage }) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [chat?.messages]);
 
-  const sendMessage = () => {
-    const text = input.trim();
-    if (!text || !chat?._id) return;
-    const socket = getSocket();
-    socket.emit("send_message", { roomId: chat._id, sender: "admin", text });
-    onNewMessage({
-      sender: "admin",
-      content: text,
-      timestamp: new Date().toISOString(),
-    });
-    setInput("");
-  };
+const sendMessage = () => {
+  const text = input.trim();
+  if (!text || !chat?._id) return;
+  const socket = getSocket();
+  socket.emit("send_message", { roomId: chat._id, sender: "admin", text });
+  setInput(""); // removed onNewMessage(...) call
+};
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {

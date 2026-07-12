@@ -86,48 +86,53 @@ exports.updateChatCustomerNote = async (req, res) => {
   }
 };
 
-// DELETE /api/admin/chats/:id — remove from admin sidebar (soft close)
-exports.closeChat = async (req, res) => {
-  try {
-    const chat = await Chat.findById(req.params.id);
-    if (!chat) return res.status(404).json({ message: "Chat not found" });
-    chat.status = "closed";
-    await chat.save();
-    res.json({ message: "Chat closed" });
-  } catch (err) {
-    console.error("closeChat:", err);
-    res.status(500).json({ message: "Failed to close chat" });
-  }
+// DELETE /api/admin/chats/:id
+exports.deleteChat = async (req, res) => {
+    try {
+        const chat = await Chat.findById(req.params.id);
+        if (!chat) return res.status(404).json({ message: 'Chat not found' });
+
+        const customerId = chat.user;
+        await chat.deleteOne();
+
+        const { emitToUser } = require('../utils/socket');
+        emitToUser(customerId, 'chat_closed', { chatId: req.params.id });
+
+        res.json({ message: 'Chat deleted' });
+    } catch (err) {
+        console.error('deleteChat:', err);
+        res.status(500).json({ message: 'Failed to delete chat' });
+    }
 };
 
-// Shared helper — called from the socket handler (next step), not an HTTP route.
-// Persists a message, bumps the right unread counter, and fires a notification
-// to whichever side didn't send it.
-exports.persistMessage = async ({ roomId, sender, content }) => {
-  const chat = await Chat.findById(roomId).populate("user", "name");
-  if (!chat) return null;
+// // Shared helper — called from the socket handler (next step), not an HTTP route.
+// // Persists a message, bumps the right unread counter, and fires a notification
+// // to whichever side didn't send it.
+// exports.persistMessage = async ({ roomId, sender, content }) => {
+//   const chat = await Chat.findById(roomId).populate("user", "name");
+//   if (!chat) return null;
 
-  const message = { sender, content, timestamp: new Date() };
-  chat.messages.push(message);
+//   const message = { sender, content, timestamp: new Date() };
+//   chat.messages.push(message);
 
-  if (sender === "user") {
-    chat.unreadByAdmin += 1;
-    notifyAdmins({
-      type: "system",
-      title: "New support message",
-      message: `${chat.user.name}: ${content.slice(0, 80)}`,
-      link: `/admin/support?chatId=${chat._id}`,
-    });
-  } else {
-    chat.unreadByUser += 1;
-    notifyUser(chat.user._id, {
-      type: "system",
-      title: "Support replied",
-      message: content.slice(0, 80),
-      link: `/profile`,
-    });
-  }
+//   if (sender === "user") {
+//     chat.unreadByAdmin += 1;
+//     notifyAdmins({
+//       type: "system",
+//       title: "New support message",
+//       message: `${chat.user.name}: ${content.slice(0, 80)}`,
+//       link: `/admin/support?chatId=${chat._id}`,
+//     });
+//   } else {
+//     chat.unreadByUser += 1;
+//     notifyUser(chat.user._id, {
+//       type: "system",
+//       title: "Support replied",
+//       message: content.slice(0, 80),
+//       link: `/profile`,
+//     });
+//   }
 
-  await chat.save();
-  return chat.messages[chat.messages.length - 1];
-};
+//   await chat.save();
+//   return chat.messages[chat.messages.length - 1];
+// };

@@ -5,10 +5,10 @@ import {
   useEffect,
   useState,
   useCallback,
-  useRef,
 } from "react";
 import { getSocket } from "@/lib/socket";
 import { API_URL } from "@/utils/config";
+import { useAuth } from "./AuthContext";
 
 const AdminNotificationContext = createContext(null);
 
@@ -16,7 +16,10 @@ export function AdminNotificationProvider({ children }) {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const initialized = useRef(false);
+  const { user } = useAuth(); 
+  const userId = user?._id || user?.id;
+
+
 
   const fetchNotifications = useCallback(async () => {
     try {
@@ -73,83 +76,100 @@ export function AdminNotificationProvider({ children }) {
       console.error("Failed to mark all as read", err);
     }
   }, []);
-    
-    const deleteNotification = useCallback(
-      async (id) => {
-        setNotifications((prev) => {
-          const target = prev.find((n) => n._id === id);
-          if (target && !target.isRead)
-            setUnreadCount((c) => Math.max(0, c - 1));
-          return prev.filter((n) => n._id !== id);
+
+  const deleteNotification = useCallback(
+    async (id) => {
+      setNotifications((prev) => {
+        const target = prev.find((n) => n._id === id);
+        if (target && !target.isRead) setUnreadCount((c) => Math.max(0, c - 1));
+        return prev.filter((n) => n._id !== id);
+      });
+      try {
+        await fetch(`${API_URL}/api/notifications/admin/${id}`, {
+          method: "DELETE",
+          credentials: "include",
         });
-        try {
-          await fetch(`${API_URL}/api/notifications/admin/${id}`, {
-            method: "DELETE",
-            credentials: "include",
-          });
-        } catch (err) {
-          console.error("Failed to delete notification", err);
-          fetchNotifications();
-          fetchUnreadCount();
-        }
-      },
-      [fetchNotifications, fetchUnreadCount],
-    );
+      } catch (err) {
+        console.error("Failed to delete notification", err);
+        fetchNotifications();
+        fetchUnreadCount();
+      }
+    },
+    [fetchNotifications, fetchUnreadCount],
+  );
 
-    const bulkDelete = useCallback(
-      async (ids) => {
-        setNotifications((prev) => {
-          const removedUnread = prev.filter(
-            (n) => ids.includes(n._id) && !n.isRead,
-          ).length;
-          if (removedUnread)
-            setUnreadCount((c) => Math.max(0, c - removedUnread));
-          return prev.filter((n) => !ids.includes(n._id));
+  const bulkDelete = useCallback(
+    async (ids) => {
+      setNotifications((prev) => {
+        const removedUnread = prev.filter(
+          (n) => ids.includes(n._id) && !n.isRead,
+        ).length;
+        if (removedUnread)
+          setUnreadCount((c) => Math.max(0, c - removedUnread));
+        return prev.filter((n) => !ids.includes(n._id));
+      });
+      try {
+        await fetch(`${API_URL}/api/notifications/admin/bulk-delete`, {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids }),
         });
-        try {
-          await fetch(`${API_URL}/api/notifications/admin/bulk-delete`, {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ids }),
-          });
-        } catch (err) {
-          console.error("Failed to bulk delete", err);
-          fetchNotifications();
-          fetchUnreadCount();
-        }
-      },
-      [fetchNotifications, fetchUnreadCount],
-    );
+      } catch (err) {
+        console.error("Failed to bulk delete", err);
+        fetchNotifications();
+        fetchUnreadCount();
+      }
+    },
+    [fetchNotifications, fetchUnreadCount],
+  );
+  const markChatRead = useCallback(
+    async (chatId) => {
+      try {
+        await fetch(`${API_URL}/api/notifications/admin/chat/${chatId}/read`, {
+          method: "PUT",
+          credentials: "include",
+        });
+        fetchUnreadCount();
+        fetchNotifications();
+      } catch (err) {
+        console.error("Failed to mark chat notifications read", err);
+      }
+    },
+    [fetchUnreadCount, fetchNotifications],
+  );
 
-  useEffect(() => {
-    if (initialized.current) return;
-    initialized.current = true;
-    fetchNotifications();
-    fetchUnreadCount();
+   useEffect(() => {
+     setNotifications([]);
+     setUnreadCount(0);
+     fetchNotifications();
+     fetchUnreadCount();
 
-    const socket = getSocket();
-    if (!socket.connected) socket.connect();
+     const socket = getSocket();
+     if (socket.connected) socket.disconnect();
+     socket.connect();
 
-    const handleNew = (notification) => {
-      if (notification.audience !== "admin") return;
-      setNotifications((prev) => [notification, ...prev].slice(0, 50));
-      setUnreadCount((prev) => prev + 1);
-    };
+     const handleNew = (notification) => {
+       if (notification.audience !== "admin") return;
+       setNotifications((prev) => [notification, ...prev].slice(0, 50));
+       setUnreadCount((prev) => prev + 1);
+     };
 
-    socket.on("notification:new", handleNew);
-    return () => socket.off("notification:new", handleNew);
-  }, [fetchNotifications, fetchUnreadCount]);
+     socket.on("notification:new", handleNew);
+     return () => socket.off("notification:new", handleNew);
+   }, [userId, fetchNotifications, fetchUnreadCount]); 
+
 
   return (
     <AdminNotificationContext.Provider
       value={{
         notifications,
         unreadCount,
-              loading,
-              deleteNotification,
+        loading,
+        deleteNotification,
         bulkDelete,
         markAsRead,
+        markChatRead,
         markAllAsRead,
         refetch: fetchNotifications,
       }}

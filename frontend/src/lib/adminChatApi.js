@@ -22,5 +22,5 @@ export const adminChatApi = {
       method: "PATCH",
       body: JSON.stringify({ note }),
     }),
-  closeChat: (id) => apiFetch(`/api/admin/chats/${id}`, { method: "DELETE" }),
+  deleteChat: (id) => apiFetch(`/api/admin/chats/${id}`, { method: "DELETE" }), // was closeChat
 };
