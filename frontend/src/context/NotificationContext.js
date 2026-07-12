@@ -101,6 +101,7 @@ useEffect(() => {
         socket.connect();
 
         const handleNewNotification = (notification) => {
+            if (notification.audience === "admin") return;
             setNotifications((prev) => [notification, ...prev]);
             setUnreadCount((prev) => prev + 1);
             toast(notification.title, {

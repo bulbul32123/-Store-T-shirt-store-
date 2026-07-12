@@ -25,6 +25,9 @@ export const adminReviewsApi = {
     getReviews: (params = {}) =>
         apiFetch(`/api/admin/reviews${toQS(params)}`),
 
+    getReviewById: (id) =>
+        apiFetch(`/api/admin/reviews/${id}`),
+
     getReportedReviews: () =>
         apiFetch('/api/admin/reviews/reports'),
 
