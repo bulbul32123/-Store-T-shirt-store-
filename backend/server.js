@@ -98,6 +98,7 @@ app.use('/api/wishlist', require('./routes/wishlist'));
 app.use('/api/categories', require('./routes/categories'));
 app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/coupons', require('./routes/coupons'));
+app.use("/api/recommendations", require("./routes/recommendations"));
 const uploadRoutes = require('./routes/upload');
 
 app.use('/api/upload', uploadRoutes);
