@@ -46,26 +46,24 @@ const sidebarLinks = [
 
 export function AppSidebar(props) {
   const pathname = usePathname();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   return (
-    <Sidebar {...props} className='bg-white!'>
+    <Sidebar {...props} className="bg-white!">
       <SidebarHeader className="border-b bg-white">
-        <Link href="/admin/dashboard">
-          <h2 className="text-[20.5px] font-bold px-2 py-2">
-            T-Shirt Admin
-          </h2>
+        <Link href="/admin/dashboard" className="flexCenter gap-1 ">
+          <Image src="/Logo.svg" alt="logo" width={80} height={80} />{" "}
+          <h2 className="text-[20.5px] font-bold px-2 py-2">Admin</h2>
         </Link>
       </SidebarHeader>
 
-      <SidebarContent className='pl-2 bg-white'>
-
-        <SidebarMenu className={'gap-1'}>
+      <SidebarContent className="pl-2 bg-white">
+        <SidebarMenu className={"gap-1"}>
           {sidebarLinks.map((item) => {
             const Icon = item.icon;
 
             return (
-              <SidebarMenuItem key={item.href} className='first:mt-2 '>
+              <SidebarMenuItem key={item.href} className="first:mt-2 ">
                 <SidebarMenuButton
                   asChild
                   isActive={pathname === item.href}
@@ -80,15 +78,11 @@ export function AppSidebar(props) {
             );
           })}
         </SidebarMenu>
-
       </SidebarContent>
 
       <SidebarFooter className="border-t bg-white">
-
         <div className="flex items-center gap-3 px-2 py-2">
-
           <span className="h-10 w-10 rounded-full overflow-hidden flex items-center justify-center">
-
             {user?.profilePicture?.url ? (
               <Image
                 src={user.profilePicture.url}
@@ -100,7 +94,6 @@ export function AppSidebar(props) {
             ) : (
               <FaUserAstronaut className="h-6 w-6" />
             )}
-
           </span>
 
           <div className="min-w-0 flex-1">
@@ -112,9 +105,7 @@ export function AppSidebar(props) {
               {user?.email}
             </p>
           </div>
-
         </div>
-
       </SidebarFooter>
 
       <SidebarRail />
