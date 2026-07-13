@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import ProductCard from './ProductCard';
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import ProductCard from "./ProductCard";
 
 export default function ProductCarousel({
   status,
@@ -22,9 +22,7 @@ export default function ProductCarousel({
     if (!el) return;
 
     setIsAtStart(el.scrollLeft <= 0);
-    setIsAtEnd(
-      el.scrollLeft + el.clientWidth >= el.scrollWidth - 10
-    );
+    setIsAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 10);
   };
 
   const scroll = (direction) => {
@@ -33,11 +31,8 @@ export default function ProductCarousel({
     if (!el) return;
 
     el.scrollBy({
-      left:
-        direction === 'left'
-          ? -el.clientWidth
-          : el.clientWidth,
-      behavior: 'smooth',
+      left: direction === "left" ? -el.clientWidth : el.clientWidth,
+      behavior: "smooth",
     });
   };
 
@@ -48,13 +43,10 @@ export default function ProductCarousel({
 
     checkScrollPosition();
 
-    el.addEventListener('scroll', checkScrollPosition);
+    el.addEventListener("scroll", checkScrollPosition);
 
     return () => {
-      el.removeEventListener(
-        'scroll',
-        checkScrollPosition
-      );
+      el.removeEventListener("scroll", checkScrollPosition);
     };
   }, []);
 
@@ -62,12 +54,9 @@ export default function ProductCarousel({
     <section className="w-full mb-5 py-8 border-b border-border">
       <div className="flex items-start justify-between mb-4">
         {title && (
-          <h2
+          <h2 
             className={`text-3xl md:text-4xl font-extrabold ${
-              status === 'onsale'
-                ? 'text-red-500'
-                : ''
-            }`}
+              status === "onsale" ? "text-red-500" : ""}`}
           >
             {title}
           </h2>
@@ -76,24 +65,20 @@ export default function ProductCarousel({
         {showArrows && products.length >= 5 && (
           <div className="hidden md:flex gap-4">
             <button
-              onClick={() => scroll('left')}
+              onClick={() => scroll("left")}
               disabled={isAtStart}
               className={`w-12 h-12 rounded-full bg-black flex items-center justify-center ${
-                isAtStart
-                  ? 'opacity-50 cursor-not-allowed'
-                  : ''
+                isAtStart ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
               <FaChevronLeft className="text-white" />
             </button>
 
             <button
-              onClick={() => scroll('right')}
+              onClick={() => scroll("right")}
               disabled={isAtEnd}
               className={`w-12 h-12 rounded-full bg-black flex items-center justify-center ${
-                isAtEnd
-                  ? 'opacity-50 cursor-not-allowed'
-                  : ''
+                isAtEnd ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
               <FaChevronRight className="text-white" />
@@ -107,11 +92,7 @@ export default function ProductCarousel({
         className="overflow-x-auto whitespace-nowrap scroll-smooth hide-scrollbar"
       >
         {products?.map((product) => (
-          <ProductCard
-            key={product._id}
-            product={product}
-            status={status}
-          />
+          <ProductCard key={product._id} product={product} status={status} />
         ))}
       </div>
 

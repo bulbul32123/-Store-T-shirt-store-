@@ -40,14 +40,17 @@ export default function ChatWidget() {
   }, [isAuthenticated]);
 
   useEffect(() => {
-    if (!chatId) return;
-    const socket = getSocket();
-    if (!socket.connected) socket.connect();
+ if (!chatId) return;
+ const socket = getSocket();
+ if (!socket.connected) socket.connect();
 
-    if (joinedRoom.current !== chatId) {
-      socket.emit("join_chat", chatId);
-      joinedRoom.current = chatId;
-    }
+ const doJoin = () => {
+   socket.emit("join_chat", chatId);
+   joinedRoom.current = chatId;
+ };
+
+ if (joinedRoom.current !== chatId) doJoin();
+ socket.on("connect", doJoin); 
 
     const handleNew = (data) => {
       if (data.roomId !== chatId) return;
@@ -57,9 +60,12 @@ export default function ChatWidget() {
       ]);
       if (data.sender === "admin" && !isOpen) setHasUnread(true);
     };
+  socket.on("new_message", handleNew);
 
-    socket.on("new_message", handleNew);
-    return () => socket.off("new_message", handleNew);
+  return () => {
+    socket.off("new_message", handleNew);
+    socket.off("connect", doJoin);
+  };
   }, [chatId, isOpen]);
 
   useEffect(() => {
