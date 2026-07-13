@@ -4,14 +4,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { adminOrdersApi } from '@/lib/adminOrdersApi';
 
 const DEFAULT_FILTERS = {
-    search: '',
-    status: 'all',
-    startDate: '',
-    endDate: '',
-    sortBy: 'createdAt',
-    sortOrder: 'desc'
+  search: "",
+  status: "all",
+  startDate: "",
+  endDate: "",
+  sortBy: "createdAt",
+  sortOrder: "desc",
+  archived: false, // ADD
 };
-
 const DEFAULT_SUMMARY = {
     totalOrders: 0,
     pendingFulfillment: 0,
