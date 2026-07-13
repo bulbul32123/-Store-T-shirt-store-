@@ -9,7 +9,14 @@ import { VisitPopupProvider } from "@/context/VisitPopupContext";
 import { Toaster } from "react-hot-toast";
 
 export const metadata = {
-  title: "T-Shirt Store | Quality T-Shirts for Everyone",
+  title: "Payra | Quality T-Shirts for Everyone",
+  icons: {
+    // icon: "/favicon.svg",
+    icon: [
+      { url: "/favico-light.svg", media: "(prefers-color-scheme: light)" },
+      { url: "/favicon.svg", media: "(prefers-color-scheme: dark)" },
+    ],
+  },
   description:
     "Find the perfect t-shirt for any occasion. Wide range of designs, colors, and sizes.",
 };
@@ -18,6 +25,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="h-full w-full">
       <body className="h-full w-full antialiased">
+        
         <AuthProvider>
           <NotificationProvider>
             <CartProvider>

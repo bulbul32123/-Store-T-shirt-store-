@@ -87,6 +87,15 @@ export default function AdminOrdersPage() {
       toast.error(err.message || "Bulk update failed");
     }
   };
+  const handleArchiveToggle = async (orderId, archive) => {
+    try {
+      await adminOrdersApi.archiveOrder(orderId, archive);
+      toast.success(archive ? "Order archived" : "Order restored");
+      refetch();
+    } catch (err) {
+      toast.error(err.message || "Failed to update archive status");
+    }
+  };
 
   const handleBulkExport = (selectedOrders) => {
     exportOrdersAsCsv(selectedOrders);
@@ -133,6 +142,7 @@ export default function AdminOrdersPage() {
           loading={loading}
           selectedIds={selectedIds}
           onToggleSelect={toggleSelect}
+          onArchiveToggle={handleArchiveToggle}
           onToggleSelectAll={toggleSelectAll}
           onOpenOrder={setActiveOrderId}
         />

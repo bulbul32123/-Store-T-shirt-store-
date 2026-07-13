@@ -6,7 +6,7 @@ import { AdminSidebarProvider } from "@/context/AdminSidebarContext";
 import { AdminNotificationProvider } from "@/context/AdminNotificationContext";
 
 export const metadata = {
-  title: "T-Shirt Store - Admin Dashboard",
+  title: "Payra - Admin Dashboard",
   description:
     "Find the perfect t-shirt for any occasion. Wide range of designs, colors, and sizes.",
 };
