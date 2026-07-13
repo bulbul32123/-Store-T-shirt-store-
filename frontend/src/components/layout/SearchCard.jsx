@@ -1,26 +1,57 @@
-import Image from 'next/image';
-import Link from 'next/link'
-import React from 'react'
-import PriceComponent from './PriceComponent';
+import Image from "next/image";
+import Link from "next/link";
+import PriceComponent from "./PriceComponent";
 
 export default function SearchCard({ item }) {
-    const p = item
-    console.log(item);
+  const image = item?.colors?.[0]?.images?.[0]?.url || "/placeholder.png";
 
-    return (
-        <>
-            <Link href={`/product/${p?.slug}`} className="w-full flex gap-2 h-20 bg-gray-50 rounded-md hover:bg-gray-100 p-[2px]">
-                <div className="w-16 sm:w-28">
-                    <Image src={p?.images[0]} className='h-full w-16 sm:w-28 object-cover object-center rounded-sm' alt={p?.name} height={100} width={100} />
-                </div>
-                <div className="flex flex-col gap-1">
-                    <h1 className='text-[10px]  sm:text-lg text-nowrap overflow-hidden'>{p?.name.length > 27 ? (p?.name)?.slice(0, 27) + '...' : p?.name}</h1>
-                    <PriceComponent product={p} />
-                    <div className="flex items-center text-sm text-yellow-500 mb-1">
-                        {'★'.repeat(Math.floor(p.rating))} <span className="ml-1 text-gray-500">{p.rating}/5</span>
-                    </div>
-                </div>
-            </Link>
-        </>
-    )
+  return (
+    <Link
+      href={`/product/${item._id}`}
+      className="flex gap-3 rounded-lg p-2 hover:bg-gray-100 transition"
+    >
+      {/* Product Image */}
+      <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
+        <Image src={image} alt={item.name} fill className="object-cover" />
+      </div>
+
+      {/* Product Info */}
+      <div className="flex flex-1 flex-col justify-between py-1">
+        {/* Status */}
+        <div className="flex flex-wrap gap-2">
+          {item.newDrop && (
+            <span className="rounded-full bg-gray-900 px-2 py-0.5 text-[7px] text-white">
+             New
+            </span>
+          )}{" "}
+          {item.isFreeShipping && (
+            <span className="rounded-full bg-green-600 px-2 py-0.5 text-[7px] text-white">
+              Free Shipping
+            </span>
+          )}
+        </div>
+
+        {/* Category */}
+        <p className="text-xs text-gray-500">{item.category?.name}</p>
+
+        {/* Name */}
+        <h3 className="line-clamp-1 text-sm font-semibold">{item.name}</h3>
+
+        {/* Price */}
+        <PriceComponent product={item} />
+
+        {/* Colors */}
+        <div className="flex items-center gap-2 mt-1">
+          {item.colors?.map((color) => (
+            <span
+              key={color._id}
+              className="h-4 w-4 rounded-full border border-gray-300"
+              style={{ backgroundColor: color.code }}
+              title={color.name}
+            />
+          ))}
+        </div>
+      </div>
+    </Link>
+  );
 }
