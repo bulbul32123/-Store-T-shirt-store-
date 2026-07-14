@@ -9,7 +9,6 @@ export const productsApi = {
     const { data } = await axios.get(`${API_URL}/api/products`, {
       params: clean,
     });
-        console.log("data", data);
         
     return data;
   },
@@ -21,7 +20,6 @@ export const productsApi = {
   },
   getCategories: async () => {
       const { data } = await axios.get(`${API_URL}/api/categories`);
-      console.log("category:", data);
     return data.categories;
   },
 };

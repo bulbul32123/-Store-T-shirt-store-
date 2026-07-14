@@ -12,7 +12,6 @@ import FavouriteIcon from '../layout/FavouriteIcon';
 export default function WatchlistNotificationPopover() {
     const { itemCount } = useWatchlist();
     const { showWatchlistPopup, watchlistItemCount, dismissWatchlist } = useVisitPopup();
-    console.log('showWatchlistPopup:', showWatchlistPopup);
     const msg = getWatchlistVisitMessage(watchlistItemCount);
 
     return (

@@ -39,7 +39,6 @@ export const AuthProvider = ({ children }) => {
             try {
                 setLoading(true);
                 const { data } = await axios.get(`${API_URL}/api/auth/me`);
-                 console.log(data)  
              if (data.success && data.user) {
                     setUser(data.user);
                 } else {

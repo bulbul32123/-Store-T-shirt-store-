@@ -49,9 +49,6 @@ export const VisitPopupProvider = ({ children }) => {
             // ignore
         }
     };
-useEffect(() => {
-    console.log('Current phase:', phase);
-}, [phase]);
     const value = {
         showCartPopup: phase === 'cart',
         showWatchlistPopup: phase === 'watchlist',
