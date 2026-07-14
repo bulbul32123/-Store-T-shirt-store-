@@ -1,20 +1,43 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import React from 'react'
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
-export default function Banner({ banner, title }) {
-    return (
-        <div className="relative w-full h-[600px] overflow-hidden mt-9 mb-10 rounded-xl">
-            <h2 className={`text-4xl pb-4 font-extrabold text-black`}>{title}</h2>
-            
-            <Link href={`/products/shop?category=${banner?.cat}&color=all&brands=all&status=all&subcategory=all&pattern=all&material=all&fit=all&style=all&isInStock=all&price=all&size=all`} className="block w-full h-full relative">
-                <Image
-                    src={banner?.img}
-                    alt="Banner"
-                    fill
-                    className="object-cover object-center rounded-xl"
-                />
-            </Link>
-        </div >
-    )
+export default function Banner({ banner }) {
+  const product = banner.product;
+  const badges = [];
+  if (banner.showStatus) {
+    if (product?.newDrop) badges.push("New");
+    if (product?.isFreeShipping) badges.push("Free Shipping");
+    if (product?.discount > 0) badges.push("Sale");
+  }
+
+  return (
+    <div className="relative w-full h-[600px] overflow-hidden mt-9 mb-10 rounded-xl">
+      <h2 className={`text-4xl pb-4 font-extrabold text-black`}>Don't Miss</h2>
+      <Link
+        href={`/product/${product?._id}`}
+        className="block w-full h-full relative"
+      >
+        <Image
+          src={banner.image?.url}
+          alt={banner.title || product?.name || "Banner"}
+          fill
+          className="object-cover object-center rounded-xl"
+        />
+        {badges.length > 0 && (
+          <div className="absolute top-6 left-6 flex gap-2 z-10">
+            {badges.map((b) => (
+              <span
+                key={b}
+                className="bg-black text-white text-xs font-medium px-3 py-1 rounded-full"
+              >
+                {b}
+              </span>
+            ))}
+          </div>
+        )}
+      </Link>
+    </div>
+  );
 }
+
