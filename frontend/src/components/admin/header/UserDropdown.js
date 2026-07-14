@@ -1,11 +1,12 @@
 "use client";
-import Image from "next/image";
-import { FaUserAstronaut } from "react-icons/fa";
-import Link from "next/link";
-import React, { useState } from "react";
 import { Dropdown } from "@/components/ui/dropdown/Dropdown";
 import { DropdownItem } from "@/components/ui/dropdown/DropdownItem";
 import { useAuth } from "@/context/AuthContext";
+import Image from "next/image";
+import { useState } from "react";
+import {  FaUserAstronaut } from "react-icons/fa";
+import { GoBell } from "react-icons/go";
+
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,11 +27,20 @@ export default function UserDropdown() {
         className="flex items-center cursor-pointer text-gray-700 dropdown-toggle"
       >
         <span className="mr-3 rounded-full h-11 w-11 flex items-center justify-center bg-[#F5F5F5] overflow-hidden">
-              {user?.profilePicture?.url ? (
-                              <Image src={user.profilePicture.url} alt={user?.name} className="h-full rounded-full w-full object-cover" height={100} width={100} />
-                          ) : (
-                               <FaUserAstronaut size={23} className="h-8 w-8 rounded-full object-cover" />
-                          )}
+          {user?.profilePicture?.url ? (
+            <Image
+              src={user.profilePicture.url}
+              alt={user?.name}
+              className="h-full rounded-full w-full object-cover"
+              height={100}
+              width={100}
+            />
+          ) : (
+            <FaUserAstronaut
+              size={23}
+              className="h-8 w-8 rounded-full object-cover"
+            />
+          )}
         </span>
       </button>
 
@@ -49,31 +59,6 @@ export default function UserDropdown() {
         </div>
 
         <ul className="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 ">
-          <li>
-            <DropdownItem
-              onItemClick={closeDropdown}
-              tag="a"
-              href="/admin/profile"
-              className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700"
-            >
-              <svg
-                className="fill-gray-500 group-hover:fill-gray-700 "
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M12 3.5C7.30558 3.5 3.5 7.30558 3.5 12C3.5 14.1526 4.3002 16.1184 5.61936 17.616C6.17279 15.3096 8.24852 13.5955 10.7246 13.5955H13.2746C15.7509 13.5955 17.8268 15.31 18.38 17.6167C19.6996 16.119 20.5 14.153 20.5 12C20.5 7.30558 16.6944 3.5 12 3.5ZM17.0246 18.8566V18.8455C17.0246 16.7744 15.3457 15.0955 13.2746 15.0955H10.7246C8.65354 15.0955 6.97461 16.7744 6.97461 18.8455V18.856C8.38223 19.8895 10.1198 20.5 12 20.5C13.8798 20.5 15.6171 19.8898 17.0246 18.8566ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM11.9991 7.25C10.8847 7.25 9.98126 8.15342 9.98126 9.26784C9.98126 10.3823 10.8847 11.2857 11.9991 11.2857C13.1135 11.2857 14.0169 10.3823 14.0169 9.26784C14.0169 8.15342 13.1135 7.25 11.9991 7.25ZM8.48126 9.26784C8.48126 7.32499 10.0563 5.75 11.9991 5.75C13.9419 5.75 15.5169 7.32499 15.5169 9.26784C15.5169 11.2107 13.9419 12.7857 11.9991 12.7857C10.0563 12.7857 8.48126 11.2107 8.48126 9.26784Z"
-                  fill=""
-                />
-              </svg>
-              Edit profile
-            </DropdownItem>
-          </li>
           <li>
             <DropdownItem
               onItemClick={closeDropdown}
@@ -98,6 +83,17 @@ export default function UserDropdown() {
               </svg>
               Account settings
             </DropdownItem>
+            <li>
+              <DropdownItem
+                onItemClick={closeDropdown}
+                tag="a"
+                href="/admin/notification"
+                className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700"
+              >
+                <GoBell size={22} />
+                Notifications
+              </DropdownItem>
+            </li>
           </li>
           <li>
             <DropdownItem
