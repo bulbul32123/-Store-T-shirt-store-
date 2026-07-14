@@ -105,34 +105,31 @@ exports.deleteChat = async (req, res) => {
     }
 };
 
-// // Shared helper — called from the socket handler (next step), not an HTTP route.
-// // Persists a message, bumps the right unread counter, and fires a notification
-// // to whichever side didn't send it.
-// exports.persistMessage = async ({ roomId, sender, content }) => {
-//   const chat = await Chat.findById(roomId).populate("user", "name");
-//   if (!chat) return null;
+exports.persistMessage = async ({ roomId, sender, content }) => {
+  const chat = await Chat.findById(roomId).populate("user", "name");
+  if (!chat) return null;
 
-//   const message = { sender, content, timestamp: new Date() };
-//   chat.messages.push(message);
+  const message = { sender, content, timestamp: new Date() };
+  chat.messages.push(message);
 
-//   if (sender === "user") {
-//     chat.unreadByAdmin += 1;
-//     notifyAdmins({
-//       type: "system",
-//       title: "New support message",
-//       message: `${chat.user.name}: ${content.slice(0, 80)}`,
-//       link: `/admin/support?chatId=${chat._id}`,
-//     });
-//   } else {
-//     chat.unreadByUser += 1;
-//     notifyUser(chat.user._id, {
-//       type: "system",
-//       title: "Support replied",
-//       message: content.slice(0, 80),
-//       link: `/profile`,
-//     });
-//   }
+  if (sender === "user") {
+    chat.unreadByAdmin += 1;
+    notifyAdmins({
+      type: "system",
+      title: "New support message",
+      message: `${chat.user.name}: ${content.slice(0, 80)}`,
+      link: `/admin/support?chatId=${chat._id}`,
+    });
+  } else {
+    chat.unreadByUser += 1;
+    notifyUser(chat.user._id, {
+      type: "system",
+      title: "Support replied",
+      message: content.slice(0, 80),
+      link: `/profile`,
+    });
+  }
 
-//   await chat.save();
-//   return chat.messages[chat.messages.length - 1];
-// };
+  await chat.save();
+  return chat.messages[chat.messages.length - 1];
+};

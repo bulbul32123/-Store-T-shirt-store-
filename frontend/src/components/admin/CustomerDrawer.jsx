@@ -1,21 +1,5 @@
+// CustomerDrawer.jsx
 'use client';
-
-/**
- * frontend/src/components/admin/customers/CustomerDrawer.jsx
- * ─────────────────────────────────────────────────────────────────────────────
- * Slide-out panel (right-to-left) that shows:
- *  A) Profile header + status toggle
- *  B) Financial insight (orders, LTV, AOV)
- *  C) Last 10 order history mini-table
- *  D) Appendable admin notes timeline
- *
- * Props:
- *   customer   object | null
- *   open       bool
- *   onClose    () => void
- *   onUpdate   (id, updates) => Promise<updatedCustomer>
- *   apiBase    string
- */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import {
@@ -25,7 +9,6 @@ import {
   PackageSearch
 } from 'lucide-react';
 
-// ── Helpers ────────────────────────────────────────────────────────────────────
 function initials(name = '') {
   return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || '?';
 }
@@ -46,7 +29,6 @@ function fmtMoney(v) {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(v || 0);
 }
 
-// ── Status config ──────────────────────────────────────────────────────────────
 const STATUS_CFG = {
   active:    { cls: 'bg-emerald-100 text-emerald-700 border-emerald-200', Icon: CheckCircle2 },
   inactive:  { cls: 'bg-amber-100   text-amber-700   border-amber-200',   Icon: AlertCircle  },
@@ -64,7 +46,6 @@ function StatusBadge({ status }) {
   );
 }
 
-// ── Order status pill ──────────────────────────────────────────────────────────
 const ORDER_STATUS_CLS = {
   pending:    'bg-yellow-50  text-yellow-700',
   processing: 'bg-blue-50    text-blue-700',
@@ -81,7 +62,6 @@ function OrderStatusPill({ status }) {
   );
 }
 
-// ── Section heading ────────────────────────────────────────────────────────────
 function SectionHeading({ children }) {
   return (
     <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">
@@ -90,7 +70,6 @@ function SectionHeading({ children }) {
   );
 }
 
-// ── Stat box (for financial insight) ──────────────────────────────────────────
 function StatBox({ icon: Icon, label, value, colorCls }) {
   return (
     <div className={`flex-1 flex flex-col items-center justify-center p-3 rounded-xl ${colorCls}`}>
@@ -101,28 +80,20 @@ function StatBox({ icon: Icon, label, value, colorCls }) {
   );
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-// Main drawer
-// ══════════════════════════════════════════════════════════════════════════════
 export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiBase }) {
-  // Detailed data fetched when drawer opens
   const [orders,     setOrders]     = useState([]);
   const [stats,      setStats]      = useState({ totalOrders: 0, totalSpent: 0, aov: 0 });
   const [loadingDet, setLoadingDet] = useState(false);
 
-  // Notes (local copy so we can append optimistically)
   const [localNotes, setLocalNotes] = useState([]);
 
-  // Note input
   const [noteText,   setNoteText]   = useState('');
   const [addingNote, setAddingNote] = useState(false);
 
-  // Status toggle
   const [toggling,   setToggling]   = useState(false);
 
   const noteRef = useRef(null);
 
-  // ── Fetch detail when drawer opens ──────────────────────────────────────────
   useEffect(() => {
     if (!customer?._id || !open) return;
 
@@ -153,20 +124,17 @@ export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiB
     fetchDetail();
   }, [customer?._id, open, apiBase]);
 
-  // ── Lock body scroll while drawer open ──────────────────────────────────────
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [open]);
 
-  // ── Close on Escape key ──────────────────────────────────────────────────────
   useEffect(() => {
     const handler = (e) => { if (e.key === 'Escape' && open) onClose(); };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, [open, onClose]);
 
-  // ── Add note ─────────────────────────────────────────────────────────────────
   const handleAddNote = useCallback(async () => {
     if (!noteText.trim() || addingNote) return;
     setAddingNote(true);
@@ -182,7 +150,6 @@ export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiB
     }
   }, [noteText, addingNote, customer?._id, onUpdate]);
 
-  // ── Toggle account status ─────────────────────────────────────────────────────
   const handleToggleStatus = useCallback(async () => {
     if (toggling) return;
     const newStatus = customer.status === 'suspended' ? 'active' : 'suspended';
@@ -196,12 +163,10 @@ export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiB
     }
   }, [toggling, customer, onUpdate]);
 
-  // ── Render nothing until a customer is selected ───────────────────────────────
   const visible = !!customer;
 
   return (
    <>
-      {/* ── Backdrop overlay ──────────────────────────────────────────────── */}
       <div
         aria-hidden="true"
         onClick={onClose}
@@ -209,7 +174,6 @@ export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiB
                     ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
       />
 
-      {/* ── Drawer panel ──────────────────────────────────────────────────── */}
     <aside
   role="dialog"
   aria-modal="true"
@@ -234,7 +198,6 @@ export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiB
   >
     {!visible ? null : (
           <>
-            {/* ── Fixed header bar ──────────────────────────────────────────── */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 flex-shrink-0">
               <div className="flex items-center gap-2">
                 <h2 className="font-bold text-gray-900 text-base">Customer Profile</h2>
@@ -251,14 +214,9 @@ export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiB
               </button>
             </div>
 
-            {/* ── Scrollable body ───────────────────────────────────────────── */}
             <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
 
-              {/* ════════════════════════════════════════════════════════════
-                  Section A — Profile header
-              ══════════════════════════════════════════════════════════════ */}
               <div className="p-5 border-b border-gray-100 space-y-4">
-                {/* Avatar + name + meta */}
                 <div className="flex items-start gap-4">
                   <div
                     className={`w-16 h-16 rounded-2xl ${avatarColor(customer.name)}
@@ -276,7 +234,6 @@ export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiB
                       <StatusBadge status={customer.status} />
                     </div>
 
-                    {/* Contact details */}
                     <ul className="mt-2 space-y-1">
                       <ContactItem icon={Mail}     text={customer.email} />
                       {customer.phone     && <ContactItem icon={Phone}    text={customer.phone} />}
@@ -293,7 +250,6 @@ export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiB
                   </div>
                 </div>
 
-                {/* Status toggle button */}
                 <button
                   onClick={handleToggleStatus}
                   disabled={toggling}
@@ -314,9 +270,6 @@ export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiB
                 </button>
               </div>
 
-              {/* ════════════════════════════════════════════════════════════
-                  Section B — Financial Insight
-              ══════════════════════════════════════════════════════════════ */}
               <div className="p-5 border-b border-gray-100">
                 <SectionHeading>Financial Overview</SectionHeading>
 
@@ -350,9 +303,6 @@ export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiB
                 )}
               </div>
 
-              {/* ════════════════════════════════════════════════════════════
-                  Section C — Order History mini-table
-              ══════════════════════════════════════════════════════════════ */}
               <div className="p-5 border-b border-gray-100">
                 <SectionHeading>Recent Orders</SectionHeading>
 
@@ -375,7 +325,6 @@ export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiB
                         className="flex items-center justify-between bg-gray-50 hover:bg-indigo-50/40
                                    border border-gray-100 rounded-xl px-3 py-2.5 transition-colors"
                       >
-                        {/* Left: ID + date */}
                         <div>
                           <p className="text-xs font-mono font-semibold text-gray-600">
                             #{String(order._id).slice(-8).toUpperCase()}
@@ -385,7 +334,6 @@ export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiB
                           </p>
                         </div>
 
-                        {/* Right: status + amount + link */}
                         <div className="flex items-center gap-2">
                           <OrderStatusPill status={order.status} />
                           <span className="text-sm font-bold text-gray-900">
@@ -405,13 +353,9 @@ export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiB
                 )}
               </div>
 
-              {/* ════════════════════════════════════════════════════════════
-                  Section D — Admin Notes timeline
-              ══════════════════════════════════════════════════════════════ */}
               <div className="p-5 pb-8">
                 <SectionHeading>Admin Notes</SectionHeading>
 
-                {/* Note input */}
                 <div className="flex gap-2 mb-4">
                   <div className="flex-1 relative">
                     <StickyNote
@@ -446,7 +390,6 @@ export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiB
                   </button>
                 </div>
 
-                {/* Notes feed (newest first) */}
                 {localNotes.length === 0 ? (
                   <p className="text-sm text-gray-400 text-center py-4">
                     No notes yet — add the first one above
@@ -474,7 +417,6 @@ export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiB
               </div>
 
             </div>
-            {/* end scrollable body */}
           </>
         )}
   </div>
@@ -483,7 +425,6 @@ export default function CustomerDrawer({ customer, open, onClose, onUpdate, apiB
   );
 }
 
-// ── Small helper: contact row ─────────────────────────────────────────────────
 function ContactItem({ icon: Icon, text }) {
   return (
     <li className="flex items-center gap-2 text-sm text-gray-500">
