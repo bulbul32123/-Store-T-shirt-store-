@@ -1,20 +1,41 @@
 import ProductCard from "@/components/home/carousel/productCarousel/ProductCard";
 import axios from "axios";
 
-export async function generateMetadata({ searchParams }) {
-   const params = await searchParams;
 
-   const query = params.query || "";
+export async function generateMetadata({ searchParams }){
+  const params = await searchParams;
+  const query = params.query?.trim() || "";
+
+  // Capitalize the first letter of the query for a cleaner tab title
+  const formattedQuery = query 
+    ? `"${query.charAt(0).toUpperCase() + query.slice(1)}"` 
+    : "";
+
+  const titleSnippet = formattedQuery 
+    ? `Search Results for ${formattedQuery}` 
+    : "Search Products";
 
   return {
-    title: query ? `Search: ${query}` : "Search Products",
-    description: `Search results for ${query}`,
+    title: `${titleSnippet} | Payra Bangladesh`,
+    description: query 
+      ? `Looking for ${query}? Explore matching clothing, streetwear, and sneakers available at Payra with fast nationwide shipping.`
+      : "Search for premium t-shirts, sneakers, sunglasses, and bags on Payra Bangladesh.",
+    openGraph: {
+      title: `${titleSnippet} - Payra`,
+      description: query 
+        ? `Find the best deals on ${query} and more items at Payra.` 
+        : "Search the Payra collection.",
+    },
+    // Prevents search engines from indexing empty or infinite custom query combinations
+    robots: {
+      index: false,
+      follow: true,
+    },
   };
 }
 
 export default async function SearchPage({ searchParams }) {
- const params = await searchParams;
-
+  const params = await searchParams;
   const query = (params.query || "").trim().toLowerCase();
 
   const { data } = await axios.get(
@@ -34,9 +55,6 @@ export default async function SearchPage({ searchParams }) {
         );
       })
     : [];
-
-  console.log("query:", query);
-  console.log("filteredProducts:", filteredProducts);
 
   return (
     <div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 py-10">
@@ -65,7 +83,6 @@ export default async function SearchPage({ searchParams }) {
       ) : (
         <div className="flex flex-col items-center justify-center py-20">
           <h2 className="text-2xl font-bold">No Products Found</h2>
-
           <p className="mt-2 text-gray-500">
             Try searching with another keyword.
           </p>

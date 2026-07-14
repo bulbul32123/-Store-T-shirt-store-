@@ -159,6 +159,8 @@ if (id) {
         };
         const data = await adminReviewsApi.getReviews(params);
         setReviews(data.reviews);
+        console.log(data);
+        
         setPagination(data.pagination);
       } catch (err) {
         toast.error(err.message || "Failed to load reviews");
