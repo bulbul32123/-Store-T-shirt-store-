@@ -9,7 +9,8 @@ import { VisitPopupProvider } from "@/context/VisitPopupContext";
 import { Toaster } from "react-hot-toast";
 
 export const metadata = {
-  title: "Payra | Quality T-Shirts for Everyone",
+  title: "Bangladesh’s Favorite Online Store | Order Now at Payra.com",
+  description: "Upgrade your footwear game with Payra.com. Discover Premium quality, New and  affordable shoes for your style. Shop online today, Order now!",
   icons: {
     // icon: "/favicon.svg",
     icon: [

@@ -12,7 +12,6 @@ import ShoppingCartIcon from '../layout/ShoppingCartIcon';
 export default function CartNotificationPopover() {
     const { itemCount } = useCart();
     const { showCartPopup, cartItemCount, dismissCart } = useVisitPopup();
-    console.log('showCartPopup:', showCartPopup);
     const msg = getCartVisitMessage(cartItemCount);
 
     return (

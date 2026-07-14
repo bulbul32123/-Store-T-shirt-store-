@@ -1,7 +1,6 @@
 import CartNotificationPopover from "@/components/navbar/CartNotificationPopover";
 import WatchlistNotificationPopover from "@/components/navbar/WatchlistNotificationPopover";
 import { navConfig } from "@/config/navConfig";
-import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import MobileHamburger from "./MobileHamburger";
@@ -17,7 +16,13 @@ export default function Navbar() {
         {/* Logo */}
         <div className="flex items-end md:w-[50%] max-md:pr-4 gap-1">
           <Link href={navConfig.logo.href}>
-            <Image src="/Logo.svg" alt="logo" width={100} height={100} />
+            <Image
+              src="/Logo.svg"
+              alt="logo"
+              width={100}
+              height={100}
+              loading="eager"
+            />
           </Link>
         </div>
 

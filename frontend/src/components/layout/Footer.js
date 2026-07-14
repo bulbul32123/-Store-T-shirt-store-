@@ -100,7 +100,7 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row justify-between items-center mt-12 border-t pt-6 border-gray-200 text-sm text-gray-500">
           <p>© {currentYear} Payra. All rights reserved.</p>
           <div className="flex gap-3 mt-4 sm:mt-0">
-            <Image src="/bkash-logo.jpg" alt="bkash" width={40} height={24} />
+            {/* <Image src="/bkash-logo.jpg" alt="bkash" width={40} height={24} />
             <Image
               src="/rocket-logo.jpeg"
               alt="Rocket"
@@ -112,7 +112,7 @@ export default function Footer() {
               alt="Chash on Delivery"
               width={40}
               height={24}
-            />
+            /> */}
           </div>
         </div>
       </div>

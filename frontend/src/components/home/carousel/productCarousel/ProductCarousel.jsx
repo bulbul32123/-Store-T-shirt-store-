@@ -54,9 +54,10 @@ export default function ProductCarousel({
     <section className="w-full mb-5 py-8 border-b border-border">
       <div className="flex items-start justify-between mb-4">
         {title && (
-          <h2 
+          <h2
             className={`text-3xl md:text-4xl font-extrabold ${
-              status === "onsale" ? "text-red-500" : ""}`}
+              status === "onsale" ? "text-red-500" : ""
+            }`}
           >
             {title}
           </h2>
@@ -98,7 +99,7 @@ export default function ProductCarousel({
 
       <div className="flex justify-center mt-6">
         <Link
-          href="/products"
+          href={`/products?status=${status}`}
           className="px-6 py-2 rounded-full border border-border text-sm hover:bg-muted transition"
         >
           View All
