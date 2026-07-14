@@ -17,9 +17,13 @@ function StarRating({ value }) {
 }
 
 function productThumb(product) {
-    if (!product?.images?.length) return null;
+  if (!product) return null;
+  if (product.images?.length) {
     const first = product.images[0];
-    return typeof first === 'string' ? first : first?.url || null;
+    return typeof first === "string" ? first : first?.url || null;
+  }
+  const colorWithImages = product.colors?.find((c) => c.images?.length > 0);
+  return colorWithImages?.images?.[0]?.url || null;
 }
 
 export default function ReviewDetailDrawer({ review, onClose, onDelete }) {
@@ -45,7 +49,7 @@ export default function ReviewDetailDrawer({ review, onClose, onDelete }) {
 
     return (
         <>
-            <div className="fixed inset-0 z-40 bg-black/40 transition-opacity" onClick={onClose} />
+            <div className="fixed inset-0 h-full z-40 bg-black/40 transition-opacity" onClick={onClose} />
             <div className="fixed inset-y-0 right-0 z-50 flex flex-col w-full max-w-lg bg-white shadow-2xl overflow-hidden">
                 <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
                     <div>
