@@ -1,8 +1,4 @@
-      
-      
-        Task:
-         1. Remove all the trendding status from product create, edit to products page.
-         3. Create,Delete,Edit Carsousels Data, Create,Delete,Edit Upcomming products add on banners,MegaMenu
+
 
 
 Admin Sidebar layout:
