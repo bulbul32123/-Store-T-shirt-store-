@@ -2,7 +2,20 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-export default function Banner({ banner }) {
+export default function Banner({ banner, isLoading = false }) {
+  // Loading Skeleton State
+  if (isLoading || !banner) {
+    return (
+      <div className="relative w-full h-[600px] overflow-hidden mt-9 mb-10 rounded-xl animate-pulse">
+        {/* Title Skeleton */}
+        <div className="h-10 bg-gray-200 rounded w-48 mb-4" />
+        {/* Banner Image Area Skeleton */}
+        <div className="w-full h-full bg-gray-200 rounded-xl" />
+      </div>
+    );
+  }
+
+  // Actual Component Logic
   const product = banner.product;
   const badges = [];
   if (banner.showStatus) {
@@ -40,4 +53,3 @@ export default function Banner({ banner }) {
     </div>
   );
 }
-

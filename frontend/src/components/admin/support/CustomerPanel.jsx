@@ -1,5 +1,4 @@
-"use client";
-import { useState, useEffect } from "react";
+
 import {
   ChevronLeft,
   ChevronRight,
@@ -7,19 +6,10 @@ import {
   Phone,
   MapPin,
   Hash,
-  Loader2,
-  Check,
 } from "lucide-react";
-import { adminChatApi } from "@/lib/adminChatApi";
+import UserAvatar from "@/components/common/UserAvatar"; // 👈 Import here
 
 export default function CustomerPanel({ chat, collapsed, onToggleCollapse }) {
-  const [note, setNote] = useState("");
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
-
-  useEffect(() => {
-    setNote("");
-  }, [chat?._id]);
 
   if (collapsed) {
     return (
@@ -35,36 +25,15 @@ export default function CustomerPanel({ chat, collapsed, onToggleCollapse }) {
   }
 
   if (!chat) {
-    return (
-      <div className="w-72 flex-shrink-0 border-l border-gray-200 bg-white flex items-center justify-center">
-        <p className="text-sm text-gray-400 px-4 text-center">
-          No customer selected
-        </p>
-      </div>
-    );
+    return null;
   }
 
   const u = chat.user || {};
   const addr = u.address;
 
-  const saveNote = async () => {
-    if (!note.trim()) return;
-    setSaving(true);
-    try {
-      await adminChatApi.addNote(chat._id, note.trim());
-      setNote("");
-      setSaved(true);
-      setTimeout(() => setSaved(false), 1500);
-    } catch (err) {
-      console.error("Failed to save note:", err);
-    } finally {
-      setSaving(false);
-    }
-  };
-
   return (
-    <div className="w-72 flex-shrink-0 border-l border-gray-200 bg-white flex flex-col overflow-y-auto">
-      <div className="flex items-center justify-between px-4 py-3.5 border-b border-gray-100">
+    <div className="w-64 flex-shrink-0 border-l border-gray-200 bg-white flex flex-col overflow-y-auto">
+      <div className="flex items-center justify-between px-4 py-5 border-b border-gray-100">
         <h3 className="text-sm font-bold text-gray-900">Customer Details</h3>
         <button
           onClick={onToggleCollapse}
@@ -75,20 +44,14 @@ export default function CustomerPanel({ chat, collapsed, onToggleCollapse }) {
       </div>
 
       <div className="flex flex-col items-center py-5 border-b border-gray-100">
-        <div
-          className="h-16 w-16 rounded-full flex items-center justify-center text-xl font-semibold text-white mb-2"
-          style={{ background: "#6366f1" }}
-        >
-          {u.avatar || u.profilePicture?.url ? (
-            <img
-              src={u.avatar || u.profilePicture.url}
-              alt=""
-              className="h-16 w-16 rounded-full object-cover"
-            />
-          ) : (
-            u.name?.[0]?.toUpperCase() || "?"
-          )}
-        </div>
+        {/* 👈 Reusable avatar setup with matching layout sizes */}
+        <UserAvatar
+          user={u}
+          size="h-16 w-16"
+          textSize="text-xl"
+          className="mb-2"
+        />
+
         <p className="text-sm font-semibold text-gray-900">
           {u.name || "Unknown"}
         </p>
@@ -136,46 +99,6 @@ export default function CustomerPanel({ chat, collapsed, onToggleCollapse }) {
             </p>
           </div>
         </div>
-      </div>
-
-      <div className="px-4 py-4 flex-1">
-        <p className="text-[11px] text-gray-400 uppercase tracking-wide mb-2">
-          Internal Notes
-        </p>
-        {u.notes?.length > 0 && (
-          <div className="space-y-2 mb-3 max-h-32 overflow-y-auto">
-            {u.notes
-              .slice()
-              .reverse()
-              .map((n, i) => (
-                <div key={i} className="bg-gray-50 rounded-lg p-2">
-                  <p className="text-xs text-gray-700">{n.text}</p>
-                  <p className="text-[10px] text-gray-400 mt-1">
-                    {n.addedBy} · {new Date(n.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-              ))}
-          </div>
-        )}
-        <textarea
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-          rows={3}
-          placeholder="Add a note about this customer…"
-          className="w-full text-xs border border-gray-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-        />
-        <button
-          onClick={saveNote}
-          disabled={saving || !note.trim()}
-          className="mt-2 w-full flex items-center justify-center gap-1.5 text-xs font-medium py-2 rounded-lg bg-gray-900 text-white hover:bg-gray-800 disabled:opacity-40"
-        >
-          {saving ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          ) : saved ? (
-            <Check className="h-3.5 w-3.5" />
-          ) : null}
-          {saving ? "Saving…" : saved ? "Saved" : "Add Note"}
-        </button>
       </div>
     </div>
   );

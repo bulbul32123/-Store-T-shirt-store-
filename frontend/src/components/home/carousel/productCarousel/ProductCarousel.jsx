@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
@@ -10,26 +9,22 @@ export default function ProductCarousel({
   title,
   products = [],
   showArrows = true,
+  isLoading = false, // Added Loading Control Prop
 }) {
   const scrollRef = useRef(null);
-
   const [isAtStart, setIsAtStart] = useState(true);
   const [isAtEnd, setIsAtEnd] = useState(false);
 
   const checkScrollPosition = () => {
     const el = scrollRef.current;
-
     if (!el) return;
-
     setIsAtStart(el.scrollLeft <= 0);
     setIsAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 10);
   };
 
   const scroll = (direction) => {
     const el = scrollRef.current;
-
     if (!el) return;
-
     el.scrollBy({
       left: direction === "left" ? -el.clientWidth : el.clientWidth,
       behavior: "smooth",
@@ -38,17 +33,13 @@ export default function ProductCarousel({
 
   useEffect(() => {
     const el = scrollRef.current;
-
-    if (!el) return;
-
+    if (!el || isLoading) return; // Prevent checking position if loading skeletons are active
     checkScrollPosition();
-
     el.addEventListener("scroll", checkScrollPosition);
-
     return () => {
       el.removeEventListener("scroll", checkScrollPosition);
     };
-  }, []);
+  }, [isLoading]);
 
   return (
     <section className="w-full mb-5 py-8 border-b border-border">
@@ -56,14 +47,13 @@ export default function ProductCarousel({
         {title && (
           <h2
             className={`text-3xl md:text-4xl font-extrabold ${
-              status === "onsale" ? "text-red-500" : ""
+              status === "sale" ? "text-red-500" : ""
             }`}
           >
             {title}
           </h2>
         )}
-
-        {showArrows && products.length >= 5 && (
+        {showArrows && !isLoading && products.length >= 4 && (
           <div className="hidden md:flex gap-4">
             <button
               onClick={() => scroll("left")}
@@ -74,7 +64,6 @@ export default function ProductCarousel({
             >
               <FaChevronLeft className="text-white" />
             </button>
-
             <button
               onClick={() => scroll("right")}
               disabled={isAtEnd}
@@ -90,11 +79,20 @@ export default function ProductCarousel({
 
       <div
         ref={scrollRef}
-        className="overflow-x-auto whitespace-nowrap scroll-smooth hide-scrollbar"
+        className="overflow-x-auto whitespace-nowrap scroll-smooth hide-scrollbar gap-4"
       >
-        {products?.map((product) => (
-          <ProductCard key={product._id} product={product} status={status} />
-        ))}
+        {isLoading
+          ? // Render 4 static placeholder card skeletons when API is executing
+            Array.from({ length: 4 }).map((_, index) => (
+              <ProductCard key={`skeleton-${index}`} isLoading={true} />
+            ))
+          : products?.map((product) => (
+              <ProductCard
+                key={product._id}
+                product={product}
+                status={status}
+              />
+            ))}
       </div>
 
       <div className="flex justify-center mt-6">

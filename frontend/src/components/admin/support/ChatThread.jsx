@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Send, Loader2, MessageCircle } from "lucide-react";
 import { getSocket } from "@/lib/socket";
+import UserAvatar from "@/components/common/UserAvatar";  // 👈 Import here
 
 function formatTime(iso) {
   return new Date(iso).toLocaleTimeString("en-US", {
@@ -19,13 +20,13 @@ export default function ChatThread({ chat, loading, online, onNewMessage }) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [chat?.messages]);
 
-const sendMessage = () => {
-  const text = input.trim();
-  if (!text || !chat?._id) return;
-  const socket = getSocket();
-  socket.emit("send_message", { roomId: chat._id, sender: "admin", text });
-  setInput(""); // removed onNewMessage(...) call
-};
+  const sendMessage = () => {
+    const text = input.trim();
+    if (!text || !chat?._id) return;
+    const socket = getSocket();
+    socket.emit("send_message", { roomId: chat._id, sender: "admin", text });
+    setInput("");
+  };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -45,21 +46,10 @@ const sendMessage = () => {
 
   return (
     <div className="flex-1 flex flex-col bg-gray-50 min-w-0">
-      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-gray-200 bg-white flex-shrink-0">
-        <div
-          className="h-9 w-9 rounded-full flex items-center justify-center text-sm font-semibold text-white flex-shrink-0"
-          style={{ background: "#6366f1" }}
-        >
-          {chat.user?.avatar || chat.user?.profilePicture?.url ? (
-            <img
-              src={chat.user.avatar || chat.user.profilePicture.url}
-              alt=""
-              className="h-9 w-9 rounded-full object-cover"
-            />
-          ) : (
-            chat.user?.name?.[0]?.toUpperCase() || "?"
-          )}
-        </div>
+      <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-200 bg-white flex-shrink-0">
+        {/* 👈 Reusable avatar setup with matching frame bounds */}
+        <UserAvatar user={chat.user} size="h-9 w-9" textSize="text-sm" />
+
         <div>
           <p className="text-sm font-semibold text-gray-900">
             {chat.user?.name || "Unknown"}
@@ -118,7 +108,7 @@ const sendMessage = () => {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Type a reply…"
-          className="flex-1 text-sm px-3.5 py-2.5 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 text-sm px-3.5 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button
           onClick={sendMessage}

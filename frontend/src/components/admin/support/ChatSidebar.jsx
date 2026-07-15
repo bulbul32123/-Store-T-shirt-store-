@@ -1,6 +1,7 @@
 "use client";
+import { ChevronLeft, ChevronRight, MoreVertical, Search } from "lucide-react";
 import { useState } from "react";
-import { MoreVertical, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import UserAvatar from "@/components/common/UserAvatar"; // 👈 Import here
 
 function timeAgo(date) {
   const s = Math.floor((Date.now() - new Date(date)) / 1000);
@@ -33,7 +34,7 @@ export default function ChatSidebar({
       <div className="w-16 flex-shrink-0 border-r border-gray-200 bg-white flex flex-col items-center py-3">
         <button
           onClick={onToggleCollapse}
-          className="p-2 rounded-lg hover:bg-gray-100 mb-3"
+          className="p-2 rounded-lg hover:bg-gray-100 mb-10"
         >
           <ChevronRight className="h-4 w-4 text-gray-500" />
         </button>
@@ -41,16 +42,11 @@ export default function ChatSidebar({
           <button
             key={c._id}
             onClick={() => onSelect(c._id)}
-            className="relative mb-2"
+            className="relative mb-2 transition-transform active:scale-95"
           >
-            <div
-              className={`h-9 w-9 rounded-full flex items-center justify-center text-xs font-semibold text-white ${activeId === c._id ? "ring-2 ring-blue-500" : ""}`}
-              style={{ background: "#6366f1" }}
-            >
-              {c.user?.name?.[0]?.toUpperCase() || "?"}
-            </div>
-            {c.unreadByAdmin > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-red-500 border-2 border-white" />
+            <UserAvatar user={c.user} /> {/* 👈 Reusable usage */}
+            {onlineIds.has(c.user?._id) && (
+              <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-500 border-2 border-white" />
             )}
           </button>
         ))}
@@ -59,8 +55,8 @@ export default function ChatSidebar({
   }
 
   return (
-    <div className="w-80 flex-shrink-0 border-r border-gray-200 bg-white flex flex-col">
-      <div className="flex items-center justify-between px-4 py-3.5 border-b border-gray-100">
+    <div className="w-64 flex-shrink-0 border-r border-gray-200 bg-white flex flex-col">
+      <div className="flex items-center justify-between px-4 py-5 border-b border-gray-100">
         <h2 className="text-base font-bold text-gray-900">Support Chats</h2>
         <button
           onClick={onToggleCollapse}
@@ -93,27 +89,15 @@ export default function ChatSidebar({
               <div
                 key={c._id}
                 onClick={() => onSelect(c._id)}
-                className={`relative flex items-center gap-3 px-4 py-3 cursor-pointer border-b border-gray-50 hover:bg-gray-50 ${activeId === c._id ? "bg-blue-50" : ""}`}
+                className={`relative flex items-center gap-3 px-4 py-3 cursor-pointer border-b border-gray-50 hover:bg-gray-50 transition-colors ${activeId === c._id ? "bg-blue-50" : ""}`}
               >
                 <div className="relative flex-shrink-0">
-                  <div
-                    className="h-10 w-10 rounded-full flex items-center justify-center text-sm font-semibold text-white"
-                    style={{ background: "#6366f1" }}
-                  >
-                    {c.user?.avatar || c.user?.profilePicture?.url ? (
-                      <img
-                        src={c.user.avatar || c.user.profilePicture.url}
-                        alt=""
-                        className="h-10 w-10 rounded-full object-cover"
-                      />
-                    ) : (
-                      c.user?.name?.[0]?.toUpperCase() || "?"
-                    )}
-                  </div>
+                  <UserAvatar user={c.user} /> {/* 👈 Reusable usage */}
                   {online && (
                     <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-500 border-2 border-white" />
                   )}
                 </div>
+
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-semibold text-gray-900 truncate">
@@ -129,11 +113,13 @@ export default function ChatSidebar({
                       : "No messages yet"}
                   </p>
                 </div>
+
                 {c.unreadByAdmin > 0 && (
                   <span className="flex-shrink-0 h-5 min-w-5 px-1 rounded-full bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center">
                     {c.unreadByAdmin}
                   </span>
                 )}
+
                 <div className="relative flex-shrink-0">
                   <button
                     onClick={(e) => {
