@@ -54,19 +54,19 @@ export default function ProductList() {
   useEffect(() => {
     if (user?.role === "admin") {
       fetchProducts();
-        fetchHeroSlides();
-         fetchBanner();
+      fetchHeroSlides();
+      fetchBanner();
     }
   }, [user, currentPage, search]);
 
-    const fetchBanner = async () => {
-      try {
-        const { data } = await axios.get(`${API_URL}/api/banner`);
-        setBannerProductId(data.banner?.product?._id || null);
-      } catch (error) {
-        console.error("Error fetching banner:", error);
-      }
-    };
+  const fetchBanner = async () => {
+    try {
+      const { data } = await axios.get(`${API_URL}/api/banner`);
+      setBannerProductId(data.banner?.product?._id || null);
+    } catch (error) {
+      console.error("Error fetching banner:", error);
+    }
+  };
 
   const handleEditRedirect = (product) => {
     router.push(`/admin/products/edit/${product._id}`);
@@ -95,44 +95,15 @@ export default function ProductList() {
     }
   };
 
+  // Keep the loading skeleton loop only on absolute initial hydrate states
   if (loading && products.length === 0) {
     return <ProductListSkeleton />;
   }
 
-  if (!loading && products.length === 0) {
-    return (
-      <div className="space-y-6 p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">
-              Products Inventory
-            </h1>
-            <p className="text-sm text-gray-500 mt-1">
-              Manage and monitor your online store items
-            </p>
-          </div>
-
-          <Link
-            href="/admin/products/new"
-            className="bg-[#CAEF96] text-black hover:bg-[#CAEF96]/80 px-4 py-2 rounded-md text-sm font-medium flex items-center shadow-sm"
-          >
-            <RiAddLine className="mr-1 text-lg" />
-            Add Product
-          </Link>
-        </div>
-
-        <div className="bg-white rounded-lg shadow border border-gray-200 text-center py-12 text-gray-500">
-          <p className="text-lg font-medium">
-            No products found matching filters
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6 p-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 p-6 max-w-full overflow-hidden">
+      {/* Header controls layout container */}
+      <div className="flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">
             Products Inventory
@@ -144,22 +115,21 @@ export default function ProductList() {
 
         <Link
           href="/admin/products/new"
-          className="bg-[#ffb803] text-black hover:bg-[#ffb803]/90 px-4 py-2 rounded-md text-sm font-medium flex items-center "
+          className="bg-[#ffb803] text-black hover:bg-[#ffb803]/90 px-4 py-2 rounded-md text-sm font-medium flex items-center shrink-0"
         >
           <RiAddLine className="mr-1 text-lg" />
           Add Product
         </Link>
       </div>
 
-      <div className="bg-white p-4 w-full rounded-lg border border-gray-150 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 items-end">
-        <div className="relative">
+      {/* Filter Options Panel - Now consistently renders regardless of content length */}
+      <div className="bg-white p-4 w-full rounded-lg border border-gray-200">
+        <div className="max-w-xs relative">
           <label className="block text-xs font-medium text-gray-600 uppercase mb-1">
             Search Name
           </label>
-
           <div className="relative w-full">
             <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-
             <input
               type="text"
               placeholder="Type product name..."
@@ -174,16 +144,36 @@ export default function ProductList() {
         </div>
       </div>
 
-      <ProductsTable
-        products={products}
-        onEdit={handleEditRedirect}
-        heroProductIds={heroProductIds}
-        onDelete={handleDeleteProduct}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        bannerProductId={bannerProductId}
-        onPageChange={setCurrentPage}
-      />
+      {/* Dynamic Inventory Display Context Block */}
+      {!loading && products.length === 0 ? (
+        <div className="bg-white rounded-lg border border-gray-200 text-center py-12 text-gray-500">
+          <p className="text-lg font-medium">
+            No products found matching filters
+          </p>
+          {search && (
+            <button
+              onClick={() => setSearch("")}
+              className="mt-2 text-xs font-semibold text-blue-600 hover:underline"
+            >
+              Clear search string
+            </button>
+          )}
+        </div>
+      ) : (
+        /* Isolated responsive block that shields shadcn components from causing viewport spillover */
+        <div className="w-full overflow-x-auto rounded-lg border border-gray-200 bg-white">
+          <ProductsTable
+            products={products}
+            onEdit={handleEditRedirect}
+            heroProductIds={heroProductIds}
+            onDelete={handleDeleteProduct}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            bannerProductId={bannerProductId}
+            onPageChange={setCurrentPage}
+          />
+        </div>
+      )}
     </div>
   );
 }

@@ -28,7 +28,7 @@ export const metadata = {
 // Home pagee
 export default async function Home() {
   const cookieStore = await cookies();
-  const cookieHeader = cookieStore.toString(); // forward the session cookie for personalized recs
+  const cookieHeader = cookieStore.toString(); 
 
   const [{ data }, recRes] = await Promise.all([
     axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/products`),
@@ -36,7 +36,7 @@ export default async function Home() {
       .get(`${process.env.NEXT_PUBLIC_API_URL}/api/recommendations`, {
         headers: { Cookie: cookieHeader },
       })
-      .catch(() => ({ data: { products: [] } })), // never break the homepage if this fails
+      .catch(() => ({ data: { products: [] } })),
   ]);
   const heroRes = await axios
     .get(`${process.env.NEXT_PUBLIC_API_URL}/api/hero-slides`)
@@ -66,12 +66,11 @@ const bannerData = bannerRes.data.banner;
 
   return (
     <div className="w-full h-full pl-5 pr-5 md:pl-10 md:pr-10">
-      {/* Hero Carousel here */}
       <Carousel items={carousel} />
 
       {onSaleProducts.length > 0 && (
         <ProductCarousel
-          status="onsale"
+          status="sale"
           title="On Sale Now"
           products={onSaleProducts}
         />
@@ -79,16 +78,16 @@ const bannerData = bannerRes.data.banner;
 
       <BrowseByCategory />
 
-      {recommendedProducts.length > 0 && (
+       {recommendedProducts.length > 0 && (
         <ProductCarousel
           status="recommended"
           title="Recommandations"
           products={recommendedProducts}
         />
-      )}
+      )} 
 
       <ProductCarousel
-        status="new"
+        status="newDrop"
         title="Explore Latest"
         products={latestProducts}
       />

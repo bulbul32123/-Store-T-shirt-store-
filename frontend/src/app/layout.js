@@ -25,8 +25,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="h-full w-full">
-      <body className="h-full w-full antialiased">
-        
+      <body className="h-full w-full antialiased relative overflow-x-hidden mx-auto xl:max-w-[1500px]">
         <AuthProvider>
           <NotificationProvider>
             <CartProvider>
