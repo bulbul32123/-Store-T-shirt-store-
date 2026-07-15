@@ -151,6 +151,7 @@ export const NotificationProvider = ({ children }) => {
     markChatRead,
     loading,
     page,
+    user,
     totalPages,
     fetchNotifications,
     loadMore,
