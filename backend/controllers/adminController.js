@@ -102,6 +102,7 @@ exports.getStats = async (req, res) => {
     ]);
 
     // --- Top products by revenue ---
+    // --- Top products by revenue ---
     const topProducts = await Order.aggregate([
       { $match: { paymentStatus: "paid" } },
       { $unwind: "$orderItems" },
@@ -120,17 +121,19 @@ exports.getStats = async (req, res) => {
       { $limit: 5 },
     ]);
 
+    // 1. FIXED: Added avatar and profilePicture fields to the select list
     const recentOrders = await Order.find()
       .sort({ createdAt: -1 })
       .limit(5)
-      .populate("user", "name email")
+      .populate("user", "name email profilePicture") // 👈 Changed this line
       .lean();
 
-    const lowStockProducts = await Product.find({ stock: { $lt: 10 } }) // was: stockQuantity
-      .sort({ stock: 1 }) // was: stockQuantity
+    // 2. OPTIONAL: If your lowStockProducts need category images as well as product images,
+    // make sure the images array is stored and returned in the Product model.
+    const lowStockProducts = await Product.find({ stock: { $lt: 10 } })
+      .sort({ stock: 1 })
       .limit(5)
-      .populate("category", "name")
-      .lean();
+      .populate("category", "name");
 
     res.json({
       success: true,

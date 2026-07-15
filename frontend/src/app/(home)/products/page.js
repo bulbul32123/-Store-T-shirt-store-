@@ -1,9 +1,7 @@
-
-import { ProductsPageInner } from "@/components/products/ProductsPageInner";
-import { Suspense } from "react";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+import { ProductsPageInner, SkeletonCard } from "@/components/products/ProductsPageInner";
 import { productsApi } from "@/lib/productsApi";
-
-
+import { Suspense } from "react";
 
 // Maps static query statuses to human-readable Meta Title phrases
 const STATUS_TITLES = {
@@ -11,10 +9,9 @@ const STATUS_TITLES = {
   newDrop: "New Drops & Arrivals",
   bestselling: "Best Selling Fashion",
   popular: "Most Popular Style",
-  trending: "Trending Collection",
 };
 
-export async function generateMetadata({ searchParams }){
+export async function generateMetadata({ searchParams }) {
   const resolvedParams = await searchParams;
   const { category, status, sale, freeShipping, minRating } = resolvedParams;
 
@@ -27,7 +24,7 @@ export async function generateMetadata({ searchParams }){
       const activeCategory = Array.isArray(categories)
         ? categories.find((c) => c._id === category)
         : null;
-      
+
       if (activeCategory?.name) {
         titleSnippet = `${activeCategory.name} Collection`;
       } else {
@@ -36,7 +33,7 @@ export async function generateMetadata({ searchParams }){
     } catch {
       titleSnippet = "Category Collection";
     }
-  } 
+  }
   // 2. Handle specific query flags explicitly matching your Nav links
   else if (status && STATUS_TITLES[status]) {
     titleSnippet = STATUS_TITLES[status];
@@ -61,9 +58,9 @@ export default function ProductsPage() {
   return (
     <Suspense
       fallback={
-        <div className="max-w-[1400px] mx-auto px-4 py-16 text-center text-gray-500">
-          Loading…
-        </div>
+         <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8">
+                   {[...Array(9)].map((_, i) => <SkeletonCard key={i} />)}
+                </div>
       }
     >
       <ProductsPageInner />

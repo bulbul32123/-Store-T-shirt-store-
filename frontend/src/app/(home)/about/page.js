@@ -1,9 +1,12 @@
+import SupportBtn from "@/components/common/SupportBtn";
+
 export const metadata = {
   title: "About Us | Payra",
   description: "Learn more about Payra and our mission.",
 };
 
 export default function AboutPage() {
+ 
   return (
     <div className="max-w-4xl mx-auto px-6 py-16">
       <h1 className="text-3xl sm:text-4xl font-extrabold mb-6">About Payra</h1>
@@ -42,7 +45,9 @@ export default function AboutPage() {
 
         <p className="pt-4">
           Have questions? Reach out through our support chat — we&apos;re always
-          happy to help.
+          happy to
+          
+          <SupportBtn text='help'/>.
         </p>
       </div>
     </div>

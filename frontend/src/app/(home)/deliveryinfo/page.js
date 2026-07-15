@@ -1,3 +1,4 @@
+import SupportBtn from "@/components/common/SupportBtn";
 import Link from "next/link";
 
 export const metadata = {
@@ -65,8 +66,8 @@ export default function DeliveryInfoPage() {
           </h2>
           <p>
             If your order is taking longer than expected, reach out through our
-            support chat with your order number and we&apos;ll look into it
-            right away.
+            <SupportBtn text={"support chat"} /> with your order number and
+            we&apos;ll look into it right away.
           </p>
         </section>
       </div>

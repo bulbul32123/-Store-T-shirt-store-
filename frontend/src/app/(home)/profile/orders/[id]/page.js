@@ -1,9 +1,8 @@
-// profile/orders/[id]/page.js
 "use client";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link"; // Added for linking to a review page if needed
+import Link from "next/link";
 import toast from "react-hot-toast";
 import { CheckCircle2, Circle } from "lucide-react";
 import { ordersApi } from "@/lib/ordersApi";
@@ -46,11 +45,7 @@ export default function OrderDetailPage() {
   };
 
   if (loading) {
-    return (
-      <div className="max-w-4xl mx-auto px-4 py-16 text-center text-gray-500">
-        Loading order...
-      </div>
-    );
+    return <OrderDetailSkeleton />;
   }
   if (!order) {
     return (
@@ -65,7 +60,6 @@ export default function OrderDetailPage() {
   const canCancel =
     !isCancelled && !["shipped", "delivered"].includes(order.orderStatus);
 
-  // Check if the overall order is successfully delivered
   const isDelivered = order.orderStatus === "delivered";
 
   return (
@@ -161,8 +155,6 @@ export default function OrderDetailPage() {
               </p>
               <p className="text-sm text-gray-500 mb-1">Qty: {item.quantity}</p>
 
-              {/* WRITE A REVIEW BUTTON CONDITION */}
-              {/* WRITE A REVIEW BUTTON CONDITION */}
               {isDelivered && (
                 <div>
                   {item?.hasReviewed ? (
@@ -221,6 +213,73 @@ export default function OrderDetailPage() {
           {order.shippingAddress.state} {order.shippingAddress.postalCode},{" "}
           {order.shippingAddress.country}
         </p>
+      </div>
+    </div>
+  );
+}
+
+// ─── ORDER DETAIL SKELETON ────────────────────────────────────────────────────
+function OrderDetailSkeleton() {
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-10 animate-pulse">
+      {/* Back Button */}
+      <div className="h-4 w-28 bg-gray-200 rounded mb-6" />
+
+      {/* Header section (Title & Button) */}
+      <div className="flex items-center justify-between mb-8">
+        <div className="space-y-2">
+          <div className="h-8 w-48 bg-gray-200 rounded-lg" />
+          <div className="h-4 w-32 bg-gray-200 rounded" />
+        </div>
+        <div className="h-9 w-28 bg-gray-200 rounded-xl" />
+      </div>
+
+      {/* Tracker Steps Bar */}
+      <div className="flex justify-between mb-10 items-center">
+        {[1, 2, 3, 4, 5].map((step, idx) => (
+          <div key={idx} className="flex-1 flex flex-col items-center relative">
+            {idx > 0 && (
+              <div className="absolute top-3 right-1/2 w-full h-0.5 bg-gray-200" />
+            )}
+            <div className="h-6 w-6 rounded-full bg-gray-200 relative z-10" />
+            <div className="h-3 w-12 bg-gray-200 rounded mt-2" />
+          </div>
+        ))}
+      </div>
+
+      {/* Items List */}
+      <div className="space-y-4 mb-8">
+        {[1, 2].map((i) => (
+          <div key={i} className="flex items-center gap-4 border-b pb-4">
+            <div className="h-20 w-20 rounded-xl bg-gray-200 shrink-0" />
+            <div className="flex-1 space-y-2">
+              <div className="h-5 w-1/2 bg-gray-200 rounded" />
+              <div className="h-4 w-1/3 bg-gray-200 rounded" />
+              <div className="h-4 w-12 bg-gray-200 rounded" />
+            </div>
+            <div className="h-5 w-14 bg-gray-200 rounded" />
+          </div>
+        ))}
+      </div>
+
+      {/* Bill Summary Block */}
+      <div className="border rounded-2xl p-6 space-y-3">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="flex justify-between">
+            <div className="h-4 w-16 bg-gray-200 rounded" />
+            <div className="h-4 w-12 bg-gray-200 rounded" />
+          </div>
+        ))}
+        <div className="border-t pt-3 flex justify-between">
+          <div className="h-6 w-16 bg-gray-200 rounded" />
+          <div className="h-6 w-20 bg-gray-200 rounded" />
+        </div>
+      </div>
+
+      {/* Address Block */}
+      <div className="border rounded-2xl p-6 mt-6 space-y-2">
+        <div className="h-5 w-32 bg-gray-200 rounded" />
+        <div className="h-4 w-5/6 bg-gray-200 rounded" />
       </div>
     </div>
   );

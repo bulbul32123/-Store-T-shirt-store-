@@ -1,3 +1,5 @@
+import SupportBtn from "@/components/common/SupportBtn";
+
 export const metadata = {
   title: "Privacy Policy | Payra",
   description: "How Payra collects, uses, and protects your information.",
@@ -74,7 +76,7 @@ export default function PrivacyPolicyPage() {
             6. Contact Us
           </h2>
           <p>
-            Questions about this policy? Reach out through our support chat or
+            Questions about this policy? Reach out through our<SupportBtn text={"support chat"} /> or
             email us directly.
           </p>
         </section>
