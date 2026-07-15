@@ -209,20 +209,6 @@ export default function ShopSidebar({
             Popular
           </label>
 
-          {/* ADDED: Trending Status */}
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.status === "trending"}
-              onChange={() =>
-                onChange(
-                  "status",
-                  filters.status === "trending" ? "" : "trending",
-                )
-              }
-            />
-            Trending
-          </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"

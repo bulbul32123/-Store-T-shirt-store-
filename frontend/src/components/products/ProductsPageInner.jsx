@@ -7,7 +7,7 @@ import { productsApi } from "@/lib/productsApi";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
-function SkeletonCard() {
+export const SkeletonCard = () => {
   return (
     <div className="animate-pulse space-y-3">
       <div className="w-full h-[19rem] rounded-2xl bg-gray-100" />
@@ -16,7 +16,7 @@ function SkeletonCard() {
       <div className="h-4 w-1/4 bg-gray-100 rounded" />
     </div>
   );
-}
+};
 
 export const ProductsPageInner = () => {
   const router = useRouter();
@@ -158,11 +158,19 @@ export const ProductsPageInner = () => {
   }, []);
 
   // The Array.isArray check ensures it won't crash even if state isn't an array yet
+  const STATUS_LABELS = {
+    featured: "Featured",
+    popular: "Popular",
+    newDrop: "New Drop",
+    bestselling: "Best Selling",
+  };
   const activeCategory = Array.isArray(categories)
     ? categories.find((c) => c._id === filters.category)
     : null;
-  const pageTitle = activeCategory?.name || "Shop";
-
+  const pageTitle =
+    activeCategory?.name ||
+    STATUS_LABELS[filters.status] ||
+    (filters.sale ? "Sale" : "Shop");
   return (
     <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-8">
       {/* Mobile filter toggle */}

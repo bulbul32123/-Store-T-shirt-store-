@@ -43,7 +43,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="md:hidden inline text-gray-400 hover:text-gray-500 transition-colors">
+        <div className="md:hidden text-gray-400 hover:text-gray-500 transition-colors">
           <MobileHamburger />
         </div>
       </div>

@@ -1,19 +1,19 @@
 "use client";
-import Link from "next/link";
+import { useNotifications } from "@/context/NotificationContext";
+import { formatDistanceToNow } from "@/utils/formatters";
 import {
   AlertTriangle,
   Bell,
   Info,
+  MessageCircle,
   Package,
   Percent,
   Star,
   Tag,
-  MessageCircle,
+  Trash2,
   XCircle,
-  Trash2, // Added missing import to fix the Runtime ReferenceError!
 } from "lucide-react";
-import { useNotifications } from "@/context/NotificationContext";
-import { formatDistanceToNow } from "@/utils/formatters";
+import Link from "next/link";
 
 const ICONS = {
   new_product: Tag,

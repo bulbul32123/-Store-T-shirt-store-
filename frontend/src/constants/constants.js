@@ -1,116 +1,36 @@
 export const shopList = {
-    title: "Shop By",
-    lists: [
-        {
-            "name": "All products",
-            'category': 'all',
-            'brand': 'all',
-            isLength: '24',
-        },
-        {
-            "name": "Beats's HeadPhones",
-            'category': 'headphone',
-            'brand': 'beats',
-            isLength: '34',
-        },
-        {
-            "name": "Omega's Watches",
-            'category': 'watch',
-            'brand': 'omega',
-            isLength: '243',
-        },
-        {
-            "name": "Sony's HeadPhones",
-            'category': 'headphone',
-            'brand': 'sony',
-            isLength: '234',
-        },
-        {
-            "name": "BrilliantHouse's Watches",
-            'category': 'watch',
-            'brand': 'brillianthouse',
-            isLength: '24',
-        },
-    ]
-}
-
-export const brandLists = {
-    title: "Shop By Brands",
-    lists: [
-        {
-            id: 1,
-            name: 'Beats',
-            'category': 'all',
-            'brand': 'beats',
-            isLength: '344'
-        },
-        {
-            id: 2,
-            name: 'Apple',
-            'category': 'all',
-            'brand': 'apple',
-            isLength: '454'
-        },
-        {
-            id: 3,
-            name: 'Sony',
-            'category': 'all',
-            'brand': 'sony',
-            isLength: '534'
-        },
-        {
-            id: 5,
-            name: 'Omega',
-            'category': 'all',
-            'brand': 'omega',
-            isLength: '744'
-        },
-        {
-            id: 4,
-            name: 'BrilliantHouse',
-            'category': 'all',
-            'brand': 'brillianthouse',
-            isLength: '644'
-        },
-    ]
-}
-
-
-export const featured = {
-    title: "Featured", lists: [
-        {
-            id: 2312,
-            name: "Upcoming",
-        },
-        {
-            id: 12,
-            name: "New Arrivals",
-        },
-        {
-            id: 233412,
-            name: "Special Sales",
-        },
-    ]
-}
-
-export const products = [
+  title: "Shop All",
+  lists: [
     {
-        id: 1,
-        name: "Nike Air Max SC",
-        price: "8,595",
-        img: "/product-1-0.avif",
+      name: "All products",
+      link: "/products",
     },
     {
-        id: 1234,
-        name: "Nike Air Max SC",
-        price: "995",
-        img: "/product-2-0.avif",
+      name: "Popular",
+      link: "/products?status=popular",
     },
     {
-        id: 1232344,
-        name: "Nike V2K Run",
-        price: "12,00",
-        img: "/product-3-0.avif",
+      name: "New Drops",
+      link: "/products?status=newDrop",
     },
+  ],
+};
 
-]
+export const status = {
+  title: "Status",
+  lists: [
+    {
+      name: "Featured",
+      link: "/products?status=featured",
+    },
+    {
+      name: "Sale",
+      link: "/products?sale=true",
+    },
+    {
+      name: "Free Shipping",
+      link: "/products?freeShipping=true",
+    },
+    { name: "Best Selling", link: "/products?status=bestselling" },
+  ],
+};

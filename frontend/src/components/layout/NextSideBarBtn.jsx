@@ -5,12 +5,13 @@ import { MdKeyboardArrowRight } from 'react-icons/md'
 
 export default function NextSideBarBtn({ setOpenHamburger, setIsSideBarOpenStates }) {
     return (
-        <div className="w-full bg-white flex justify-between items-center z-20">
+        <div className="w-full bg-white flex justify-between items-center pr-6 z-20">
             <button className='flex ' onClick={() => setIsSideBarOpenStates(prev => ({
                 ...prev,
                 openProfile: false,
                 openCategory: false,
                 openBrand: false,
+                openStatus:false,
                 openFeatured: false,
                 openShopAll: false,
             }))} ><MdKeyboardArrowRight size={25} className='rotate-180' />Back</button>
@@ -19,6 +20,7 @@ export default function NextSideBarBtn({ setOpenHamburger, setIsSideBarOpenState
                     ...prev,
                     openProfile: false,
                     openBrand: false,
+                    openStatus:false,
                     openFeatured: false,
                     openShopAll: false,
                     openCategory: false

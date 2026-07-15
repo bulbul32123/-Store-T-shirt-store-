@@ -15,7 +15,6 @@ export default function ShopByCategory({ categories }) {
             animate={{ y: 0 }}
             transition={{ duration: 0.4 }}
           >
-            {/* Links clean with category database _id matching shop filtering */}
             <Link
               href={`/products?category=${item._id}`}
               className="hover:text-gray-800"

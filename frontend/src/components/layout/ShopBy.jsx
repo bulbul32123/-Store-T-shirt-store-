@@ -19,8 +19,8 @@ export default function ShopBy() {
           <Link href="/products?status=popular" className="hover:text-gray-800">
             Popular
           </Link>{" "}
-          <Link href="/products?status=trending" className="hover:text-gray-800">
-            Trending
+          <Link href="/products?status=newDrop" className="hover:text-gray-800">
+            New Drops
           </Link>
         </motion.li>
       </ul>

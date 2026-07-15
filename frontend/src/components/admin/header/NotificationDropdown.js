@@ -103,21 +103,22 @@ export default function NotificationDropdown() {
   return (
     <div className="relative">
       <button
-        className="relative flex items-center justify-center text-black transition-colors bg-white border border-gray-200 rounded-full hover:text-gray-700 h-11 w-11 hover:bg-gray-100"
+        type="button"
+        className="dropdown-toggle relative flex items-center justify-center text-black transition-colors bg-white border border-gray-200 rounded-full hover:text-gray-700 h-11 w-11 hover:bg-gray-100"
         onClick={toggleDropdown}
       >
         {unreadCount > 0 && (
-          <span className="absolute right-1.5 top-1 z-10 flex h-4 min-w-4 items-center justify-center rounded-full bg-orange-500 px-1 text-[10px] font-semibold text-white">
+          <span className="absolute right-1.5 top-1 z-10 flex h-4 min-w-4 items-center justify-center rounded-full bg-orange-500 px-1 text-[10px] font-semibold text-white pointer-events-none">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
-        <Bell className="h-5 w-5" />
+        <Bell className="h-5 w-5 pointer-events-none" />
       </button>
 
       <Dropdown
         isOpen={isOpen}
         onClose={closeDropdown}
-        className="absolute max-lg:left-0 mt-2 lg:mt-[17px] flex h-[480px] w-[360px] flex-col rounded-2xl border border-gray-100 bg-white text-black p-3 shadow-theme-lg sm:w-[380px] lg:right-0"
+        className="absolute mt-2 lg:mt-[17px] flex h-[480px] w-[360px] flex-col rounded-2xl border border-gray-100 bg-white text-black p-3 shadow-theme-lg sm:w-[380px] lg:right-0"
       >
         <div className="flex items-center justify-between pb-3 mb-2 border-b border-gray-100">
           <h5 className="text-lg font-semibold text-gray-800">

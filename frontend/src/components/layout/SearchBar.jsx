@@ -90,16 +90,16 @@ const navigateToSearchPage = (e) => {
           onChange={(e) => setSearchValue(e.target.value)}
           value={searchValue}
           onKeyUp={(e) => navigateToSearchPage(e)}
-          className="w-full border border-gray-300 outline-none focus-within:border-[#28AE5F] transition-all duration-200 focus-within:border py-2 rounded-lg pl-10"
+          className="w-full border border-gray-300 outline-none focus-within:border-[#ffb800] transition-all duration-200 focus-within:border py-2 rounded-lg pl-10"
         />
 
         <button
           onClick={SendToSearchPage}
-          className="absolute rounded-lg py-1.5 text-gray-500 text-sm font-light transitions hover:bg-[#28AE5F] hover:text-white bg-gray-100 px-4 md:px-6 top-[5px] right-2"
+          className="absolute rounded-lg py-1.5 text-gray-500 text-sm font-light transitions hover:bg-[#ffb800] hover:text-white bg-gray-100 px-4 md:px-6 top-[5px] right-2"
         >
           Search
         </button>
-        <span className="absolute rounded-lg p-2 text-gray-500  transitions hover:bg-[#28AE5F] hover:text-white bg-gray-100  top-[4px] left-1.5">
+        <span className="absolute rounded-lg p-2 text-gray-500  transitions hover:bg-[#ffb800] hover:text-white bg-gray-100  top-[4px] left-1.5">
           <IoSearchSharp size={18} />
         </span>
         <div

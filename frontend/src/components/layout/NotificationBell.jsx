@@ -10,11 +10,11 @@ import {
   AlertTriangle,
   Bell,
   Info,
+  MessageCircle,
   Package,
   Percent,
   Star,
   Tag,
-  MessageCircle,
   XCircle,
 } from "lucide-react";
 import Link from "next/link";
@@ -89,63 +89,66 @@ function NotificationRow({ n, markAsRead }) {
 }
 
 export default function NotificationBell() {
-  const { notifications, unreadCount, markAsRead } = useNotifications();
+  const { notifications, unreadCount, markAsRead, user } = useNotifications();
   const recent = notifications.slice(0, 6);
 
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          aria-label="Notifications"
-          className="relative hover:text-gray-500 transition-colors"
-        >
-          <Bell size={25} />
-          {unreadCount > 0 && (
-            <span className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-[#FF5A1F] text-white text-[10px] font-bold flex items-center justify-center">
-              {unreadCount > 9 ? "9+" : unreadCount}
-            </span>
-          )}
-        </button>
-      </PopoverTrigger>
-      <PopoverContent align="end" className="w-80 p-0">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#E5E5E5]">
-          <p className="text-sm font-bold uppercase tracking-tight text-[#111]">
-            Notifications
-          </p>
-          {unreadCount > 0 && (
-            <span className="text-xs text-[#6F6F6F]">{unreadCount} unread</span>
-          )}
-        </div>
-
-        {recent.length === 0 ? (
-          <div className="px-4 py-10 text-center">
-            <Bell
-              size={22}
-              className="mx-auto text-[#6F6F6F] mb-2"
-              strokeWidth={1.5}
-            />
-            <p className="text-sm text-[#6F6F6F]">
-              Nothing yet — new drops and updates will show up here.
+  if (!user) return 
+    return (
+      <Popover>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            aria-label="Notifications"
+            className="relative hover:text-gray-500 transition-colors max-md:p-3 max-md:rounded-full max-md:bg-primary max-md:hover:bg-black max-md:text-white max-md:hover:text-white transitions"
+          >
+            <Bell size={25} className="max-h-6 max-w-6" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-[#FF5A1F] text-white text-[10px] font-bold flex items-center justify-center">
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
+          </button>
+        </PopoverTrigger>
+        <PopoverContent align="end" className="w-80 p-0">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-[#E5E5E5]">
+            <p className="text-sm font-bold uppercase tracking-tight text-[#111]">
+              Notifications
             </p>
+            {unreadCount > 0 && (
+              <span className="text-xs text-[#6F6F6F]">
+                {unreadCount} unread
+              </span>
+            )}
           </div>
-        ) : (
-          <ul className="max-h-96 overflow-y-auto divide-y divide-[#E5E5E5]">
-            {recent.map((n) => (
-              <li key={n._id}>
-                <NotificationRow n={n} markAsRead={markAsRead} />
-              </li>
-            ))}
-          </ul>
-        )}
 
-        <Link
-          href="/profile/notifications"
-          className="block text-center text-xs font-bold uppercase tracking-wide py-3 border-t border-[#E5E5E5] hover:bg-[#F5F5F5] text-[#111]"
-        >
-          View all
-        </Link>
-      </PopoverContent>
-    </Popover>
-  );
+          {recent.length === 0 ? (
+            <div className="px-4 py-10 text-center">
+              <Bell
+                size={22}
+                className="mx-auto text-[#6F6F6F] mb-2"
+                strokeWidth={1.5}
+              />
+              <p className="text-sm text-[#6F6F6F]">
+                Nothing yet — new drops and updates will show up here.
+              </p>
+            </div>
+          ) : (
+            <ul className="max-h-96 overflow-y-auto divide-y divide-[#E5E5E5]">
+              {recent.map((n) => (
+                <li key={n._id}>
+                  <NotificationRow n={n} markAsRead={markAsRead} />
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <Link
+            href="/profile/notifications"
+            className="block text-center text-xs font-bold uppercase tracking-wide py-3 border-t border-[#E5E5E5] hover:bg-[#F5F5F5] text-[#111]"
+          >
+            View all
+          </Link>
+        </PopoverContent>
+      </Popover>
+    );
 }

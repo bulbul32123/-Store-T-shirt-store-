@@ -273,7 +273,6 @@ const adminLogin = async (email, password) => {
     const isVerified = () => {
         return user?.isVerified === true;
     };
-
     const value = {
         user,
         loading,
@@ -287,6 +286,7 @@ const adminLogin = async (email, password) => {
         forgotPassword,
         resetPassword,
         verifyEmail,
+        
         refreshUser,
 
         hasRole,

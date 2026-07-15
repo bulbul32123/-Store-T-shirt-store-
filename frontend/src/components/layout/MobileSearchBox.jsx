@@ -1,56 +1,166 @@
-
-import React, { useState } from 'react'
+"use client";
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import { GrSearch } from "react-icons/gr";
 import { IoMdClose } from "react-icons/io";
-import { IoSearchSharp } from 'react-icons/io5'
-import ProductCard from '@/components/home/carousel/productCarousel/ProductCard';
+import { IoSearchSharp } from "react-icons/io5";
+import SearchResults from "./SearchResults"; // Reusing your desktop search results
 
 export default function MobileSearchBox() {
-    const [searchBtn, setSearchBtn] = useState(false);
-    const [inputValue, setInputValue] = useState("");
+  const router = useRouter();
+  const [searchBtn, setSearchBtn] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [datas, setDatas] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const searchRef = useRef(null);
 
-    return (
-        <div>
-            <button className='p-3 rounded-full bg-gray-100 hover:bg-green-500 hover:text-white transitions' onClick={() => setSearchBtn(true)}><GrSearch size={22} /></button>
+  // 1. Fetch live products from API when mounted
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const { data } = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/products`,
+        );
+        setProducts(data.products || []);
+      } catch (err) {
+        console.error("Error fetching products for mobile search:", err);
+      }
+    };
 
-            <div className={`absolute top-0  left-0 w-full h-full bg-white z-[11] transition-transform duration-200 ease-out ${searchBtn ? "translate-x-0" : "translate-x-[200rem]"} py-5 px-5`}>
-                <div className="flex justify-between items-center pt-3 pb-5 padding-sm">
-                    <div className="relative flex justify-center items-center w-[80%] md:w-[70%] mr-4">
-                        <span className='absolute rounded-full p-2 text-gray-500  transitions hover:bg-[#28AE5F] hover:text-white bg-gray-100  top-[4px] left-1.5'><IoSearchSharp size={18} /></span>
-                        <input type="text" placeholder='Search here....' onChange={(e) => setInputValue(e.target.value)} value={inputValue} className='w-full border border-gray-300 outline-none focus-within:border-[#28AE5F] transition-all duration-200 focus-within:border py-2 rounded-3xl pl-11' />
-                        {inputValue?.length > 0 && (
-                            <button className="absolute right-0 pr-4" onClick={() => setInputValue('')}>
-                                <IoMdClose size={20} color="black" />
-                            </button>
-                        )}
-                    </div>
-                    <div>
-                        <button className="text-black font-medium" onClick={() => setSearchBtn(false)}>
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-                <div>
-                    {inputValue.length > 1 ? (
-                        <div className="transition-all  duration-200 ease-out">
-                            <span>Search result:</span>
-                            <ProductCard />
-                        </div>
-                    ) : (
-                        <div className="h-full w-full bg-white py-4 pl-2 transition-all  duration-200 ease-out">
-                            <span className=' text-black font-bold block'>New Products:</span>
-                            <div className="flex gap-1 flex-wrap py-3">
+    fetchProducts();
+  }, []);
 
-                                {
-                                    // Fetch New Products and show them in the card
-                                    // <ProductCard />
-                                }
-                            </div>
-                        </div>
-                    )
-                    }
-                </div>
-            </div>
+  // 2. Click outside overlay logic (optional helper to close menu if clicked outside)
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        // If you want clicking outside the search overlay to close it:
+        // setSearchBtn(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // 3. Filter products matching search term in real-time
+  useEffect(() => {
+    const query = searchValue.trim().toLowerCase();
+
+    if (!query) {
+      setDatas([]);
+      return;
+    }
+
+    const filtered = products.filter((product) => {
+      const name = product.name?.toLowerCase() || "";
+      const category = product.category?.name?.toLowerCase() || "";
+      return name.includes(query) || category.includes(query);
+    });
+
+    setDatas(filtered.slice(0, 8));
+  }, [searchValue, products]);
+
+  // 4. Send user to search page on click/Enter key
+  const sendToSearchPage = () => {
+    if (!searchValue.trim()) return;
+
+    router.push(`/search?query=${encodeURIComponent(searchValue.trim())}`);
+    setDatas([]);
+    setSearchValue("");
+    setSearchBtn(false); // Close mobile search modal overlay
+  };
+
+  const handleKeyUp = (e) => {
+    if (e.key === "Enter") {
+      sendToSearchPage();
+    }
+  };
+
+  return (
+    <div ref={searchRef}>
+      {/* Search Trigger Button */}
+      <button
+        className="p-3 rounded-full bg-primary hover:bg-black text-white hover:text-white transitions"
+        onClick={() => setSearchBtn(true)}
+      >
+        <GrSearch size={22} />
+      </button>
+
+      {/* Mobile Search Overlay Slider */}
+      <div
+        className={`absolute top-0 left-0 w-full min-h-screen h-full bg-white z-[300] transition-transform duration-200 ease-out ${searchBtn ? "translate-x-0" : "translate-x-[200rem]"} py-5 px-5`}
+      >
+        <div className="flex justify-between items-center pt-3 pb-5 padding-sm">
+          {/* Search Input field wrapper */}
+          <div className="relative flex justify-center items-center w-[80%] md:w-[70%] mr-4">
+            <span className="absolute rounded-full p-2 text-gray-500 transitions hover:bg-[#ffb800] hover:text-white bg-gray-100 top-[4px] left-1.5">
+              <IoSearchSharp size={18} />
+            </span>
+
+            <input
+              type="text"
+              placeholder="Search here...."
+              onChange={(e) => setSearchValue(e.target.value)}
+              value={searchValue}
+              onKeyUp={handleKeyUp}
+              className="w-full border border-gray-300 outline-none focus-within:border-[#ffb800] transition-all duration-200 focus-within:border py-2 rounded-3xl pl-11 pr-10"
+            />
+
+            {searchValue?.length > 0 && (
+              <button
+                className="absolute right-3"
+                onClick={() => setSearchValue("")}
+              >
+                <IoMdClose size={20} className="text-gray-500" />
+              </button>
+            )}
+          </div>
+
+          {/* Navigation Control Action Panel */}
+          <div className="flex gap-2">
+            {searchValue.trim().length > 0 && (
+              <button
+                className="text-primary font-semibold text-sm mr-2"
+                onClick={sendToSearchPage}
+              >
+                Search
+              </button>
+            )}
+            <button
+              className="text-black font-medium text-sm"
+              onClick={() => {
+                setSearchBtn(false);
+                setSearchValue("");
+              }}
+            >
+              Cancel
+            </button>
+          </div>
         </div>
-    )
+
+        {/* Real-time Dynamic Search Results */}
+        <div className="overflow-y-auto max-h-[75vh] mt-2">
+          {searchValue.trim().length > 0 ? (
+            <div>
+              <span className="text-gray-400 text-xs font-semibold block mb-2 pl-2">
+                Search results:
+              </span>
+              <SearchResults searchQuery={searchValue} data={datas} />
+            </div>
+          ) : (
+            <div className="h-full w-full bg-white py-4 pl-2 transition-all duration-200 ease-out">
+              <div className="flex flex-col gap-2">
+                <p className="text-sm text-gray-500 italic">
+                  Type above to find products instantly...
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
