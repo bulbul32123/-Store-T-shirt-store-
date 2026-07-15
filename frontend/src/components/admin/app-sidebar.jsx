@@ -1,33 +1,32 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaUserAstronaut } from "react-icons/fa";
 import {
-  FiHome,
-  FiBox,
-  FiShoppingBag,
-  FiUsers,
   FiBarChart2,
-  FiSettings,
-  FiLogOut,
-  FiMessageCircle,
-  FiTag,
+  FiBox,
   FiGrid,
+  FiHome,
+  FiMessageCircle,
+  FiSettings,
+  FiShoppingBag,
+  FiTag,
+  FiUsers,
 } from "react-icons/fi";
 
 import { useAuth } from "@/context/AuthContext";
 
 import {
   Sidebar,
-  SidebarHeader,
   SidebarContent,
   SidebarFooter,
-  SidebarRail,
+  SidebarHeader,
   SidebarMenu,
-  SidebarMenuItem,
   SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
 } from "@/components/ui/sidebar";
 
 const sidebarLinks = [
@@ -40,7 +39,7 @@ const sidebarLinks = [
   { href: "/admin/reviews", label: "Reviews", icon: FiTag },
   { href: "/admin/support", label: "Customer Support", icon: FiMessageCircle },
   { href: "/admin/reports", label: "Reports", icon: FiBarChart2 },
-  { href: "/admin/settings", label: "Settings", icon: FiSettings },
+  { href: "/admin/profile", label: "Settings", icon: FiSettings },
 ];
 
 export function AppSidebar(props) {
