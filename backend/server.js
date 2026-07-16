@@ -1,4 +1,4 @@
-//server
+
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -143,7 +143,7 @@ io.on('connection', (socket) => {
     registerChatEvents(io, socket);
 
     socket.on('disconnect', () => {
-        // no-op — room membership is cleaned up automatically
+   
     });
 });
 
