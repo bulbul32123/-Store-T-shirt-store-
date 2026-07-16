@@ -1,4 +1,3 @@
-// authController
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
@@ -137,7 +136,7 @@ exports.login = async (req, res) => {
     res.json({
       success: true,
       message: "Login successful",
-      user: userPayload, // ✅ Returns all fields!
+      user: userPayload, 
       token,
     });
   } catch (err) {
@@ -186,7 +185,7 @@ exports.forgotPassword = async (req, res) => {
 
     const resetToken = uuidv4();
     user.resetPasswordToken = resetToken;
-    user.resetPasswordExpires = Date.now() + 60 * 60 * 1000; // 1h
+    user.resetPasswordExpires = Date.now() + 60 * 60 * 1000; 
     await user.save();
 
     const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}`;
@@ -275,7 +274,7 @@ exports.updateProfile = async (req, res) => {
       name,
       email,
       password,
-      oldPassword, // Securely pull the current password sent from the dialog
+      oldPassword, 
       gender,
       phoneNumber,
       dateOfBirth,
@@ -290,7 +289,6 @@ exports.updateProfile = async (req, res) => {
       });
     }
 
-    // --- 1. HANDLE PASSWORD CHANGE SECURITY CHECK ---
     if (password) {
       if (!oldPassword) {
         return res.status(400).json({
@@ -299,10 +297,8 @@ exports.updateProfile = async (req, res) => {
         });
       }
 
-      // Verify if the submitted oldPassword matches the database hash
       const isMatch = await user.matchPassword(oldPassword);
       if (!isMatch) {
-        // STOPS IMMEDIATELY and responds to Next.js. user.save() will NEVER run.
         return res.status(400).json({
           success: false,
           message: "Incorrect current password. Please try again.",
@@ -316,11 +312,9 @@ exports.updateProfile = async (req, res) => {
         });
       }
 
-      // Safe to assign the new password now
       user.password = password;
     }
 
-    // --- 2. UPDATE CORE PROFILE FIELDS ---
     if (name) user.name = name.trim();
     if (gender) user.gender = gender;
     if (phoneNumber) user.phoneNumber = phoneNumber.trim();
@@ -328,7 +322,6 @@ exports.updateProfile = async (req, res) => {
     if (profilePicture) user.profilePicture = profilePicture;
     if (address) user.address = { ...user.address?.toObject?.(), ...address };
 
-    // --- 3. EMAIL CHANGE CHECKS ---
     if (email && email.toLowerCase().trim() !== user.email) {
       const emailExists = await User.findOne({
         email: email.toLowerCase(),
@@ -347,10 +340,8 @@ exports.updateProfile = async (req, res) => {
       user.verificationTokenExpires = Date.now() + 60 * 60 * 1000;
     }
 
-    // --- 4. SECURE SAVE ---
     await user.save();
 
-    // Clean up response data by completely removing the password field
     const updatedUser = await User.findById(user._id).select("-password");
 
     res.json({

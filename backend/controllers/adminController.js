@@ -29,7 +29,6 @@ exports.getStats = async (req, res) => {
     ]);
     const totalRevenue = revenueAgg.length > 0 ? revenueAgg[0].total : 0;
 
-    // --- Month-over-month change calculations ---
     const [thisMonthRevenue, lastMonthRevenue] = await Promise.all([
       Order.aggregate([
         {
@@ -81,7 +80,6 @@ exports.getStats = async (req, res) => {
     const ordersChange = pctChange(thisMonthOrders, lastMonthOrders);
     const customersChange = pctChange(thisMonthCustomers, lastMonthCustomers);
 
-    // --- Revenue trend (last 6 months) ---
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
     sixMonthsAgo.setDate(1);
@@ -101,8 +99,6 @@ exports.getStats = async (req, res) => {
       { $sort: { "_id.year": 1, "_id.month": 1 } },
     ]);
 
-    // --- Top products by revenue ---
-    // --- Top products by revenue ---
     const topProducts = await Order.aggregate([
       { $match: { paymentStatus: "paid" } },
       { $unwind: "$orderItems" },
@@ -121,11 +117,10 @@ exports.getStats = async (req, res) => {
       { $limit: 5 },
     ]);
 
-    // 1. FIXED: Added avatar and profilePicture fields to the select list
     const recentOrders = await Order.find()
       .sort({ createdAt: -1 })
       .limit(5)
-      .populate("user", "name email profilePicture") // 👈 Changed this line
+      .populate("user", "name email profilePicture")
       .lean();
     const lowStockProducts = await Product.find({ stock: { $lt: 10 } })
       .sort({ stock: 1 })

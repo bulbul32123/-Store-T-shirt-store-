@@ -1,7 +1,6 @@
 const Chat = require("../models/Chat");
 const { notifyAdmins, notifyUser } = require("../utils/notify");
 
-// GET /api/chats/me — customer's own chat (creates one if none exists)
 exports.getMyChat = async (req, res) => {
   try {
     let chat = await Chat.findOne({
@@ -14,7 +13,6 @@ exports.getMyChat = async (req, res) => {
         subject: "General Support",
       });
     }
-    // customer opening the widget clears their unread badge
     if (chat.unreadByUser > 0) {
       chat.unreadByUser = 0;
       await chat.save();
@@ -26,7 +24,6 @@ exports.getMyChat = async (req, res) => {
   }
 };
 
-// GET /api/admin/chats — sidebar list, newest activity first
 exports.getAdminChats = async (req, res) => {
   try {
     const chats = await Chat.find({ status: { $ne: "closed" } })
@@ -50,7 +47,6 @@ exports.getAdminChats = async (req, res) => {
   }
 };
 
-// GET /api/admin/chats/:id — full thread for the active chat window
 exports.getAdminChatById = async (req, res) => {
   try {
     const chat = await Chat.findById(req.params.id).populate(
@@ -70,7 +66,6 @@ exports.getAdminChatById = async (req, res) => {
   }
 };
 
-// PATCH /api/admin/chats/:id/notes — save internal admin note on the customer
 exports.updateChatCustomerNote = async (req, res) => {
   try {
     const { note } = req.body;
@@ -86,7 +81,6 @@ exports.updateChatCustomerNote = async (req, res) => {
   }
 };
 
-// DELETE /api/admin/chats/:id
 exports.deleteChat = async (req, res) => {
     try {
         const chat = await Chat.findById(req.params.id);
