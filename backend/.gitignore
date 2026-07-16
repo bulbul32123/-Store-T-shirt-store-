@@ -12,14 +12,7 @@
 
 # testing
 /coverage
-/confiq
-/controllers
-/middleware
-/models
-/routes
-/scripts
-/uploads
-/utils
+
 .env
 # next.js
 /.next/
