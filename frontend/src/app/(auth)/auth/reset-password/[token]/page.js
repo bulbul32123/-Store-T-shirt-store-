@@ -21,10 +21,8 @@ export default function ResetPassword() {
     const token = params.token;
 
     useEffect(() => {
-        // Verify token validity
         const verifyToken = async () => {
             try {
-                // For demo purposes - in a real app, you'd verify with your backend
                 setTokenChecking(true);
                 const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify-reset-token/${token}`);
 
@@ -72,7 +70,6 @@ export default function ResetPassword() {
 
         try {
             await resetPassword(token, password);
-            // Redirect is handled in the resetPassword function
         } catch (error) {
             console.error('Password reset error:', error);
         }
@@ -166,7 +163,6 @@ export default function ResetPassword() {
                             )}
                         </div>
 
-                        {/* Confirm Password Field */}
                         <div>
                             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
                                 Confirm New Password

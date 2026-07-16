@@ -112,6 +112,7 @@ export default function AdminCategories() {
             }
 
             setShowForm(false);
+            
             fetchCategories();
         } catch (error) {
             console.error('Error saving category:', error);
@@ -258,3 +259,5 @@ export default function AdminCategories() {
       </div>
     );
 } 
+
+
