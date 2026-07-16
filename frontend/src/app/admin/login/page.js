@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -12,7 +11,6 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
     const { adminLogin, loading } = useAuth();
-    const router = useRouter();
 
     const validateForm = () => {
         const newErrors = {};
@@ -42,7 +40,6 @@ export default function Login() {
 
         try {
             await adminLogin(email, password);
-            // Redirect is handled in the login function
         } catch (error) {
             console.error('Login error:', error);
         }
@@ -57,7 +54,6 @@ export default function Login() {
 
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
                     <div className="space-y-4">
-                        {/* Email Field */}
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                                 Email address
@@ -82,8 +78,6 @@ export default function Login() {
                                 <p className="mt-1 text-sm text-red-600">{errors.email}</p>
                             )}
                         </div>
-
-                        {/* Password Field */}
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                                 Password

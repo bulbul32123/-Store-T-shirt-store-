@@ -22,7 +22,7 @@ function StarRating({ value, size = 14 }) {
 function ReportBadge({ count }) {
   if (!count) return null;
   return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-rose-100 text-rose-700 ring-1 ring-rose-200">
+    <span className="flex items-center gap-1 px-2 w-20 py-0.5 rounded-full text-xs font-semibold bg-rose-100 text-rose-700 ring-1 ring-rose-200">
       <FiFlag size={11} /> {count} report{count !== 1 ? "s" : ""}
     </span>
   );
@@ -30,12 +30,10 @@ function ReportBadge({ count }) {
 
 function productThumb(product) {
   if (!product) return null;
-  // Top-level images first
   if (product.images?.length) {
     const first = product.images[0];
     return typeof first === "string" ? first : first?.url || null;
   }
-  // Fallback — most products actually store images per color variant
   const colorWithImages = product.colors?.find((c) => c.images?.length > 0);
   return colorWithImages?.images?.[0]?.url || null;
 }
@@ -46,7 +44,7 @@ function TruncatedText({ text, limit = 120 }) {
     return <span className="text-gray-400 italic text-xs">No text</span>;
   const short = text.length > limit && !expanded;
   return (
-    <span className="text-sm text-gray-700">
+    <span className="text-xs text-gray-700 w-60!">
       {short ? `${text.slice(0, limit)}…` : text}
       {text.length > limit && (
         <button
@@ -163,7 +161,6 @@ function ReviewCard({
   mode,
 }) {
   const thumb = productThumb(review.product);
-  console.log(review.product);
   const initials = review.user?.name?.[0]?.toUpperCase() || "?";
   const date = new Date(review.createdAt).toLocaleDateString("en-US", {
     month: "short",
@@ -229,8 +226,8 @@ function ReviewCard({
           </div>
           <StarRating value={review.rating} size={13} />
         </div>
-        <div className="pl-7 mb-3">
-          <TruncatedText text={review.reviewText} limit={100} />
+        <div className="w-20 mb-3">
+          <TruncatedText text={review.reviewText} limit={0} />
         </div>
         <div className="flex items-center justify-between pl-7">
           {mode === "reported" ? (
@@ -257,7 +254,7 @@ export default function ReviewsTable({
   onSelectRow,
   onDelete,
   onViewDetail,
-  mode = "all", // 'all' | 'reported'
+  mode = "all",
 }) {
   const allSelected =
     reviews.length > 0 && reviews.every((r) => selectedIds.has(r._id));
@@ -414,11 +411,11 @@ export default function ReviewsTable({
                           </span>
                         </div>
                       </td>
-                      <td className="px-4 py-3 max-w-[260px]">
+                      <td className="px-4 py-3 w-20!">
                         <TruncatedText text={review.reviewText} limit={90} />
                       </td>
                       {mode === "reported" && (
-                        <td className="px-4 py-3">
+                        <td className="px-7 py-3">
                           <ReportBadge count={review.reportCount} />
                         </td>
                       )}
