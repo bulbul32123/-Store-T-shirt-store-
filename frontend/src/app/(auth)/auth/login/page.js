@@ -1,8 +1,7 @@
-// /auth/login/
+
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
@@ -15,7 +14,6 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
     const { login, loading } = useAuth();
-    const router = useRouter();
 
     const validateForm = () => {
         const newErrors = {};
@@ -45,7 +43,6 @@ export default function Login() {
 
         try {
             await login(email, password);
-            // Redirect is handled in the login function
         } catch (error) {
             console.error('Login error:', error);
         }

@@ -1,9 +1,8 @@
-// My current Register page code. this code is primary and important 
+
 'use client';
 import { BsGenderTrans } from "react-icons/bs";
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiPhone } from 'react-icons/fi';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -21,7 +20,6 @@ export default function Register() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [errors, setErrors] = useState({});
     const { register, loading } = useAuth();
-    const router = useRouter();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -76,7 +74,6 @@ export default function Register() {
 
         try {
             await register(formData);
-            // Redirect is handled in the register function
         } catch (error) {
             console.error('Registration error:', error);
         }
@@ -124,7 +121,6 @@ export default function Register() {
                             )}
                         </div>
 
-                        {/* Email Field */}
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                                 Email address
@@ -150,7 +146,6 @@ export default function Register() {
                             )}
                         </div>
 
-                        {/* Phone Field */}
                         <div>
                             <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                                 Phone Number (optional)
@@ -203,7 +198,6 @@ export default function Register() {
                             )}
                         </div>
 
-                        {/* Password Field */}
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                                 Password
@@ -242,7 +236,6 @@ export default function Register() {
                             )}
                         </div>
 
-                        {/* Confirm Password Field */}
                         <div>
                             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
                                 Confirm Password
