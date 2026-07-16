@@ -36,15 +36,14 @@ export default function Profile() {
   }
 
   if (!user) {
-    return null; // Will redirect in the useEffect
+    return null;
   }
 
   return (
-    <div className="bg-gray-50 p-6 h-full w-full text-black">
+    <div className="bg-white h-full w-full text-black">
       <div className="">
-        <div className="bg-white shadow rounded-lg overflow-hidden">
+        <div className="bg-white border rounded-lg overflow-hidden">
           <div className="md:flex">
-            {/* Sidebar Navigation */}
             <div className="bg-gray-50 p-6 border-r border-gray-200">
               <div className="flex items-center mb-6">
                 {user.profilePicture?.url ? (
@@ -193,7 +192,7 @@ function ProfileTab({ user, updateProfile }) {
             >
               Full Name
             </label>
-            <div className="mt-1 relative rounded-md shadow-sm">
+            <div className="mt-1 relative rounded-md ">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <FiUser className="h-5 w-5 text-gray-400" />
               </div>
@@ -203,7 +202,7 @@ function ProfileTab({ user, updateProfile }) {
                 id="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md  focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]"
                 placeholder="Your full name"
               />
             </div>
@@ -216,7 +215,7 @@ function ProfileTab({ user, updateProfile }) {
             >
               Email Address
             </label>
-            <div className="mt-1 relative rounded-md shadow-sm">
+            <div className="mt-1 relative rounded-md ">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <FiMail className="h-5 w-5 text-gray-400" />
               </div>
@@ -226,7 +225,7 @@ function ProfileTab({ user, updateProfile }) {
                 id="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md  focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]"
                 placeholder="you@example.com"
                 readOnly
               />
@@ -243,7 +242,7 @@ function ProfileTab({ user, updateProfile }) {
             >
               Phone Number
             </label>
-            <div className="mt-1 relative rounded-md shadow-sm">
+            <div className="mt-1 relative rounded-md ">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <FiPhone className="h-5 w-5 text-gray-400" />
               </div>
@@ -253,7 +252,7 @@ function ProfileTab({ user, updateProfile }) {
                 id="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md  focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]"
                 placeholder="(123) 456-7890"
               />
             </div>
@@ -264,7 +263,7 @@ function ProfileTab({ user, updateProfile }) {
           <button
             type="submit"
             disabled={loading}
-            className={`px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-black ${
+            className={`px-4 py-2 border border-transparent text-sm font-medium rounded-md  text-black ${
               loading ? "bg-[#ffb800]/80" : "bg-[#ffb800] hover:bg-[#ffb800]/80"
             } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ffb800]`}
           >
@@ -374,7 +373,7 @@ function SecurityTab({ user, updateProfile }) {
             >
               Current Password
             </label>
-            <div className="mt-1 relative rounded-md shadow-sm">
+            <div className="mt-1 relative rounded-md ">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <FiLock className="h-5 w-5 text-gray-400" />
               </div>
@@ -386,7 +385,7 @@ function SecurityTab({ user, updateProfile }) {
                 onChange={handleChange}
                 className={`block w-full pl-10 pr-10 py-2 border ${
                   errors.currentPassword ? "border-red-300" : "border-gray-300"
-                } rounded-md shadow-sm focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]`}
+                } rounded-md  focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]`}
                 placeholder="••••••••"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -417,7 +416,7 @@ function SecurityTab({ user, updateProfile }) {
             >
               New Password
             </label>
-            <div className="mt-1 relative rounded-md shadow-sm">
+            <div className="mt-1 relative rounded-md ">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <FiLock className="h-5 w-5 text-gray-400" />
               </div>
@@ -429,7 +428,7 @@ function SecurityTab({ user, updateProfile }) {
                 onChange={handleChange}
                 className={`block w-full pl-10 pr-10 py-2 border ${
                   errors.newPassword ? "border-red-300" : "border-gray-300"
-                } rounded-md shadow-sm focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]`}
+                } rounded-md  focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]`}
                 placeholder="••••••••"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -458,7 +457,7 @@ function SecurityTab({ user, updateProfile }) {
             >
               Confirm New Password
             </label>
-            <div className="mt-1 relative rounded-md shadow-sm">
+            <div className="mt-1 relative rounded-md ">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <FiLock className="h-5 w-5 text-gray-400" />
               </div>
@@ -470,7 +469,7 @@ function SecurityTab({ user, updateProfile }) {
                 onChange={handleChange}
                 className={`block w-full pl-10 pr-10 py-2 border ${
                   errors.confirmPassword ? "border-red-300" : "border-gray-300"
-                } rounded-md shadow-sm focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]`}
+                } rounded-md  focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]`}
                 placeholder="••••••••"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -499,7 +498,7 @@ function SecurityTab({ user, updateProfile }) {
           <button
             type="submit"
             disabled={loading}
-            className={`px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-black ${
+            className={`px-4 py-2 border border-transparent text-sm font-medium rounded-md  text-black ${
               loading ? "bg-[#ffb800]/80" : "bg-[#ffb800] hover:bg-[#ffb800]/80"
             } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
           >
@@ -564,7 +563,7 @@ function AddressesTab({ user, updateProfile }) {
               id="street"
               value={address.street}
               onChange={handleChange}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]"
+              className="mt-1 block w-full border border-gray-300 rounded-md  py-2 px-3 focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]"
             />
           </div>
 
@@ -582,7 +581,7 @@ function AddressesTab({ user, updateProfile }) {
                 id="city"
                 value={address.city}
                 onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]"
+                className="mt-1 block w-full border border-gray-300 rounded-md  py-2 px-3 focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]"
               />
             </div>
 
@@ -599,7 +598,7 @@ function AddressesTab({ user, updateProfile }) {
                 id="state"
                 value={address.state}
                 onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]"
+                className="mt-1 block w-full border border-gray-300 rounded-md  py-2 px-3 focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]"
               />
             </div>
           </div>
@@ -618,7 +617,7 @@ function AddressesTab({ user, updateProfile }) {
                 id="postalCode"
                 value={address.postalCode}
                 onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]"
+                className="mt-1 block w-full border border-gray-300 rounded-md  py-2 px-3 focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]"
               />
             </div>
 
@@ -635,7 +634,7 @@ function AddressesTab({ user, updateProfile }) {
                 id="country"
                 value={address.country}
                 onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]"
+                className="mt-1 block w-full border border-gray-300 rounded-md  py-2 px-3 focus:outline-none focus:ring-[#ffb800] focus:border-[#ffb800]"
               />
             </div>
           </div>
@@ -645,7 +644,7 @@ function AddressesTab({ user, updateProfile }) {
           <button
             type="submit"
             disabled={loading}
-            className={`px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-black ${
+            className={`px-4 py-2 border border-transparent text-sm font-medium rounded-md  text-black ${
               loading ? "bg-[#ffb800]/80" : "bg-[#ffb800] hover:bg-[#ffb800]/80"
             } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
           >

@@ -1,4 +1,3 @@
-//useOrders.js
 'use client';
 import { useCallback, useEffect, useState } from 'react';
 import { adminOrdersApi } from '@/lib/adminOrdersApi';
@@ -10,7 +9,7 @@ const DEFAULT_FILTERS = {
   endDate: "",
   sortBy: "createdAt",
   sortOrder: "desc",
-  archived: false, // ADD
+  archived: false, 
 };
 const DEFAULT_SUMMARY = {
     totalOrders: 0,
@@ -54,7 +53,7 @@ export function useOrders() {
 
     const updateFilters = (patch) => {
         setFilters((prev) => ({ ...prev, ...patch }));
-        setCurrentPage(1); // any filter change resets pagination
+        setCurrentPage(1); 
     };
 
     const resetFilters = () => {

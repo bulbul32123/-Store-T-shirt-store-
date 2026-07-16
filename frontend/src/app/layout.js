@@ -1,4 +1,3 @@
-// src/app/layout.js
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
@@ -12,7 +11,6 @@ export const metadata = {
   title: "Bangladesh’s Favorite Online Store | Order Now at Payra.com",
   description: "Upgrade your footwear game with Payra.com. Discover Premium quality, New and  affordable shoes for your style. Shop online today, Order now!",
   icons: {
-    // icon: "/favicon.svg",
     icon: [
       { url: "/favico-light.svg", media: "(prefers-color-scheme: light)" },
       { url: "/favicon.svg", media: "(prefers-color-scheme: dark)" },

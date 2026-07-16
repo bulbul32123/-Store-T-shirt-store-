@@ -57,7 +57,8 @@ export default function ProductList() {
       fetchHeroSlides();
       fetchBanner();
     }
-  }, [user, currentPage, search]);
+  }, [user, currentPage, search]); 
+  
 
   const fetchBanner = async () => {
     try {
@@ -95,20 +96,18 @@ export default function ProductList() {
     }
   };
 
-  // Keep the loading skeleton loop only on absolute initial hydrate states
   if (loading && products.length === 0) {
     return <ProductListSkeleton />;
   }
 
   return (
-    <div className="space-y-6 p-6 max-w-full overflow-hidden">
-      {/* Header controls layout container */}
+    <div className="space-y-6 max-w-full overflow-hidden">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">
+          <h1 className="text-3xl font-bold text-gray-800">
             Products Inventory
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="mt-1 text-gray-500 ">
             Manage and monitor your online store items
           </p>
         </div>
@@ -122,7 +121,6 @@ export default function ProductList() {
         </Link>
       </div>
 
-      {/* Filter Options Panel - Now consistently renders regardless of content length */}
       <div className="bg-white p-4 w-full rounded-lg border border-gray-200">
         <div className="max-w-xs relative">
           <label className="block text-xs font-medium text-gray-600 uppercase mb-1">
@@ -144,7 +142,6 @@ export default function ProductList() {
         </div>
       </div>
 
-      {/* Dynamic Inventory Display Context Block */}
       {!loading && products.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-200 text-center py-12 text-gray-500">
           <p className="text-lg font-medium">
@@ -160,7 +157,6 @@ export default function ProductList() {
           )}
         </div>
       ) : (
-        /* Isolated responsive block that shields shadcn components from causing viewport spillover */
         <div className="w-full overflow-x-auto rounded-lg border border-gray-200 bg-white">
           <ProductsTable
             products={products}

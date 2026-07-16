@@ -81,12 +81,11 @@ exports.register = async (req, res) => {
     });
     res.status(201).json({
       success: true,
-      message: "Registered successfully. Please verify your email.",
+      message: "Registered successfully.",
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
-        isVerified: user.isVerified,
       },
     });
   } catch (err) {
@@ -98,45 +97,6 @@ exports.register = async (req, res) => {
   }
 };
 
-exports.verifyEmail = async (req, res) => {
-  try {
-    const { token } = req.query;
-    if (!token) {
-      return res.status(400).json({
-        success: false,
-        message: "Verification token is required",
-      });
-    }
-
-    const user = await User.findOne({
-      verificationToken: token,
-      verificationTokenExpires: { $gt: Date.now() },
-    });
-
-    if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid or expired verification token",
-      });
-    }
-
-    user.isVerified = true;
-    user.verificationToken = undefined;
-    user.verificationTokenExpires = undefined;
-    await user.save();
-
-    res.json({
-      success: true,
-      message: "Email verified successfully",
-    });
-  } catch (err) {
-    console.error("Email verification error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Server error during email verification",
-    });
-  }
-};
 
 exports.login = async (req, res) => {
   try {
@@ -165,13 +125,6 @@ exports.login = async (req, res) => {
         message: "Invalid credentials",
       });
     }
-
-    // if (!user.isVerified) {
-    //     return res.status(401).json({
-    //         success: false,
-    //         message: 'Please verify your email first'
-    //     });
-    // }
     const token = generateToken(user._id, user.role);
     setTokenCookie(res, token);
     const userPayload = {
@@ -179,7 +132,6 @@ exports.login = async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      isVerified: user.isVerified,
     };
 
     res.json({
@@ -330,11 +282,6 @@ exports.updateProfile = async (req, res) => {
       profilePicture,
       address,
     } = req.body;
-
-      // 🔴 FORCE A FRESH QUERY with +password to bypass the middleware exclusions!
-      console.log("oldPassword", oldPassword);
-      console.log("password", password);
-      console.log("email", email);
     const user = await User.findById(req.user.id).select("+password");
     if (!user) {
       return res.status(404).json({
@@ -396,7 +343,6 @@ exports.updateProfile = async (req, res) => {
       }
 
       user.email = email.toLowerCase().trim();
-      user.isVerified = false;
       user.verificationToken = require("uuid").v4();
       user.verificationTokenExpires = Date.now() + 60 * 60 * 1000;
     }

@@ -1,12 +1,18 @@
-// Review Context
-'use client';
-import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
-import axios from 'axios';
-import { useAuth } from './AuthContext';
-import toast from 'react-hot-toast';
+"use client";
+import axios from "axios";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import toast from "react-hot-toast";
+import { useAuth } from "./AuthContext";
 
 const ReviewContext = createContext();
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 export function ReviewProvider({ children, product }) {
   const { user } = useAuth();
@@ -28,7 +34,7 @@ export function ReviewProvider({ children, product }) {
     startIndex: 0,
   });
   const [showForm, setShowForm] = useState(false);
-    const [editingReview, setEditingReview] = useState(null);
+  const [editingReview, setEditingReview] = useState(null);
   const pendingVoteRef = useRef({});
 
   const statsRef = useRef(false);
@@ -69,7 +75,6 @@ export function ReviewProvider({ children, product }) {
     fetchReviews(1, false);
   }, [fetchReviews]);
 
-  // ReviewContext.jsx — replace handleLike / handleDislike with this pattern // { [reviewId]: { timeoutId, targetState: 'like'|'dislike'|'none' } }
 
   const scheduleVoteSync = useCallback(
     (reviewId, targetState) => {
@@ -85,7 +90,7 @@ export function ReviewProvider({ children, product }) {
               : targetState === "dislike"
                 ? "dislike"
                 : null;
-          if (!endpoint) return; // 'none' means the net effect was a no-op (e.g. like -> unlike), nothing to send... but see note below
+
           const { data } = await axios.post(
             `${API}/api/reviews/${reviewId}/${endpoint}`,
             {},
@@ -96,10 +101,10 @@ export function ReviewProvider({ children, product }) {
           );
         } catch {
           toast.error("Failed to save your vote");
-          // Resync from server truth on failure since we can't easily unwind several optimistic toggles
+
           fetchReviews(pagination.page, false);
         }
-      }, 6000); // 6s — inside your 5-7s window
+      }, 6000);
 
       pendingVoteRef.current[reviewId] = { timeoutId, targetState };
     },
@@ -125,7 +130,7 @@ export function ReviewProvider({ children, product }) {
       }),
     );
     const current = reviews.find((r) => r._id === reviewId);
-    const nextState = current?.isLiked ? "none" : "like"; // isLiked read BEFORE the setReviews above applied, so this is the pre-toggle value — see note
+
     scheduleVoteSync(reviewId, nextState);
   };
 
@@ -196,7 +201,6 @@ export function ReviewProvider({ children, product }) {
       ),
     );
 
-    // Rebalance rating average + fit-feedback counts if either changed
     if (oldReview) {
       setStats((prev) => {
         if (!prev) return prev;
@@ -243,7 +247,6 @@ export function ReviewProvider({ children, product }) {
     toast.success("Review updated!");
   };
 
-  // ── Submit new ────────────────────────────────────────────────────────────
   const handleSubmit = async (formData) => {
     const { data } = await axios.post(
       `${API}/api/products/${product._id}/reviews`,
@@ -269,7 +272,6 @@ export function ReviewProvider({ children, product }) {
     setReviews((prev) => [newReview, ...prev]);
     setPagination((prev) => ({ ...prev, total: prev.total + 1 }));
 
-    // Recompute stats locally instead of waiting for a refetch
     setStats((prev) => {
       if (!prev) {
         return {
@@ -312,19 +314,16 @@ export function ReviewProvider({ children, product }) {
     closeForm();
     toast.success("Review published!");
   };
-  // ── Load more ─────────────────────────────────────────────────────────────
   const loadMore = () => {
     if (pagination.page < pagination.pages && !loadingMore)
       fetchReviews(pagination.page + 1, true);
   };
 
-  // ── Media modal ───────────────────────────────────────────────────────────
   const openMediaModal = (items, startIndex = 0) =>
     setMediaModal({ open: true, items, startIndex });
   const closeMediaModal = () =>
     setMediaModal({ open: false, items: [], startIndex: 0 });
 
-  // ── Review form ───────────────────────────────────────────────────────────
   const openForm = (review = null) => {
     setEditingReview(review);
     setShowForm(true);

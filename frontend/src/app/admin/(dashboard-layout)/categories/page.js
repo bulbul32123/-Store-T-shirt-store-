@@ -18,7 +18,6 @@ export default function AdminCategories() {
     const router = useRouter();
 
     useEffect(() => {
-        // Check if user is admin
         if (!authLoading && (!user || user.role !== 'admin')) {
             toast.error('Access denied. Admins only.');
             router.push('/auth/login');
@@ -80,8 +79,6 @@ export default function AdminCategories() {
         try {
             const token = localStorage.getItem('token');
             const isEditing = !!editCategory;
-
-            // Create FormData object to handle image upload
             const formData = new FormData();
 
             // Append other form data
@@ -97,7 +94,6 @@ export default function AdminCategories() {
                     Authorization: `Bearer ${token}`
                 }
             };
-            console.log("formData ", formData);
 
             if (isEditing) {
                 await axios.put(
@@ -132,117 +128,133 @@ export default function AdminCategories() {
     }
 
     return (
-            <div className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-2xl font-semibold text-gray-800">Category Management</h1>
+      <div>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl font-bold text-gray-800">
+            Category Management
+          </h1>
 
-                    <button
-                        onClick={handleAddCategory}
-                        className="bg-[#CAEF96] text-black hover:bg-[#CAEF96]/80 px-4 py-2 rounded-md  flex items-center"
-                    >
-                        <FiPlus className="mr-2" />
-                        Add Category
-                    </button>
-                </div>
+          <button
+            onClick={handleAddCategory}
+            className="bg-[#CAEF96] text-black hover:bg-[#CAEF96]/80 px-4 py-2 rounded-md  flex items-center"
+          >
+            <FiPlus className="mr-2" />
+            Add Category
+          </button>
+        </div>
 
-                {showForm ? (
-                    <CategoryForm
-                        category={editCategory}
-                        categories={categories}
-                        onSave={handleCategorySave}
-                        onCancel={() => setShowForm(false)}
-                    />
-                ) : loading ? (
-                    <div className="flex justify-center items-center h-64">
-                        <LoadingSpinner size="large" />
-                    </div>
+        {showForm ? (
+          <CategoryForm
+            category={editCategory}
+            categories={categories}
+            onSave={handleCategorySave}
+            onCancel={() => setShowForm(false)}
+          />
+        ) : loading ? (
+          <div className="flex justify-center items-center h-64">
+            <LoadingSpinner size="large" />
+          </div>
+        ) : (
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Category
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Featured
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {categories.length > 0 ? (
+                  categories.map((category) => (
+                    <tr key={category._id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0 h-10 w-10 relative">
+                            {category.image?.url ? (
+                              <img
+                                src={category.image.url}
+                                alt={category.name}
+                                className="h-10 w-10 rounded-full object-cover"
+                              />
+                            ) : (
+                              <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                <span className="text-xs text-gray-500">
+                                  No img
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">
+                              {category.name}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              {category.slug}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`px-2 py-1 text-xs rounded-full ${
+                            category.featured
+                              ? "bg-green-100 text-green-800"
+                              : "bg-gray-100 text-gray-800"
+                          }`}
+                        >
+                          {category.featured ? "Yes" : "No"}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => handleEditCategory(category)}
+                            className="text-blue-600 hover:text-blue-900"
+                            title="Edit"
+                          >
+                            <FiEdit2 className="h-5 w-5" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteCategory(category._id)}
+                            className="text-red-600 hover:text-red-900"
+                            title="Delete"
+                          >
+                            <FiTrash2 className="h-5 w-5" />
+                          </button>
+                          <button
+                            onClick={() =>
+                              router.push(`/category/${category.slug}`)
+                            }
+                            className="text-gray-600 hover:text-gray-900"
+                            title="View on site"
+                          >
+                            <FiEye className="h-5 w-5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
                 ) : (
-                    <div className="bg-white rounded-lg shadow overflow-hidden">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
-                                <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Category
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Featured
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Actions
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                                {categories.length > 0 ? (
-                                    categories.map((category) => (
-                                        <tr key={category._id} className="hover:bg-gray-50">
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center">
-                                                    <div className="flex-shrink-0 h-10 w-10 relative">
-                                                        {category.image?.url ? (
-                                                            <img
-                                                                src={category.image.url}
-                                                                alt={category.name}
-                                                                className="h-10 w-10 rounded-full object-cover"
-                                                            />
-                                                        ) : (
-                                                            <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                                                <span className="text-xs text-gray-500">No img</span>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    <div className="ml-4">
-                                                        <div className="text-sm font-medium text-gray-900">{category.name}</div>
-                                                        <div className="text-sm text-gray-500">{category.slug}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <span className={`px-2 py-1 text-xs rounded-full ${category.featured
-                                                    ? 'bg-green-100 text-green-800'
-                                                    : 'bg-gray-100 text-gray-800'
-                                                    }`}>
-                                                    {category.featured ? 'Yes' : 'No'}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                <div className="flex space-x-2">
-                                                    <button
-                                                        onClick={() => handleEditCategory(category)}
-                                                        className="text-blue-600 hover:text-blue-900"
-                                                        title="Edit"
-                                                    >
-                                                        <FiEdit2 className="h-5 w-5" />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleDeleteCategory(category._id)}
-                                                        className="text-red-600 hover:text-red-900"
-                                                        title="Delete"
-                                                    >
-                                                        <FiTrash2 className="h-5 w-5" />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => router.push(`/category/${category.slug}`)}
-                                                        className="text-gray-600 hover:text-gray-900"
-                                                        title="View on site"
-                                                    >
-                                                        <FiEye className="h-5 w-5" />
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
-                                            No categories found. Create your first category!
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                  <tr>
+                    <td
+                      colSpan="5"
+                      className="px-6 py-4 text-center text-gray-500"
+                    >
+                      No categories found. Create your first category!
+                    </td>
+                  </tr>
                 )}
-            </div>
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     );
 } 

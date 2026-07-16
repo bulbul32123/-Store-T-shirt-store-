@@ -6,14 +6,14 @@ import { checkoutApi } from '@/lib/checkoutApi';
 import { useCart } from '@/context/CartContext';
 
 const POLL_INTERVAL = 2000;
-const MAX_ATTEMPTS = 15; // ~30 seconds
+const MAX_ATTEMPTS = 15; 
 
 export default function ClientStripeSuccessPage() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const sessionId = searchParams.get('session_id');
     const { clearCart, syncNow } = useCart();
-    const [status, setStatus] = useState('waiting'); // waiting | found | timeout
+    const [status, setStatus] = useState('waiting'); 
     const [order, setOrder] = useState(null);
     const attemptsRef = useRef(0);
     const clearedRef = useRef(false);

@@ -13,7 +13,7 @@ const NAV_ITEMS = [
   { href: "/profile/notifications", label: "Notifications", icon: Bell },
   { href: "/profile/cart", label: "Cart", icon: ShoppingBag },
   { href: "/profile/watchlist", label: "Watchlist", icon: Heart },
-  { href: "/profile/support", label: "Watchlist", icon: FaHeadphonesAlt },
+  { href: "/profile/support", label: "Support", icon: FaHeadphonesAlt },
 ];
 
 export default function ProfileSidebar() {

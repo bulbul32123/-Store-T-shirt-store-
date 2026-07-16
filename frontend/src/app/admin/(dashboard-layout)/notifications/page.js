@@ -20,7 +20,7 @@ const LIMIT = 15;
 function SkeletonRow() {
   return (
     <div className="flex gap-3 p-4 border-b border-gray-100 animate-pulse">
-      <div className="h-10 w-10 rounded-full bg-gray-200 flex-shrink-0" />
+      <div className="h-10 w-10 rounded-full bg-gray-200 shrink-0" />
       <div className="flex-1 space-y-2">
         <div className="h-3.5 w-1/3 bg-gray-200 rounded" />
         <div className="h-3 w-2/3 bg-gray-200 rounded" />
@@ -147,11 +147,11 @@ export default function AdminNotificationsPage() {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Notifications</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-3xl font-bold text-gray-900">Notifications</h1>
+          <p className="mt-1 text-gray-500">
             {total} total notification{total !== 1 ? "s" : ""}
           </p>
         </div>
@@ -263,10 +263,10 @@ export default function AdminNotificationsPage() {
                       checked={selectedIds.includes(n._id)}
                       onClick={(e) => e.stopPropagation()}
                       onChange={() => toggleSelect(n._id)}
-                      className="h-4 w-4 mt-1 rounded border-gray-300 flex-shrink-0"
+                      className="h-4 w-4 mt-1 rounded border-gray-300 shrink-0"
                     />
                     <span
-                      className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full ${config.bg}`}
+                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${config.bg}`}
                     >
                       <Icon className={`h-4.5 w-4.5 ${config.fg}`} />
                     </span>
@@ -276,7 +276,7 @@ export default function AdminNotificationsPage() {
                           {n.title}
                         </span>
                         {!n.isRead && (
-                          <span className="h-2 w-2 rounded-full bg-blue-500 flex-shrink-0" />
+                          <span className="h-2 w-2 rounded-full bg-blue-500 shrink-0" />
                         )}
                       </span>
                       <span className="block text-sm text-gray-500 mt-0.5">
@@ -288,7 +288,7 @@ export default function AdminNotificationsPage() {
                     </span>
                     <button
                       onClick={(e) => handleDelete(n._id, e)}
-                      className="opacity-0 group-hover:opacity-100 transition p-1.5 rounded-lg hover:bg-red-50 flex-shrink-0"
+                      className="opacity-0 group-hover:opacity-100 transition p-1.5 rounded-lg hover:bg-red-50 shrink-0"
                     >
                       <Trash2 className="h-4 w-4 text-red-500" />
                     </button>

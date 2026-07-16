@@ -5,7 +5,7 @@ export const navConfig = {
   },
   links: [
     { href: "/cart", icon: "ShoppingCartIcon", ariaLabel: "Shopping Cart" },
-    { href: "/favorites", icon: "FavouriteIcon", ariaLabel: "Favorites" }
+    { href: "/watchlist", icon: "FavouriteIcon", ariaLabel: "WatchList" }
   ],
   search: {
     placeholder: "Search products...",

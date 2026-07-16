@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 const AdminSidebarContext = createContext(undefined);
 
 export const useSidebar = () => {
@@ -10,9 +10,7 @@ export const useSidebar = () => {
   return context;
 };
 
-export const AdminSidebarProvider = ({
-  children,
-}) => {
+export const AdminSidebarProvider = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);

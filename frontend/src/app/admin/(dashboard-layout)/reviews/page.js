@@ -190,12 +190,10 @@ if (id) {
     }
   }, []);
 
-  // Initial stats load
   useEffect(() => {
     fetchStats();
   }, [fetchStats]);
 
-  // Tab switch — reset everything and load the right dataset
   useEffect(() => {
     setPage(1);
     setSelectedIds(new Set());
@@ -204,7 +202,6 @@ if (id) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
-  // Filter changes only apply to the 'all' tab
   const isFirstRender = useRef(true);
   useEffect(() => {
     if (activeTab !== "all") return;
@@ -235,13 +232,12 @@ if (id) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
-  // Live socket badge for new reports
   useEffect(() => {
     const socket = getSocket();
     socket.connect();
     const handleReported = (payload) => {
       setNewReportsBadge((n) => n + 1);
-      setStats((s) => (s ? { ...s, reportedCount: s.reportedCount || 0 } : s)); // count itself updates via next fetchStats()
+      setStats((s) => (s ? { ...s, reportedCount: s.reportedCount || 0 } : s)); 
       fetchStats();
       toast(
         `New report: "${payload.reportTitle}" on ${payload.productName || "a review"}`,
@@ -333,12 +329,12 @@ if (id) {
   const resetFilters = () => setFilters(DEFAULT_FILTERS);
 
   return (
-    <div className="p-4 md:p-6 space-y-5 max-w-screen-2xl mx-auto">
+    <div className="space-y-5 max-w-screen-2xl mx-auto">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-3xl font-bold text-gray-900">
           Reviews &amp; Ratings
         </h1>
-        <p className="text-sm text-gray-500 mt-0.5">
+        <p className=" text-gray-500 mt-0.5">
           Reviews publish automatically — manage reported content here
         </p>
       </div>

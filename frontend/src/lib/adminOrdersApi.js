@@ -2,7 +2,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 async function request(path, options = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
-    credentials: "include", // sends the auth cookie set by your existing /api/auth login
+    credentials: "include", 
     headers: { "Content-Type": "application/json", ...(options.headers || {}) },
     ...options,
   });
@@ -76,5 +76,5 @@ export const adminOrdersApi = {
     request(`/api/admin/orders/${id}`, {
       method: "PATCH",
       body: JSON.stringify({ isArchived: archived }),
-    }), // ADD
+    }),
 };

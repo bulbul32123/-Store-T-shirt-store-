@@ -42,7 +42,6 @@ export const WatchlistProvider = ({ children }) => {
                 setUpdatedAt(parsed.updatedAt || null);
             }
         } catch {
-            // ignore corrupt storage
         } finally {
             setHydrated(true);
         }

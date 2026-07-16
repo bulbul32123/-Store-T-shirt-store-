@@ -1,4 +1,3 @@
-// Admin Order page
 'use client';
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -105,11 +104,11 @@ export default function AdminOrdersPage() {
     return <OrdersPageSkeleton />;
   }
   return (
-    <div className="p-6">
+    <div>
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Order Management</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-3xl font-bold text-gray-900">Order Management</h1>
+          <p className="mt-1 text-gray-500">
             Track, fulfill, and manage every order in one place.
           </p>
         </div>

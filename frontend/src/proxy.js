@@ -2,12 +2,9 @@ import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-
-// 1. Renamed function from 'middleware' to 'proxy'
 export async function proxy(req) {
   const { pathname } = req.nextUrl;
 
-  // Always allow the admin login page itself
   if (pathname === "/admin/login") {
     return NextResponse.next();
   }

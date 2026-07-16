@@ -1,4 +1,3 @@
-// CartContext.js
 'use client';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
@@ -6,20 +5,15 @@ import toast from 'react-hot-toast';
 import { API_URL } from '@/utils/config';
 import { useSyncQueue } from '@/hooks/useSyncQueue';
 import { getImageForColor } from '@/utils/productImage';
+import { computeFinalPrice } from "@/utils/pricing";
 
 const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
 
 const STORAGE_KEY = 'cart_v1';
 const SYNC_KEY = 'cart_sync';
-const DEBOUNCE_MS = 20000; // within the 15–30s window
+const DEBOUNCE_MS = 20000; 
 
-function computeFinalPrice(product) {
-    const discount = Number(product.discount || 0);
-    return discount > 0
-        ? +(product.price - (product.price * discount) / 100).toFixed(2)
-        : product.price;
-}
 
 async function syncCartToServer(items) {
     const payload = items.map((i) => ({
@@ -37,7 +31,7 @@ export const CartProvider = ({ children }) => {
     const [hydrated, setHydrated] = useState(false);
     const itemsRef = useRef(items);
     itemsRef.current = items;
-    const skipNextSyncRef = useRef(true); // don't sync on initial hydration load
+    const skipNextSyncRef = useRef(true); 
 
     const { scheduleSync, flushNow, syncing, lastError, pending } = useSyncQueue({
         syncKey: SYNC_KEY,
@@ -45,7 +39,6 @@ export const CartProvider = ({ children }) => {
         debounceMs: DEBOUNCE_MS,
     });
 
-    // hydrate from localStorage
     useEffect(() => {
         try {
             const raw = localStorage.getItem(STORAGE_KEY);
@@ -55,19 +48,16 @@ export const CartProvider = ({ children }) => {
                 setUpdatedAt(parsed.updatedAt || null);
             }
         } catch {
-            // ignore corrupt storage
         } finally {
             setHydrated(true);
         }
     }, []);
 
-    // persist to localStorage instantly on every change
     useEffect(() => {
         if (!hydrated) return;
         localStorage.setItem(STORAGE_KEY, JSON.stringify({ items, updatedAt }));
     }, [items, updatedAt, hydrated]);
 
-    // schedule a debounced server sync whenever items actually change
     useEffect(() => {
         if (!hydrated) return;
         if (skipNextSyncRef.current) {
@@ -79,7 +69,6 @@ export const CartProvider = ({ children }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [items, hydrated]);
 
-    // app init: flush immediately if unsynced local data exists from last session
     useEffect(() => {
         if (!hydrated) return;
         if (pending && itemsRef.current.length > 0) {
@@ -88,7 +77,6 @@ export const CartProvider = ({ children }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [hydrated]);
 
-    // sync on tab/window close
     useEffect(() => {
         const handler = () => {
             flushNow(itemsRef.current);
@@ -157,7 +145,6 @@ const getProductQuantityInCart = (productId) =>
         setItems([]);
     };
 
-    // exposed so logout / checkout / any manual trigger can force an immediate sync
     const syncNow = () => flushNow(itemsRef.current);
 
     const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);

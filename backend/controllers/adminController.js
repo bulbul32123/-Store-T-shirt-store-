@@ -127,9 +127,6 @@ exports.getStats = async (req, res) => {
       .limit(5)
       .populate("user", "name email profilePicture") // 👈 Changed this line
       .lean();
-
-    // 2. OPTIONAL: If your lowStockProducts need category images as well as product images,
-    // make sure the images array is stored and returned in the Product model.
     const lowStockProducts = await Product.find({ stock: { $lt: 10 } })
       .sort({ stock: 1 })
       .limit(5)
@@ -181,13 +178,6 @@ exports.login = async (req, res) => {
         message: "Invalid credentials",
       });
     }
-
-    if (!user.isVerified) {
-      return res.status(401).json({
-        success: false,
-        message: "Please verify your email first",
-      });
-    }
     const token = generateToken(user._id);
     setTokenCookie(res, token);
 
@@ -199,7 +189,6 @@ exports.login = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        isVerified: user.isVerified,
       },
       token,
     });

@@ -3,6 +3,7 @@ import { FulfillmentBadge, PaymentBadge } from "@/components/StatusBadge";
 import StatusUpdateModal from "@/components/admin/orders/StatusUpdateModal";
 import { adminOrdersApi } from "@/lib/adminOrdersApi";
 import { Archive, ArchiveRestore, ArrowLeft, Check, Loader2 } from "lucide-react";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -51,10 +52,10 @@ function AddressBlock({ title, address }) {
 
 function OrderDetailSkeleton() {
   return (
-    <div className="p-6 max-w-6xl mx-auto animate-pulse">
+    <div className="max-w-6xl mx-auto animate-pulse">
       <div className="h-4 w-28 bg-gray-200 rounded mb-4" />
 
-      {/* Header */}
+      
       <div className="flex items-start justify-between mb-6">
         <div>
           <div className="flex items-center gap-2">
@@ -68,9 +69,9 @@ function OrderDetailSkeleton() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left column */}
+        
         <div className="lg:col-span-2 space-y-6">
-          {/* Order details */}
+          
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <div className="h-4 w-28 bg-gray-200 rounded mb-3" />
             <div className="border border-gray-200 rounded-lg overflow-hidden">
@@ -80,7 +81,7 @@ function OrderDetailSkeleton() {
                   key={i}
                   className="flex items-center gap-3 px-3 py-3 border-t border-gray-100"
                 >
-                  <div className="h-10 w-10 rounded bg-gray-100 flex-shrink-0" />
+                  <div className="h-10 w-10 rounded bg-gray-100 shrink-0" />
                   <div className="flex-1 space-y-1.5">
                     <div className="h-3.5 w-1/3 bg-gray-200 rounded" />
                     <div className="h-3 w-1/4 bg-gray-100 rounded" />
@@ -103,13 +104,13 @@ function OrderDetailSkeleton() {
             </div>
           </div>
 
-          {/* Shipping activity */}
+          
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <div className="h-4 w-32 bg-gray-200 rounded mb-4" />
             <div className="space-y-4">
               {Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="flex gap-3">
-                  <div className="h-2.5 w-2.5 rounded-full bg-gray-200 mt-1.5 flex-shrink-0" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-gray-200 mt-1.5 shrink-0" />
                   <div className="flex-1 flex items-start justify-between">
                     <div className="space-y-1.5">
                       <div className="h-3.5 w-20 bg-gray-200 rounded" />
@@ -122,19 +123,19 @@ function OrderDetailSkeleton() {
             </div>
           </div>
 
-          {/* Internal notes */}
+          
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <div className="h-4 w-36 bg-gray-200 rounded mb-3" />
             <div className="h-20 w-full bg-gray-100 rounded-lg" />
           </div>
         </div>
 
-        {/* Right column */}
+        
         <div className="space-y-6">
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <div className="h-4 w-28 bg-gray-200 rounded mb-3" />
             <div className="flex items-center gap-3 mb-3">
-              <div className="h-10 w-10 rounded-full bg-gray-200 flex-shrink-0" />
+              <div className="h-10 w-10 rounded-full bg-gray-200 shrink-0" />
               <div className="space-y-1.5">
                 <div className="h-3.5 w-24 bg-gray-200 rounded" />
                 <div className="h-3 w-20 bg-gray-100 rounded" />
@@ -238,7 +239,7 @@ export default function OrderDetailPage() {
   const initials = displayName[0]?.toUpperCase() || "?";
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {statusModalOpen && (
         <StatusUpdateModal
           currentStatus={order.orderStatus}
@@ -254,11 +255,10 @@ export default function OrderDetailPage() {
         <ArrowLeft className="h-4 w-4" /> Back to orders
       </button>
 
-      {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="text-xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-gray-900">
               {order.displayId}
             </h1>
             <PaymentBadge status={order.paymentStatus} />
@@ -298,9 +298,7 @@ export default function OrderDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left column */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Order details */}
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <h3 className="text-sm font-semibold text-gray-900 mb-3">
               Order details
@@ -390,7 +388,6 @@ export default function OrderDetailPage() {
             </div>
           </div>
 
-          {/* Shipping activity */}
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <h3 className="text-sm font-semibold text-gray-900 mb-4">
               Shipping activity
@@ -404,9 +401,9 @@ export default function OrderDetailPage() {
                 {[...order.statusHistory].reverse().map((h, idx, arr) => (
                   <div key={idx} className="flex gap-3 pb-5 last:pb-0 relative">
                     {idx !== arr.length - 1 && (
-                      <span className="absolute left-[5px] top-3 bottom-0 w-px bg-gray-200" />
+                      <span className="absolute left-1.25 top-3 bottom-0 w-px bg-gray-200" />
                     )}
-                    <span className="h-2.5 w-2.5 rounded-full bg-teal-500 mt-1.5 flex-shrink-0 z-10" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-teal-500 mt-1.5 shrink-0 z-10" />
                     <div className="flex-1 flex items-start justify-between gap-3">
                       <div>
                         <p className="text-sm font-semibold text-gray-900 capitalize">
@@ -428,7 +425,6 @@ export default function OrderDetailPage() {
             )}
           </div>
 
-          {/* Internal notes */}
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <h3 className="text-sm font-semibold text-gray-900 mb-2">
               Internal admin notes
@@ -449,22 +445,22 @@ export default function OrderDetailPage() {
           </div>
         </div>
 
-        {/* Right column */}
         <div className="space-y-6">
-          {/* Customer details */}
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <h3 className="text-sm font-semibold text-gray-900 mb-3">
               Customer details
             </h3>
             <div className="flex items-center gap-3 mb-3">
               <div
-                className="h-10 w-10 rounded-full flex items-center justify-center text-sm font-semibold text-white flex-shrink-0"
+                className="h-10 w-10 rounded-full flex items-center justify-center text-sm font-semibold text-white shrink-0"
                 style={{ background: "#6366f1" }}
               >
                 {order.user?.avatar || order.user?.profilePicture?.url ? (
-                  <img
+                  <Image
                     src={order.user.avatar || order.user.profilePicture.url}
-                    alt=""
+                    alt={displayName}
+                    height={100}
+                    width={100}
                     className="h-10 w-10 rounded-full object-cover"
                   />
                 ) : (
@@ -497,7 +493,6 @@ export default function OrderDetailPage() {
             </div>
           </div>
 
-          {/* Shipping address */}
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <AddressBlock
               title="Shipping address"
@@ -505,7 +500,6 @@ export default function OrderDetailPage() {
             />
           </div>
 
-          {/* Billing / payment */}
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <AddressBlock
               title="Billing address"

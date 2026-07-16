@@ -132,9 +132,9 @@ export default function NewProduct() {
   }
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">Add New Product</h1>
+        <h1 className="text-3xl font-bold text-gray-800">Add New Product</h1>
         <div className="flex gap-2">
           <Button
             type="button"

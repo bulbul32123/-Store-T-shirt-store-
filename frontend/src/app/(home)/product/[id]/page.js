@@ -14,8 +14,6 @@ export async function generateMetadata({ params }) {
     if (!product) {
       return { title: "Product Not Found | Payra" };
     }
-
-    // 1. Defensively handle category name so the raw ID string doesn't leak into the title
     let categoryText = "Clothing";
     if (
       product.category &&
@@ -29,7 +27,6 @@ export async function generateMetadata({ params }) {
       ? (product.price - (product.price * product.discount) / 100).toFixed(2)
       : product.price.toFixed(2);
 
-    // 2. Resolve image fallbacks safely
     const ogImage =
       product.colors?.[0]?.images?.[0]?.url ||
       product.images?.[0]?.url ||

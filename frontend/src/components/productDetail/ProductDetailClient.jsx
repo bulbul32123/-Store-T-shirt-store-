@@ -3,9 +3,12 @@ import ProductReviews from "@/components/review/ProductReviews";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { useWatchlist } from "@/context/WatchlistContext";
+import { setBuyNowItem } from "@/lib/buyNow";
+import { computeFinalPrice } from "@/utils/pricing";
+import { getImageForColor } from "@/utils/productImage";
 import axios from "axios";
 import DOMPurify from "dompurify";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import {
   FiChevronLeft,
@@ -19,9 +22,6 @@ import {
   FiTruck,
   FiX,
 } from "react-icons/fi";
-
-// Product.images is an untyped Array and can hold either raw strings or
-// { url, public_id } objects — this resolves either shape defensively.
 const getImageUrl = (img) =>
   (typeof img === "string" ? img : img?.url) || "/images/placeholder.jpg";
 
@@ -39,14 +39,12 @@ export default function ProductDetailClient() {
   const [activeImage, setActiveImage] = useState(0);
   const [activeTab, setActiveTab] = useState("description");
 
-  // Size Guide States
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
   const [sizeUnit, setSizeUnit] = useState("cm"); // cm or in
 
   const { addToCart } = useCart();
   const { toggleWatchlist, isInWatchlist } = useWatchlist();
 
-  // ── Fetch product ─────────────────────────────────────────────────────
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -71,7 +69,6 @@ export default function ProductDetailClient() {
     if (id) fetchProduct();
   }, [id]);
 
-  // ── Derived image gallery, based on selected color ───────────────────
   const currentImages = useMemo(() => {
     if (!product) return [];
 
@@ -84,12 +81,10 @@ export default function ProductDetailClient() {
     return (product.images || []).map((img) => getImageUrl(img));
   }, [product, selectedColor]);
 
-  // Reset the active gallery image whenever the color changes
   useEffect(() => {
     setActiveImage(0);
   }, [selectedColor]);
 
-  // ── Handlers ───────────────────────────────────────────────────────────
   const handleColorChange = (colorName) => setSelectedColor(colorName);
 
   const handleQuantityChange = (delta) => {
@@ -97,8 +92,30 @@ export default function ProductDetailClient() {
     if (next > 0 && next <= product.stock) setQuantity(next);
   };
 
-  const handleOrderPlace = () => {
-    // Order placement logic
+  // inside the component, alongside your other hooks
+  const router = useRouter();
+
+  const handleBuyNow = () => {
+    if (!product || product.stock === 0) return;
+
+    const resolvedColor = selectedColor || product.colors?.[0]?.name || null;
+    const image = getImageForColor(product, resolvedColor);
+    const lineId = `${product._id}-${selectedSize}-${resolvedColor}`;
+
+    setBuyNowItem({
+      lineId,
+      productId: product._id,
+      name: product.name,
+      slug: product.slug,
+      price: computeFinalPrice(product),
+      image,
+      size: selectedSize,
+      color: resolvedColor,
+      quantity,
+      addedAt: Date.now(),
+    });
+
+    router.push("/checkout?buynow=1");
   };
 
   const nextImage = () => {
@@ -116,7 +133,6 @@ export default function ProductDetailClient() {
     }
   };
 
-  // ── Loading Skeleton State ─────────────────────────────────────────────
   if (loading) {
     return (
       <div className="container mx-auto px-4 lg:px-4 py-8 mt-2 bg-white animate-pulse">
@@ -133,8 +149,6 @@ export default function ProductDetailClient() {
               ))}
             </div>
           </div>
-
-          {/* Info Details Skeleton */}
           <div className="space-y-6 py-2">
             <div className="space-y-3">
               <div className="h-8 bg-gray-200 rounded w-3/4" />
@@ -145,7 +159,6 @@ export default function ProductDetailClient() {
               <div className="h-4 bg-gray-200 rounded w-full" />
               <div className="h-4 bg-gray-200 rounded w-5/6" />
             </div>
-            {/* Colors Picker Skeleton */}
             <div className="space-y-2">
               <div className="h-4 bg-gray-200 rounded w-12" />
               <div className="flex gap-2">
@@ -154,7 +167,6 @@ export default function ProductDetailClient() {
                 ))}
               </div>
             </div>
-            {/* Sizes Picker Skeleton */}
             <div className="space-y-2">
               <div className="h-4 bg-gray-200 rounded w-10" />
               <div className="flex gap-2">
@@ -163,7 +175,6 @@ export default function ProductDetailClient() {
                 ))}
               </div>
             </div>
-            {/* Buttons Skeleton */}
             <div className="flex gap-3 pt-4">
               <div className="flex-1 h-14 bg-gray-200 rounded-md" />
               <div className="flex-1 h-14 bg-gray-200 rounded-md" />
@@ -189,17 +200,13 @@ export default function ProductDetailClient() {
       </div>
     );
   }
-
-  // ── Derived pricing ──────────────────────────────────────────────────────
   const discountedPrice = product.discount
     ? product.price - (product.price * product.discount) / 100
     : null;
   const displayPrice = discountedPrice ?? product.price;
   const reviewCount = product.numReviews ?? product.ratings?.length ?? 0;
-  const categoryName = product.category?.name || product.category || "—";
   const inWatchlist = isInWatchlist(product?._id);
 
-  // Dynamic Nike-Style Size Chart conversion maps
   const sizeChartData = [
     {
       size: "XS",
@@ -241,7 +248,6 @@ export default function ProductDetailClient() {
   return (
     <div className="container mx-auto px-4 lg:px-4 py-8 mt-2 bg-white">
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-        {/* ── Image Gallery ──────────────────────────────────────── */}
         <div className="space-y-4">
           <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
             <img
@@ -282,7 +288,6 @@ export default function ProductDetailClient() {
             )}
           </div>
 
-          {/* Thumbnails */}
           {currentImages.length > 1 && (
             <div className="flex gap-3 overflow-x-auto pb-2">
               {currentImages.map((src, idx) => (
@@ -306,7 +311,6 @@ export default function ProductDetailClient() {
           )}
         </div>
 
-        {/* ── Product Info ───────────────────────────────────────── */}
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
@@ -334,7 +338,6 @@ export default function ProductDetailClient() {
             )}
           </div>
 
-          {/* Price */}
           <div className="flex items-baseline gap-3 flex-wrap">
             <span className="text-3xl font-bold text-gray-900">
               ${displayPrice.toFixed(2)}
@@ -350,14 +353,6 @@ export default function ProductDetailClient() {
               </span>
             )}
           </div>
-            {/* <p
-              className="text-gray-700 leading-relaxed"
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(product.description || ""),
-              }}
-            /> */}
-
-          {/* Colors */}
           {product.colors?.length > 0 && (
             <div className="space-y-3">
               <span className="text-sm font-medium text-gray-900">Color</span>
@@ -387,8 +382,6 @@ export default function ProductDetailClient() {
               </div>
             </div>
           )}
-
-          {/* Size Section */}
           {product.sizes?.length > 0 && (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -421,7 +414,6 @@ export default function ProductDetailClient() {
             </div>
           )}
 
-          {/* Quantity */}
           <div className="space-y-3">
             <span className="text-sm font-medium text-gray-900">Quantity</span>
             <div className="flex items-center gap-3">
@@ -445,9 +437,9 @@ export default function ProductDetailClient() {
             </div>
           </div>
 
-          {/* Actions */}
           <div className="flex gap-3">
             <button
+              onClick={handleBuyNow}
               disabled={product.stock === 0}
               className="flex-1 h-14 rounded-md font-medium bg-gray-900 text-white border border-gray-900 transition-colors hover:bg-white hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -481,7 +473,6 @@ export default function ProductDetailClient() {
             </button>
           </div>
 
-          {/* Features */}
           <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-200">
             <div className="text-center">
               <FiTruck className="h-5 w-5 mx-auto text-gray-500 mb-1" />
@@ -503,7 +494,6 @@ export default function ProductDetailClient() {
         </div>
       </div>
 
-      {/* Size Guide Modal Overlay */}
       {isSizeGuideOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-white w-full max-w-2xl rounded-2xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
@@ -611,7 +601,6 @@ export default function ProductDetailClient() {
         </div>
       )}
 
-      {/* ── Description / Reviews — tab switcher ────────────────────────── */}
       <div className="mt-10 border-t-2 border-gray-200">
         <div className="flex border-b border-gray-200">
           <button

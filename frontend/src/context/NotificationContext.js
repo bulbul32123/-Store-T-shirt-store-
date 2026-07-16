@@ -1,4 +1,3 @@
-// NotificationContext.js
 "use client";
 import { useAuth } from "@/context/AuthContext";
 import { getSocket } from "@/lib/socket";
@@ -37,7 +36,6 @@ export const NotificationProvider = ({ children }) => {
       );
       if (data.success) setUnreadCount(data.count);
     } catch {
-      // silent — polling will retry
     }
   }, [isAuthenticated]);
 
@@ -59,7 +57,6 @@ export const NotificationProvider = ({ children }) => {
           setTotalPages(data.totalPages);
         }
       } catch {
-        // silent
       } finally {
         setLoading(false);
       }
@@ -75,7 +72,7 @@ export const NotificationProvider = ({ children }) => {
     try {
       await axios.put(`${API_URL}/api/notifications/${id}/read`);
     } catch {
-      fetchUnreadCount(); // resync on failure
+      fetchUnreadCount();
     }
   };
 
@@ -94,7 +91,6 @@ export const NotificationProvider = ({ children }) => {
       fetchUnreadCount();
       fetchNotifications(1);
     } catch {
-      /* silent */
     }
   };
 
@@ -104,7 +100,7 @@ export const NotificationProvider = ({ children }) => {
     try {
       await axios.delete(`${API_URL}/api/notifications/${id}`);
     } catch {
-      setNotifications(prevList); // roll back on failure
+      setNotifications(prevList);
     }
   };
 
@@ -113,7 +109,6 @@ export const NotificationProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // reset immediately on any account change — stops stale counts bleeding across users
     setNotifications([]);
     setUnreadCount(0);
 
@@ -125,7 +120,7 @@ export const NotificationProvider = ({ children }) => {
     pollRef.current = setInterval(fetchUnreadCount, POLL_MS);
 
     const socket = getSocket();
-    if (socket.connected) socket.disconnect(); // force re-handshake so it re-authenticates as the NEW user
+    if (socket.connected) socket.disconnect();
     socket.connect();
 
     const handleNewNotification = (notification) => {
@@ -143,7 +138,7 @@ export const NotificationProvider = ({ children }) => {
       socket.off("notification:new", handleNewNotification);
       socket.disconnect();
     };
-  }, [isAuthenticated, userId, fetchUnreadCount, fetchNotifications]); // userId added
+  }, [isAuthenticated, userId, fetchUnreadCount, fetchNotifications]); 
 
   const value = {
     notifications,

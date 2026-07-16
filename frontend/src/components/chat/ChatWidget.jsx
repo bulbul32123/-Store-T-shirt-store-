@@ -144,7 +144,7 @@ export default function ChatWidget() {
       {isOpen && (
         <div className="mb-4 w-[360px] sm:w-[400px] h-[560px] bg-white rounded-3xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] flex flex-col overflow-hidden transition-all duration-300 ease-out transform scale-100 origin-bottom-right">
           {/* Header */}
-          <div className="flex items-center justify-between px-5 py-4 bg-black text-white flex-shrink-0">
+          <div className="flex items-center justify-between px-5 py-4 bg-black text-white shrink-0">
             <div className="flex items-center gap-3">
               <div className="relative">
                 <div className="flex items-end gap-1">
@@ -179,7 +179,6 @@ export default function ChatWidget() {
             </button>
           </div>
 
-          {/* Messages Area */}
           <div
             ref={scrollRef}
             className="flex-1 overflow-y-auto px-5 py-5 space-y-4 bg-neutral-50/50"
@@ -196,7 +195,7 @@ export default function ChatWidget() {
                 <p className="text-sm font-medium text-neutral-800">
                   Start a Conversation
                 </p>
-                <p className="text-xs text-neutral-500 mt-1 max-w-[240px]">
+                <p className="text-xs text-neutral-500 mt-1 max-w-60">
                   Ask us anything about sizing, shipping, or returns!
                 </p>
               </div>
@@ -219,7 +218,7 @@ export default function ChatWidget() {
                     className={`flex items-end gap-2 ${isUser ? "justify-end" : "justify-start"}`}
                   >
                     {!isUser && (
-                      <div className="rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 mb-1">
+                      <div className="rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mb-1">
                         <Image
                           src="/favico-light.svg"
                           alt="logo"
@@ -252,9 +251,7 @@ export default function ChatWidget() {
               })
             )}
           </div>
-
-          {/* Input Area */}
-          <div className="px-4 py-3 border-t border-neutral-100 bg-white flex-shrink-0">
+          <div className="px-4 py-3 border-t border-neutral-100 bg-white shrink-0">
             <div className="flex items-center gap-2 bg-neutral-100 hover:bg-neutral-200/70 focus-within:!bg-white focus-within:ring-2 focus-within:ring-[#ffb800] focus-within:border-transparent border border-transparent rounded-2xl px-3 py-1.5 transition-all">
               <input
                 value={input}
@@ -266,7 +263,7 @@ export default function ChatWidget() {
               <button
                 onClick={sendMessage}
                 disabled={!input.trim()}
-                className="h-8 w-8 flex-shrink-0 flex items-center justify-center rounded-xl bg-black text-[#ffb800] disabled:bg-neutral-200 disabled:text-neutral-400 hover:bg-neutral-900 transition-all shadow-sm"
+                className="h-8 w-8 shrink-0 flex items-center justify-center rounded-xl bg-black text-[#ffb800] disabled:bg-neutral-200 disabled:text-neutral-400 hover:bg-neutral-900 transition-all shadow-sm"
               >
                 <Send className="h-3.5 w-3.5" />
               </button>
@@ -274,8 +271,6 @@ export default function ChatWidget() {
           </div>
         </div>
       )}
-
-      {/* Main Trigger Button */}
       <button
         onClick={toggleOpen}
         className="relative h-14 w-14 rounded-full bg-[#ffb800] text-black shadow-2xl flex items-center justify-center hover:bg-[#ffb800]/80 hover:text-white active:scale-95 transition-all duration-200 group "
