@@ -1,3 +1,4 @@
+// create new products
 "use client";
 import ProductPromoModal from "@/components/admin/ProductPromoModal";
 import ColorVariantsManager from "@/components/admin/products/ColorVariantsManager";
