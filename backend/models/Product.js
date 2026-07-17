@@ -1,4 +1,4 @@
-
+// product Model
 
 const mongoose = require('mongoose');
 

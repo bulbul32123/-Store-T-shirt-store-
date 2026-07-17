@@ -1,3 +1,4 @@
+//productcontroller
 const Product = require("../models/Product");
 const Order = require("../models/Order");
 const mongoose = require("mongoose");
@@ -515,7 +516,7 @@ exports.addColorImages = async (req, res) => {
 
     const uploadPromises = req.files.map(async (file) => {
       const result = await cloudinary.uploader.upload(file.path, {
-        folder: `tshirt-store/products/${product.slug}/${colorName}`,
+        folder: `payra-store/products/${product.slug}/${colorName}`,
         width: 800,
         crop: "scale",
       });
@@ -639,7 +640,7 @@ exports.uploadProductImages = async (req, res) => {
 
     const uploadPromises = req.files.map(async (file) => {
       const result = await cloudinary.uploader.upload(file.path, {
-        folder: "tshirt-store/products",
+        folder: "payra-store/products",
         width: 800,
         crop: "scale",
       });
