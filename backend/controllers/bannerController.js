@@ -1,3 +1,5 @@
+
+// controllers / bannerController.js;
 const Banner = require("../models/Banner");
 
 exports.getBanner = async (req, res) => {
