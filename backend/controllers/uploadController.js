@@ -1,3 +1,4 @@
+//uploadsController.js
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
 const path = require('path');
@@ -57,11 +58,17 @@ exports.uploadImage = async (req, res) => {
 
         console.log('Attempting Cloudinary upload...');
 
-        const uploadOptions = {
-            folder: 'tshirt-store/products',
-            resource_type: 'auto',
-            quality: 'auto'
-        };
+      const folderMap = {
+        product: "payra-store/products",
+        banner: "payra-store/banners",
+        carousel: "payra-store/carousel",
+        asset: "payra-store/assets",
+      };
+      const uploadOptions = {
+        folder: folderMap[req.query.type] || "payra-store/assets",
+        resource_type: "auto",
+        quality: "auto",
+      };
 
         const result = await cloudinary.uploader.upload(req.file.path, uploadOptions);
 
