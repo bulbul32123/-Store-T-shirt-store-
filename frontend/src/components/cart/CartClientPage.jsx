@@ -11,7 +11,12 @@ export default function CartClientPage() {
   const { items, subtotal, updateQuantity, removeFromCart } = useCart();
   const router = useRouter();
 
-  const shipping = subtotal >= 100 ? 0 : 10;
+  const hasFreeShippingItem = items.some(
+    (item) => item.isFreeShipping === true,
+  );
+
+
+  const shipping = hasFreeShippingItem || subtotal >= 100 ? 0 : 10;
   const tax = 5;
 
   const total = subtotal + shipping;
@@ -21,11 +26,8 @@ export default function CartClientPage() {
       <div className="max-w-7xl mx-auto px-4 py-16">
         <div className="text-center border border-dashed border-gray-300 rounded-3xl py-24">
           <div className="text-5xl mb-4">🛍️</div>
-
           <h2 className="text-2xl font-bold mb-3">Your cart is empty</h2>
-
           <p className="text-gray-500 mb-8">Find something it can hold onto.</p>
-
           <Link
             href="/products"
             className="inline-flex items-center justify-center rounded-full bg-black text-white px-8 py-3 font-medium"
@@ -41,10 +43,12 @@ export default function CartClientPage() {
     <div className="max-w-7xl mx-auto pl-5 pr-5 md:pl-10 md:pr-10 border-b border-gray-300 py-10">
       <div className="mb-10 ">
         <h1 className="text-4xl font-bold">Cart</h1>
-
         <p className="text-gray-500 mt-2">{items.length} items</p>
       </div>
-      <FreeShippingProgress subtotal={subtotal} threshold={100} />
+
+      {!hasFreeShippingItem && (
+        <FreeShippingProgress subtotal={subtotal} threshold={100} />
+      )}
 
       <div className="grid lg:grid-cols-[1fr_380px] gap-10">
         <div className="space-y-6">
@@ -73,7 +77,6 @@ export default function CartClientPage() {
                   {item.color && (
                     <div className="flex items-center gap-2 mt-1">
                       <span>Color</span>
-
                       <span
                         className="w-3 h-3 rounded-full border"
                         style={{
@@ -81,6 +84,12 @@ export default function CartClientPage() {
                         }}
                       />
                     </div>
+                  )}
+
+                  {item.isFreeShipping && (
+                    <span className="inline-block bg-emerald-50 text-emerald-600 text-xs font-semibold px-2 py-0.5 rounded mt-1.5">
+                      Free Shipping
+                    </span>
                   )}
                 </div>
 
