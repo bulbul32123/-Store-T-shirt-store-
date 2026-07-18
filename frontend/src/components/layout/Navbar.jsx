@@ -13,7 +13,6 @@ export default function Navbar() {
   return (
     <div className="w-full h-16" aria-label="Main navigation">
       <div className="flexBetween w-full gap-3 py-3">
-        {/* Logo */}
         <div className="flex items-end md:w-[50%] max-md:pr-4 gap-1">
           <Link href={navConfig.logo.href}>
             <Image
@@ -26,7 +25,6 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Search */}
         <div className="w-full max-md:hidden h-full relative">
           <SearchBar
             placeholder={navConfig.search.placeholder}
@@ -34,7 +32,6 @@ export default function Navbar() {
           />
         </div>
 
-        {/* Right */}
         <div className="md:w-[50%] md:inline hidden">
           <div className="flex items-center text-gray-400 justify-end gap-4">
             <NotificationBell />
