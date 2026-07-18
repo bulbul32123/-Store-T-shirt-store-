@@ -3,15 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useAuth } from "@/context/AuthContext";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import AvatarUploader from "./AvatarUploader";
 import PasswordChangeDialog from "./PasswordChangeDialog";
 
@@ -21,7 +14,7 @@ export default function AccountForm() {
   const [form, setForm] = useState({
     name: user?.name || "",
     gender: user?.gender || "",
-    phoneNumber: user?.phoneNumber || "",
+    phone: user?.phone || "",
     dateOfBirth: user?.dateOfBirth ? user.dateOfBirth.slice(0, 10) : "",
     address: {
       street: user?.address?.street || "",
@@ -31,15 +24,21 @@ export default function AccountForm() {
       country: user?.address?.country || "Bangladesh",
     },
   });
+  console.log("form", form);
 
   const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
+    console.log("useEffect fired");
+    console.log("user in effect:", user);
+    console.log("useEffect fired");
+    console.log("user in effect:", user);
+
     if (user) {
-      setForm({
+      const newForm = {
         name: user.name || "",
-        gender: user.gender || "",
-        phoneNumber: user.phoneNumber || "",
+        gender: user.gender ? String(user.gender).trim().toLowerCase() : "",
+        phone: user.phone || "",
         dateOfBirth: user.dateOfBirth ? user.dateOfBirth.slice(0, 10) : "",
         address: {
           street: user.address?.street || "",
@@ -48,7 +47,10 @@ export default function AccountForm() {
           postalCode: user.address?.postalCode || "",
           country: user.address?.country || "Bangladesh",
         },
-      });
+      };
+
+      console.log("Setting form:", newForm);
+      setForm(newForm);
     }
   }, [user]);
 
@@ -75,29 +77,23 @@ export default function AccountForm() {
     try {
       await updateProfile(form);
       setDirty(false);
-    } catch {
-      // Handled by AuthContext
-    }
+    } catch {}
   };
 
-  // Modern input sizes, spacing, and yellow focus styles
   const inputClass =
     "h-10 rounded-lg border-[#E5E5E5] text-sm placeholder:text-gray-400 outline-[#ffb803] focus:ring-[#ffb803] focus:border-[#ffb803] focus-visible:ring-[#ffb803] focus-visible:border-[#ffb803] transition-all";
-if (loading)
+  if (!user || loading)
     return (
       <div className="animate-pulse">
-        {/* Header Skeletons */}
         <div className="h-6 w-32 bg-[#E5E5E5] rounded mb-2" />
         <div className="h-4 w-72 bg-[#E5E5E5] rounded mb-8" />
 
         <div className="max-w-4xl mx-auto space-y-8 pb-16">
-          {/* Photo Card Skeleton */}
           <div className="bg-white border border-[#E5E5E5] rounded-xl p-6 flex flex-col items-center">
             <div className="h-3 w-24 bg-[#E5E5E5] rounded mb-4" />
             <div className="h-24 w-24 rounded-full bg-[#E5E5E5]" />
           </div>
 
-          {/* Personal Details Card Skeleton */}
           <div className="bg-white border border-[#E5E5E5] rounded-xl p-6 space-y-6">
             <div className="border-b border-[#F5F5F5] pb-3 space-y-1.5">
               <div className="h-4 w-36 bg-[#E5E5E5] rounded" />
@@ -114,7 +110,6 @@ if (loading)
             </div>
           </div>
 
-          {/* Shipping Address Card Skeleton */}
           <div className="bg-white border border-[#E5E5E5] rounded-xl p-6 space-y-6">
             <div className="border-b border-[#F5F5F5] pb-3 space-y-1.5">
               <div className="h-4 w-36 bg-[#E5E5E5] rounded" />
@@ -135,7 +130,6 @@ if (loading)
             </div>
           </div>
 
-          {/* Security Card Skeleton */}
           <div className="bg-white border border-[#E5E5E5] rounded-xl p-6 space-y-6">
             <div className="border-b border-[#F5F5F5] pb-3 space-y-1.5">
               <div className="h-4 w-36 bg-[#E5E5E5] rounded" />
@@ -152,8 +146,6 @@ if (loading)
               </div>
             </div>
           </div>
-
-          {/* Save Button Row Skeleton */}
           <div className="flex justify-end pt-4">
             <div className="h-12 w-40 bg-[#E5E5E5] rounded-full" />
           </div>
@@ -161,10 +153,8 @@ if (loading)
       </div>
     );
 
-
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-16">
-      {/* PHOTO SECTION */}
       <div className="bg-white border border-[#E5E5E5] rounded-xl p-6  flex flex-col items-center">
         <h3 className="text-xs font-bold uppercase tracking-widest text-[#6F6F6F] mb-4">
           Profile Photo
@@ -173,7 +163,6 @@ if (loading)
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
-        {/* PERSONAL DETAILS CARD */}
         <div className="bg-white border border-[#E5E5E5] rounded-xl p-6  space-y-6">
           <div className="border-b border-[#F5F5F5] pb-3">
             <h3 className="text-sm font-bold uppercase tracking-wider text-[#111]">
@@ -207,19 +196,21 @@ if (loading)
               >
                 Gender
               </Label>
-              <Select
+              <select
                 value={form.gender}
-                onValueChange={handleChange("gender")}
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    gender: e.target.value,
+                  }))
+                }
+                className="border p-2 rounded w-full text-sm!"
               >
-                <SelectTrigger id="gender" className={inputClass}>
-                  <SelectValue placeholder="Select Gender" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="male">Male</SelectItem>
-                  <SelectItem value="female">Female</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
             </div>
 
             <div className="md:col-span-3 space-y-1.5">
@@ -232,8 +223,8 @@ if (loading)
               <Input
                 id="phone"
                 type="tel"
-                value={form.phoneNumber}
-                onChange={handleChange("phoneNumber")}
+                value={form.phone}
+                onChange={handleChange("phone")}
                 className={inputClass}
               />
             </div>
@@ -256,7 +247,6 @@ if (loading)
           </div>
         </div>
 
-        {/* SHIPPING ADDRESS CARD */}
         <div className="bg-white border border-[#E5E5E5] rounded-xl p-6  space-y-6">
           <div className="border-b border-[#F5F5F5] pb-3">
             <h3 className="text-sm font-bold uppercase tracking-wider text-[#111]">
@@ -345,8 +335,6 @@ if (loading)
             </div>
           </div>
         </div>
-
-        {/* SECURITY & CREDENTIALS CARD */}
         <div className="bg-white border border-[#E5E5E5] rounded-xl p-6  space-y-6">
           <div className="border-b border-[#F5F5F5] pb-3">
             <h3 className="text-sm font-bold uppercase tracking-wider text-[#111]">
@@ -378,7 +366,6 @@ if (loading)
           </div>
         </div>
 
-        {/* SAVE CHANGES ROW */}
         <div className="flex justify-end pt-4">
           <Button
             type="submit"
