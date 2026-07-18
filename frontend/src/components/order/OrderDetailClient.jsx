@@ -1,18 +1,21 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
-import toast from "react-hot-toast";
+
+import { ordersApi } from "@/lib/ordersApi";
 import {
   CheckCircle2,
-  Truck,
-  Package,
-  MapPin,
   Copy,
+  MapPin,
+  Package,
+  Truck,
   XCircle,
 } from "lucide-react";
-import { ordersApi } from "@/lib/ordersApi";
+import Image from "next/image";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+// import { FiAlertTriangle, FiLoader, FiX } from "react-icons/fi";
+import ConfirmModal from "../common/ConfirmModal";
 
 const STEPS = [
   {
@@ -65,48 +68,13 @@ function formatDate(d) {
   });
 }
 
-function OrderSkeleton() {
-  return (
-    <div className="max-w-4xl mx-auto px-4 py-10 animate-pulse">
-      <div className="h-4 w-24 bg-gray-200 rounded-md mb-6"></div>
-      <div className="flex items-start justify-between mb-8 flex-wrap gap-3">
-        <div>
-          <div className="h-8 w-48 bg-gray-200 rounded-md mb-2"></div>
-          <div className="h-4 w-32 bg-gray-200 rounded-md"></div>
-        </div>
-        <div className="h-10 w-28 bg-gray-200 rounded-xl"></div>
-      </div>
-      <div className="border border-gray-100 rounded-2xl p-6 mb-8 overflow-hidden relative">
-        <div className="absolute top-10 left-0 w-full h-0.5 bg-gray-100 z-0"></div>
-        <div className="flex items-start justify-between relative z-10">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="flex-1 flex flex-col items-center">
-              <div className="h-8 w-8 bg-gray-200 rounded-full border-4 border-white mb-2"></div>
-              <div className="h-3 w-16 bg-gray-200 rounded-md"></div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="border border-gray-100 rounded-2xl divide-y mb-8">
-        {[1, 2].map((i) => (
-          <div key={i} className="flex items-center gap-4 p-5">
-            <div className="h-20 w-20 bg-gray-200 rounded-xl shrink-0"></div>
-            <div className="flex-1 space-y-2">
-              <div className="h-5 w-48 bg-gray-200 rounded-md"></div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export default function OrderDetailClient() {
   const { id } = useParams();
   const router = useRouter();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
   const fetchOrder = () => {
     setLoading(true);
@@ -121,12 +89,12 @@ export default function OrderDetailClient() {
     fetchOrder();
   }, [id]);
 
-  const handleCancel = async () => {
-    if (!confirm("Cancel this order?")) return;
+  const handleCancelConfirm = async () => {
     setCancelling(true);
     try {
       await ordersApi.cancel(id);
-      toast.success("Order cancelled");
+      toast.success("Order cancelled successfully");
+      setIsCancelModalOpen(false);
       fetchOrder();
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to cancel order");
@@ -172,11 +140,10 @@ export default function OrderDetailClient() {
         </div>
         {canCancel && (
           <button
-            onClick={handleCancel}
-            disabled={cancelling}
-            className="text-sm border border-red-300 text-red-600 px-4 py-2 rounded-xl disabled:opacity-50 hover:bg-red-50 transition-colors"
+            onClick={() => setIsCancelModalOpen(true)}
+            className="text-sm border border-red-300 text-red-600 px-4 py-2 rounded-xl hover:bg-red-50 transition-colors"
           >
-            {cancelling ? "Cancelling…" : "Cancel Order"}
+            Cancel Order
           </button>
         )}
       </div>
@@ -345,6 +312,53 @@ export default function OrderDetailClient() {
             <p className="text-gray-500 text-sm mt-1">{order.phone}</p>
           )}
         </div>
+      </div>
+
+      <ConfirmModal
+        isOpen={isCancelModalOpen}
+        onClose={() => setIsCancelModalOpen(false)}
+        onConfirm={handleCancelConfirm}
+        title="Cancel Order"
+        message={`Are you sure you want to cancel Order #${order.orderNumber}? This action cannot be undone.`}
+        confirmText="Yes, Cancel Order"
+        cancelText="No, Keep Order"
+        type="danger"
+        isLoading={cancelling}
+      />
+    </div>
+  );
+}
+function OrderSkeleton() {
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-10 animate-pulse">
+      <div className="h-4 w-24 bg-gray-200 rounded-md mb-6"></div>
+      <div className="flex items-start justify-between mb-8 flex-wrap gap-3">
+        <div>
+          <div className="h-8 w-48 bg-gray-200 rounded-md mb-2"></div>
+          <div className="h-4 w-32 bg-gray-200 rounded-md"></div>
+        </div>
+        <div className="h-10 w-28 bg-gray-200 rounded-xl"></div>
+      </div>
+      <div className="border border-gray-100 rounded-2xl p-6 mb-8 overflow-hidden relative">
+        <div className="absolute top-10 left-0 w-full h-0.5 bg-gray-100 z-0"></div>
+        <div className="flex items-start justify-between relative z-10">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="flex-1 flex flex-col items-center">
+              <div className="h-8 w-8 bg-gray-200 rounded-full border-4 border-white mb-2"></div>
+              <div className="h-3 w-16 bg-gray-200 rounded-md"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="border border-gray-100 rounded-2xl divide-y mb-8">
+        {[1, 2].map((i) => (
+          <div key={i} className="flex items-center gap-4 p-5">
+            <div className="h-20 w-20 bg-gray-200 rounded-xl shrink-0"></div>
+            <div className="flex-1 space-y-2">
+              <div className="h-5 w-48 bg-gray-200 rounded-md"></div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
