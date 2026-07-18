@@ -1,14 +1,7 @@
 "use client";
 import { adminOrdersApi } from "@/lib/adminOrdersApi";
-import {
-  Archive,
-  ArchiveRestore,
-  Check,
-  ChevronDown,
-  Loader2,
-  X,
-} from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { Archive, ArchiveRestore, ChevronDown, Loader2, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { FulfillmentBadge, PaymentBadge } from "./StatusBadge";
 
 const STATUS_OPTIONS = [
@@ -67,9 +60,6 @@ export default function OrderDetailDrawer({
   const [loading, setLoading] = useState(true);
   const [statusMenuOpen, setStatusMenuOpen] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
-  const [notes, setNotes] = useState("");
-  const [savingNotes, setSavingNotes] = useState(false);
-  const [savedTick, setSavedTick] = useState(false);
   const [archiving, setArchiving] = useState(false);
 
   const handleArchiveToggle = async () => {
@@ -98,7 +88,6 @@ export default function OrderDetailDrawer({
       .then((data) => {
         if (cancelled) return;
         setOrder(data);
-        setNotes(data.internalNotes || "");
       })
       .catch((err) => console.error("Failed to load order:", err))
       .finally(() => !cancelled && setLoading(false));
@@ -118,37 +107,11 @@ export default function OrderDetailDrawer({
       onOrderUpdated?.();
     } catch (err) {
       console.error("Failed to update status:", err);
-      toast.error(err.message || "Failed to update order status"); // ADD — needs `import toast from 'react-hot-toast';` at top if not present
+      toast.error(err.message || "Failed to update order status");
     } finally {
       setUpdatingStatus(false);
     }
   };
-
-  // Save internal notes ~600ms after the admin stops typing.
-  const saveNotes = useCallback(
-    (value) => {
-      setSavingNotes(true);
-      adminOrdersApi
-        .updateOrder(orderId, { internalNotes: value })
-        .then(() => {
-          setSavingNotes(false);
-          setSavedTick(true);
-          setTimeout(() => setSavedTick(false), 1500);
-        })
-        .catch((err) => {
-          console.error("Failed to save notes:", err);
-          setSavingNotes(false);
-        });
-    },
-    [orderId],
-  );
-
-  useEffect(() => {
-    if (!orderId || notes === (order?.internalNotes || "")) return;
-    const timer = setTimeout(() => saveNotes(notes), 600);
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [notes]);
 
   if (!isOpen) return null;
 
@@ -163,7 +126,6 @@ export default function OrderDetailDrawer({
           </div>
         ) : (
           <>
-            {/* Header */}
             <div className="border-b border-gray-200 p-5">
               <div className="flex items-start justify-between">
                 <div>
@@ -175,7 +137,6 @@ export default function OrderDetailDrawer({
                   </p>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  {/* ADD */}
                   <button
                     onClick={handleArchiveToggle}
                     disabled={archiving}
@@ -240,9 +201,7 @@ export default function OrderDetailDrawer({
               </div>
             </div>
 
-            {/* Scrollable body */}
             <div className="flex-1 overflow-y-auto p-5 space-y-6">
-              {/* Product breakdown */}
               <div>
                 <h3 className="text-sm font-semibold text-gray-900 mb-3">
                   Items
@@ -274,7 +233,6 @@ export default function OrderDetailDrawer({
                           <td className="px-3 py-2">
                             <div className="flex items-center gap-2">
                               {item.image ? (
-                                // eslint-disable-next-line @next/next/no-img-element
                                 <img
                                   src={item.image}
                                   alt={item.name}
@@ -332,7 +290,6 @@ export default function OrderDetailDrawer({
                 </div>
               </div>
 
-              {/* Customer details */}
               <div className="border border-gray-200 rounded-lg p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <AddressBlock
                   title="Shipping address"
@@ -361,34 +318,6 @@ export default function OrderDetailDrawer({
                   <p className="text-sm text-gray-700">{order.user?.name}</p>
                   <p className="text-xs text-gray-500">{order.user?.email}</p>
                 </div>
-              </div>
-
-              {/* Internal notes */}
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <h3 className="text-sm font-semibold text-gray-900">
-                    Internal admin notes
-                  </h3>
-                  <span className="text-xs text-gray-400 flex items-center gap-1">
-                    {savingNotes && (
-                      <>
-                        <Loader2 className="h-3 w-3 animate-spin" /> Saving…
-                      </>
-                    )}
-                    {savedTick && (
-                      <>
-                        <Check className="h-3 w-3 text-green-500" /> Saved
-                      </>
-                    )}
-                  </span>
-                </div>
-                <textarea
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  rows={4}
-                  placeholder="Notes visible only to admins — not shown to the customer…"
-                  className="w-full text-sm border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                />
               </div>
             </div>
           </>
