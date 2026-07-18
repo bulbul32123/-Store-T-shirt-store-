@@ -38,26 +38,26 @@ function productThumb(product) {
   return colorWithImages?.images?.[0]?.url || null;
 }
 
-function TruncatedText({ text, limit = 120 }) {
+function TruncatedText({ text, limit = 90 }) {
   const [expanded, setExpanded] = useState(false);
   if (!text)
     return <span className="text-gray-400 italic text-xs">No text</span>;
-  const short = text.length > limit && !expanded;
+
   return (
-    <span className="text-xs text-gray-700 w-60!">
-      {short ? `${text.slice(0, limit)}…` : text}
+    <div className="max-w-xs text-xs text-gray-700" title={text}>
+      <p className={expanded ? "break-words" : "truncate"}>{text}</p>
       {text.length > limit && (
         <button
           onClick={(e) => {
             e.stopPropagation();
             setExpanded(!expanded);
           }}
-          className="ml-1 text-indigo-600 hover:text-indigo-800 text-xs font-medium focus:outline-none"
+          className="mt-0.5 text-indigo-600 hover:text-indigo-800 text-xs font-medium focus:outline-none block"
         >
           {expanded ? "show less" : "show more"}
         </button>
       )}
-    </span>
+    </div>
   );
 }
 
@@ -226,8 +226,8 @@ function ReviewCard({
           </div>
           <StarRating value={review.rating} size={13} />
         </div>
-        <div className="w-20 mb-3">
-          <TruncatedText text={review.reviewText} limit={0} />
+        <div className="mb-3 pl-7">
+          <TruncatedText text={review.reviewText} limit={90} />
         </div>
         <div className="flex items-center justify-between pl-7">
           {mode === "reported" ? (
@@ -260,7 +260,6 @@ export default function ReviewsTable({
     reviews.length > 0 && reviews.every((r) => selectedIds.has(r._id));
   const someSelected =
     reviews.length > 0 && reviews.some((r) => selectedIds.has(r._id));
-  console.log(reviews);
 
   if (!loading && reviews.length === 0) {
     return (
@@ -411,7 +410,7 @@ export default function ReviewsTable({
                           </span>
                         </div>
                       </td>
-                      <td className="px-4 py-3 w-20!">
+                      <td className="px-4 py-3 max-w-xs">
                         <TruncatedText text={review.reviewText} limit={90} />
                       </td>
                       {mode === "reported" && (
