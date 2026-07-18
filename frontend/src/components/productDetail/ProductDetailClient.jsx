@@ -1,7 +1,7 @@
 "use client";
 import ProductReviews from "@/components/review/ProductReviews";
-import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
+import { ReviewProvider, useReviews } from "@/context/ReviewContext";
 import { useWatchlist } from "@/context/WatchlistContext";
 import { setBuyNowItem } from "@/lib/buyNow";
 import { computeFinalPrice } from "@/utils/pricing";
@@ -22,12 +22,20 @@ import {
   FiTruck,
   FiX,
 } from "react-icons/fi";
+import ProductCarousel from "../home/carousel/productCarousel/ProductCarousel";
 const getImageUrl = (img) =>
   (typeof img === "string" ? img : img?.url) || "/images/placeholder.jpg";
 
-export default function ProductDetailClient() {
+function ReviewsTabLabel() {
+  const { pagination } = useReviews();
+  return <>Reviews({pagination.total})</>;
+}
+
+export default function ProductDetailClient({
+  recommendedProducts,
+  newDropData,
+}) {
   const { id } = useParams();
-  const { user } = useAuth();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -92,7 +100,6 @@ export default function ProductDetailClient() {
     if (next > 0 && next <= product.stock) setQuantity(next);
   };
 
-  // inside the component, alongside your other hooks
   const router = useRouter();
 
   const handleBuyNow = () => {
@@ -137,7 +144,6 @@ export default function ProductDetailClient() {
     return (
       <div className="container mx-auto px-4 lg:px-4 py-8 mt-2 bg-white animate-pulse">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* Gallery Skeleton */}
           <div className="space-y-4">
             <div className="aspect-square rounded-lg bg-gray-200 w-full" />
             <div className="flex gap-3">
@@ -244,402 +250,433 @@ export default function ProductDetailClient() {
       in: { chest: "53.5-58", waist: "47.5-52.5", hip: "50.5-53.5" },
     },
   ];
-
   return (
-    <div className="container mx-auto px-4 lg:px-4 py-8 mt-2 bg-white">
-      <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-        <div className="space-y-4">
-          <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
-            <img
-              src={currentImages[activeImage] || "/images/placeholder.jpg"}
-              alt={`${product.name}${selectedColor ? ` - ${selectedColor}` : ""}`}
-              className="w-full h-full object-cover"
-            />
+    <ReviewProvider product={product}>
+      <div>
+        <div className="container pl-5 pr-5 md:pl-10 md:pr-10 py-8 mt-2 bg-white">
+          <div className="grid lg:grid-cols-2 gap-4 lg:gap-8">
+            <div className="space-y-4">
+              <div className="relative  rounded-lg overflow-hidden bg-gray-100">
+                <img
+                  src={currentImages[activeImage] || "/images/placeholder.jpg"}
+                  alt={`${product.name}${selectedColor ? ` - ${selectedColor}` : ""}`}
+                  className="w-full h-full object-cover"
+                />
 
-            {currentImages.length > 1 && (
-              <>
-                <button
-                  onClick={prevImage}
-                  aria-label="Previous image"
-                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white rounded-full p-2 text-gray-800 transition-colors"
-                >
-                  <FiChevronLeft className="h-5 w-5" />
-                </button>
-                <button
-                  onClick={nextImage}
-                  aria-label="Next image"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white rounded-full p-2 text-gray-800 transition-colors"
-                >
-                  <FiChevronRight className="h-5 w-5" />
-                </button>
-              </>
-            )}
+                {currentImages.length > 1 && (
+                  <>
+                    <button
+                      onClick={prevImage}
+                      aria-label="Previous image"
+                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white rounded-full p-2 text-gray-800 transition-colors"
+                    >
+                      <FiChevronLeft className="h-5 w-5" />
+                    </button>
+                    <button
+                      onClick={nextImage}
+                      aria-label="Next image"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white rounded-full p-2 text-gray-800 transition-colors"
+                    >
+                      <FiChevronRight className="h-5 w-5" />
+                    </button>
+                  </>
+                )}
 
-            {product.discount > 0 && (
-              <span className="absolute top-4 left-4 bg-red-500 text-white text-sm font-bold px-2 py-1 rounded">
-                {product.discount}% OFF
-              </span>
-            )}
+                {product.discount > 0 && (
+                  <span className="absolute top-4 left-4 bg-red-500 text-white text-sm font-bold px-2 py-1 rounded">
+                    {product.discount}% OFF
+                  </span>
+                )}
 
-            {currentImages.length > 1 && (
-              <div className="absolute bottom-4 right-4 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                {activeImage + 1} / {currentImages.length}
+                {currentImages.length > 1 && (
+                  <div className="absolute bottom-4 right-4 bg-black/50 text-white text-xs px-2 py-1 rounded">
+                    {activeImage + 1} / {currentImages.length}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          {currentImages.length > 1 && (
-            <div className="flex gap-3 overflow-x-auto pb-2">
-              {currentImages.map((src, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setActiveImage(idx)}
-                  className={`relative w-20 h-20 flex-shrink-0 rounded-md overflow-hidden border-2 transition-all ${
-                    activeImage === idx
-                      ? "border-gray-900"
-                      : "border-transparent opacity-60 hover:opacity-100"
-                  }`}
-                >
-                  <img
-                    src={src}
-                    alt=""
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div className="space-y-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
-            {product.numReviews > 0 && (
-              <div className="flex items-center gap-4 mt-2">
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <FiStar
-                      key={i}
-                      className={`h-4 w-4 ${
-                        i < Math.round(product.averageRating || 0)
-                          ? "fill-current text-gray-900"
-                          : "text-gray-300"
+              {currentImages.length > 1 && (
+                <div className="flex gap-3 overflow-x-auto pb-2">
+                  {currentImages.map((src, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveImage(idx)}
+                      className={`relative w-20 h-20 flex-shrink-0 rounded-md overflow-hidden border-2 transition-all ${
+                        activeImage === idx
+                          ? "border-gray-900"
+                          : "border-transparent opacity-60 hover:opacity-100"
                       }`}
-                    />
+                    >
+                      <img
+                        src={src}
+                        alt=""
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
                   ))}
-                  <span className="text-sm font-medium text-gray-900">
-                    {(product.averageRating || 0).toFixed(1)}
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    ({reviewCount} reviews)
-                  </span>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
 
-          <div className="flex items-baseline gap-3 flex-wrap">
-            <span className="text-3xl font-bold text-gray-900">
-              ${displayPrice.toFixed(2)}
-            </span>
-            {discountedPrice !== null && (
-              <span className="text-lg text-gray-400 line-through">
-                ${product.price.toFixed(2)}
-              </span>
-            )}
-            {product.isFreeShipping && (
-              <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
-                Free Shipping
-              </span>
-            )}
-          </div>
-          {product.colors?.length > 0 && (
-            <div className="space-y-3">
-              <span className="text-sm font-medium text-gray-900">Color</span>
-              <div className="flex gap-2 pb-2 flex-wrap">
-                {product.colors.map((color) => (
-                  <button
-                    key={color.name}
-                    onClick={() => handleColorChange(color.name)}
-                    title={color.name}
-                    className={`relative w-16 h-16 flex-shrink-0 rounded-md overflow-hidden border-2 transition-all ${
-                      selectedColor === color.name
-                        ? "border-gray-900 scale-105"
-                        : "border-transparent opacity-60 hover:opacity-100"
-                    }`}
-                  >
-                    <img
-                      src={getImageUrl(color.images?.[0])}
-                      alt={color.name}
-                      className="w-full h-full object-cover"
-                    />
-                    <span
-                      className="absolute bottom-1 right-1 h-3 w-3 rounded-full border border-white shadow"
-                      style={{ backgroundColor: color.code }}
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-          {product.sizes?.length > 0 && (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-900">Size</span>
-                <button
-                  onClick={() => setIsSizeGuideOpen(true)}
-                  className="text-sm text-gray-500 underline decoration-gray-400 hover:text-black font-medium transition-colors"
-                >
-                  Size Guide
-                </button>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {product.sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    disabled={product.stock === 0}
-                    className={`h-11 px-4 text-sm font-medium rounded-md border transition-all ${
-                      selectedSize === size
-                        ? "bg-gray-900 text-white border-gray-900"
-                        : product.stock === 0
-                          ? "border-gray-200 text-gray-300 cursor-not-allowed"
-                          : "border-gray-300 text-gray-900 hover:border-gray-900"
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="space-y-3">
-            <span className="text-sm font-medium text-gray-900">Quantity</span>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => handleQuantityChange(-1)}
-                disabled={quantity <= 1}
-                className="h-10 w-10 inline-flex items-center justify-center rounded-md border border-gray-300 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-              >
-                <FiMinus className="h-4 w-4" />
-              </button>
-              <span className="w-12 text-center font-medium text-gray-900">
-                {quantity}
-              </span>
-              <button
-                onClick={() => handleQuantityChange(1)}
-                disabled={quantity >= product.stock}
-                className="h-10 w-10 inline-flex items-center justify-center rounded-md border border-gray-300 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-              >
-                <FiPlus className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-
-          <div className="flex gap-3">
-            <button
-              onClick={handleBuyNow}
-              disabled={product.stock === 0}
-              className="flex-1 h-14 rounded-md font-medium bg-gray-900 text-white border border-gray-900 transition-colors hover:bg-white hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Buy Now
-            </button>
-            <button
-              onClick={() =>
-                addToCart(product, {
-                  size: selectedSize,
-                  color: selectedColor,
-                  quantity,
-                })
-              }
-              disabled={product.stock === 0}
-              className="flex-1 h-14 rounded-md font-medium border border-gray-300 text-gray-900 transition-colors hover:bg-gray-900 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
-            </button>
-            <button
-              onClick={() =>
-                toggleWatchlist(product, {
-                  size: selectedSize,
-                  color: selectedColor,
-                })
-              }
-              className="h-14 w-14 flex-shrink-0 inline-flex items-center justify-center rounded-md bg-gray-900 text-white transition-colors"
-            >
-              <FiHeart
-                className={`h-5 w-5 ${inWatchlist ? "fill-current" : ""}`}
-              />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-200">
-            <div className="text-center">
-              <FiTruck className="h-5 w-5 mx-auto text-gray-500 mb-1" />
-              <span className="text-xs text-gray-500">
-                {product.isFreeShipping
-                  ? "Free Delivery"
-                  : "Standard Delivery 50TK"}
-              </span>
-            </div>
-            <div className="text-center">
-              <FiRefreshCw className="h-5 w-5 mx-auto text-gray-500 mb-1" />
-              <span className="text-xs text-gray-500">7-Day Returns</span>
-            </div>
-            <div className="text-center">
-              <FiShield className="h-5 w-5 mx-auto text-gray-500 mb-1" />
-              <span className="text-xs text-gray-500">Secure Checkout</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {isSizeGuideOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white w-full max-w-2xl rounded-2xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
-            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+            <div className="space-y-6">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Size Guide</h2>
-                <p className="text-xs text-gray-500 mt-0.5">
-                  Find your perfect body measurement alignment
-                </p>
-              </div>
-              <button
-                onClick={() => setIsSizeGuideOpen(false)}
-                className="p-2 hover:bg-gray-100 text-gray-500 hover:text-black rounded-full transition-colors"
-              >
-                <FiX className="h-5 w-5" />
-              </button>
-            </div>
-
-            <div className="p-6 overflow-y-auto space-y-6">
-              <div className="flex justify-end">
-                <div className="bg-gray-100 p-0.5 rounded-lg inline-flex items-center border">
-                  <button
-                    onClick={() => setSizeUnit("cm")}
-                    className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-all ${
-                      sizeUnit === "cm"
-                        ? "bg-white text-black shadow-sm"
-                        : "text-gray-500 hover:text-black"
-                    }`}
-                  >
-                    Metric (cm)
-                  </button>
-                  <button
-                    onClick={() => setSizeUnit("in")}
-                    className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-all ${
-                      sizeUnit === "in"
-                        ? "bg-white text-black shadow-sm"
-                        : "text-gray-500 hover:text-black"
-                    }`}
-                  >
-                    Imperial (in)
-                  </button>
-                </div>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  {product.name}
+                </h1>
+                <span className="text-gray-600 mb-5 mt-2">
+                  {" "}
+                  {product?.category && typeof product.category === "object"
+                    ? product.category.name
+                    : product?.category}
+                </span>
+                {product.numReviews > 0 && (
+                  <div className="flex items-center gap-4 mt-3">
+                    <div className="flex items-center gap-1">
+                      {[...Array(5)].map((_, i) => (
+                        <FiStar
+                          key={i}
+                          className={`h-4 w-4 ${
+                            i < Math.round(product.averageRating || 0)
+                              ? "fill-current text-gray-900"
+                              : "text-gray-300"
+                          }`}
+                        />
+                      ))}
+                      <span className="text-sm font-medium text-gray-900">
+                        {(product.averageRating || 0).toFixed(1)}
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        Reviews ({reviewCount})
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              <div className="border border-gray-200 rounded-xl overflow-hidden">
-                <table className="w-full text-left border-collapse text-sm">
-                  <thead>
-                    <tr className="bg-gray-50 font-semibold border-b border-gray-200 text-gray-700">
-                      <th className="py-3.5 px-4">Size</th>
-                      <th className="py-3.5 px-4">Chest</th>
-                      <th className="py-3.5 px-4">Waist</th>
-                      <th className="py-3.5 px-4">Hips</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100 text-gray-600">
-                    {sizeChartData.map((row) => (
-                      <tr
-                        key={row.size}
-                        className={`hover:bg-gray-50/80 transition-colors ${
-                          selectedSize === row.size
-                            ? "bg-gray-50 font-medium text-black"
-                            : ""
+              <div className="flex items-baseline gap-3 flex-wrap">
+                <span className="text-3xl font-bold text-gray-900">
+                  ${displayPrice.toFixed(2)}
+                </span>
+                {product.isFreeShipping && (
+                  <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
+                    Free Shipping
+                  </span>
+                )}
+              </div>
+              {product.colors?.length > 0 && (
+                <div className="space-y-3">
+                  <span className="text-sm font-medium text-gray-900">
+                    Color
+                  </span>
+                  <div className="flex gap-2 pb-2 flex-wrap">
+                    {product.colors.map((color) => (
+                      <button
+                        key={color.name}
+                        onClick={() => handleColorChange(color.name)}
+                        title={color.name}
+                        className={`relative w-16 h-16 flex-shrink-0 rounded-md overflow-hidden border-2 transition-all ${
+                          selectedColor === color.name
+                            ? "border-gray-900 scale-105"
+                            : "border-transparent opacity-60 hover:opacity-100"
                         }`}
                       >
-                        <td className="py-3.5 px-4 font-bold text-gray-900">
-                          {row.size}
-                        </td>
-                        <td className="py-3.5 px-4">{row[sizeUnit].chest}</td>
-                        <td className="py-3.5 px-4">{row[sizeUnit].waist}</td>
-                        <td className="py-3.5 px-4">{row[sizeUnit].hip}</td>
-                      </tr>
+                        <img
+                          src={getImageUrl(color.images?.[0])}
+                          alt={color.name}
+                          className="w-full h-full object-cover"
+                        />
+                        <span
+                          className="absolute bottom-1 right-1 h-3 w-3 rounded-full border border-white shadow"
+                          style={{ backgroundColor: color.code }}
+                        />
+                      </button>
                     ))}
-                  </tbody>
-                </table>
+                  </div>
+                </div>
+              )}
+              {product.sizes?.length > 0 && (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-gray-900">
+                      Size
+                    </span>
+                    <button
+                      onClick={() => setIsSizeGuideOpen(true)}
+                      className="text-sm text-gray-500 underline decoration-gray-400 hover:text-black font-medium transition-colors"
+                    >
+                      Size Guide
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {product.sizes.map((size) => (
+                      <button
+                        key={size}
+                        onClick={() => setSelectedSize(size)}
+                        disabled={product.stock === 0}
+                        className={`h-11 px-4 text-sm font-medium rounded-md border transition-all ${
+                          selectedSize === size
+                            ? "bg-gray-900 text-white border-gray-900"
+                            : product.stock === 0
+                              ? "border-gray-200 text-gray-300 cursor-not-allowed"
+                              : "border-gray-300 text-gray-900 hover:border-gray-900"
+                        }`}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-3">
+                <span className="text-sm font-medium text-gray-900">
+                  Quantity
+                </span>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => handleQuantityChange(-1)}
+                    disabled={quantity <= 1}
+                    className="h-10 w-10 inline-flex items-center justify-center rounded-md border border-gray-300 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <FiMinus className="h-4 w-4" />
+                  </button>
+                  <span className="w-12 text-center font-medium text-gray-900">
+                    {quantity}
+                  </span>
+                  <button
+                    onClick={() => handleQuantityChange(1)}
+                    disabled={quantity >= product.stock}
+                    className="h-10 w-10 inline-flex items-center justify-center rounded-md border border-gray-300 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <FiPlus className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
 
-              <div className="bg-gray-50 rounded-xl p-4 text-xs text-gray-600 space-y-3 leading-relaxed">
-                <p className="font-bold text-gray-900 text-sm mb-1">
-                  How To Measure
-                </p>
-                <div>
-                  <span className="font-semibold text-gray-900 block">
-                    1. Chest:
+              <div className="flex gap-3">
+                <button
+                  onClick={handleBuyNow}
+                  disabled={product.stock === 0}
+                  className="flex-1 h-14 rounded-md font-medium bg-gray-900 text-white border border-gray-900 transition-colors hover:bg-white hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Buy Now
+                </button>
+                <button
+                  onClick={() =>
+                    addToCart(product, {
+                      size: selectedSize,
+                      color: selectedColor,
+                      quantity,
+                    })
+                  }
+                  disabled={product.stock === 0}
+                  className="flex-1 h-14 rounded-md font-medium border border-gray-300 text-gray-900 transition-colors hover:bg-gray-900 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
+                </button>
+                <button
+                  onClick={() =>
+                    toggleWatchlist(product, {
+                      size: selectedSize,
+                      color: selectedColor,
+                    })
+                  }
+                  className="h-14 w-14 flex-shrink-0 inline-flex items-center justify-center rounded-md bg-gray-900 text-white transition-colors"
+                >
+                  <FiHeart
+                    className={`h-5 w-5 ${inWatchlist ? "fill-current" : ""}`}
+                  />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-200">
+                <div className="text-center">
+                  <FiTruck className="h-5 w-5 mx-auto text-gray-500 mb-1" />
+                  <span className="text-xs text-gray-500">
+                    {product.isFreeShipping
+                      ? "Free Delivery"
+                      : "Standard Delivery 50TK"}
                   </span>
-                  Measure around the fullest part of your chest, keeping the
-                  measuring tape horizontal.
                 </div>
-                <div>
-                  <span className="font-semibold text-gray-900 block">
-                    2. Waist:
-                  </span>
-                  Measure around the narrowest part (typically where your body
-                  bends side to side), keeping the tape horizontal.
+                <div className="text-center">
+                  <FiRefreshCw className="h-5 w-5 mx-auto text-gray-500 mb-1" />
+                  <span className="text-xs text-gray-500">7-Day Returns</span>
                 </div>
-                <div>
-                  <span className="font-semibold text-gray-900 block">
-                    3. Hips:
-                  </span>
-                  Measure around the fullest part of your hips, keeping the tape
-                  horizontal.
+                <div className="text-center">
+                  <FiShield className="h-5 w-5 mx-auto text-gray-500 mb-1" />
+                  <span className="text-xs text-gray-500">Secure Checkout</span>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
 
-      <div className="mt-10 border-t-2 border-gray-200">
-        <div className="flex border-b border-gray-200">
-          <button
-            onClick={() => setActiveTab("description")}
-            className={`px-6 py-4 text-sm font-semibold transition-colors border-b-2 -mb-px ${
-              activeTab === "description"
-                ? "border-gray-900 text-gray-900"
-                : "border-transparent text-gray-500"
-            }`}
-          >
-            Description
-          </button>
-          <button
-            onClick={() => setActiveTab("reviews")}
-            className={`px-6 py-4 text-sm font-semibold transition-colors border-b-2 -mb-px ${
-              activeTab === "reviews"
-                ? "border-gray-900 text-gray-900"
-                : "border-transparent text-gray-500"
-            }`}
-          >
-            Reviews ({reviewCount})
-          </button>
-        </div>
+          {isSizeGuideOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+              <div className="bg-white w-full max-w-2xl rounded-2xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
+                <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-900">
+                      Size Guide
+                    </h2>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      Find your perfect body measurement alignment
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setIsSizeGuideOpen(false)}
+                    className="p-2 hover:bg-gray-100 text-gray-500 hover:text-black rounded-full transition-colors"
+                  >
+                    <FiX className="h-5 w-5" />
+                  </button>
+                </div>
 
-        {activeTab === "reviews" && (
-          <div className="py-6">
-            <ProductReviews product={product} />
+                <div className="p-6 overflow-y-auto space-y-6">
+                  <div className="flex justify-end">
+                    <div className="bg-gray-100 p-0.5 rounded-lg inline-flex items-center border">
+                      <button
+                        onClick={() => setSizeUnit("cm")}
+                        className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-all ${
+                          sizeUnit === "cm"
+                            ? "bg-white text-black shadow-sm"
+                            : "text-gray-500 hover:text-black"
+                        }`}
+                      >
+                        Metric (cm)
+                      </button>
+                      <button
+                        onClick={() => setSizeUnit("in")}
+                        className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-all ${
+                          sizeUnit === "in"
+                            ? "bg-white text-black shadow-sm"
+                            : "text-gray-500 hover:text-black"
+                        }`}
+                      >
+                        Imperial (in)
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="border border-gray-200 rounded-xl overflow-hidden">
+                    <table className="w-full text-left border-collapse text-sm">
+                      <thead>
+                        <tr className="bg-gray-50 font-semibold border-b border-gray-200 text-gray-700">
+                          <th className="py-3.5 px-4">Size</th>
+                          <th className="py-3.5 px-4">Chest</th>
+                          <th className="py-3.5 px-4">Waist</th>
+                          <th className="py-3.5 px-4">Hips</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100 text-gray-600">
+                        {sizeChartData.map((row) => (
+                          <tr
+                            key={row.size}
+                            className={`hover:bg-gray-50/80 transition-colors ${
+                              selectedSize === row.size
+                                ? "bg-gray-50 font-medium text-black"
+                                : ""
+                            }`}
+                          >
+                            <td className="py-3.5 px-4 font-bold text-gray-900">
+                              {row.size}
+                            </td>
+                            <td className="py-3.5 px-4">
+                              {row[sizeUnit].chest}
+                            </td>
+                            <td className="py-3.5 px-4">
+                              {row[sizeUnit].waist}
+                            </td>
+                            <td className="py-3.5 px-4">{row[sizeUnit].hip}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="bg-gray-50 rounded-xl p-4 text-xs text-gray-600 space-y-3 leading-relaxed">
+                    <p className="font-bold text-gray-900 text-sm mb-1">
+                      How To Measure
+                    </p>
+                    <div>
+                      <span className="font-semibold text-gray-900 block">
+                        1. Chest:
+                      </span>
+                      Measure around the fullest part of your chest, keeping the
+                      measuring tape horizontal.
+                    </div>
+                    <div>
+                      <span className="font-semibold text-gray-900 block">
+                        2. Waist:
+                      </span>
+                      Measure around the narrowest part (typically where your
+                      body bends side to side), keeping the tape horizontal.
+                    </div>
+                    <div>
+                      <span className="font-semibold text-gray-900 block">
+                        3. Hips:
+                      </span>
+                      Measure around the fullest part of your hips, keeping the
+                      tape horizontal.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="mt-10 border-t border-gray-200">
+            <div className="flex border-b border-gray-200">
+              <button
+                onClick={() => setActiveTab("description")}
+                className={`px-6 py-4 text-sm font-semibold transition-colors border-b-2 -mb-px ${
+                  activeTab === "description"
+                    ? "border-gray-900 text-gray-900"
+                    : "border-transparent text-gray-500"
+                }`}
+              >
+                Description
+              </button>
+              <button
+                onClick={() => setActiveTab("reviews")}
+                className={`px-6 py-4 text-sm font-semibold transition-colors border-b-2 -mb-px ${
+                  activeTab === "reviews"
+                    ? "border-gray-900 text-gray-900"
+                    : "border-transparent text-gray-500"
+                }`}
+              >
+                <ReviewsTabLabel />
+              </button>
+            </div>
+
+            {activeTab === "reviews" && (
+              <div className="py-6">
+                <ProductReviews product={product} />
+              </div>
+            )}
+
+            {activeTab === "description" && (
+              <div
+                className="py-6 max-w-3xl prose prose-sm prose-gray"
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(product.description || ""),
+                }}
+              />
+            )}
           </div>
-        )}
-
-        {activeTab === "description" && (
-          <div
-            className="py-6 max-w-3xl prose prose-sm prose-gray"
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(product.description || ""),
-            }}
+        </div>
+        <div className="w-full h-full pl-5 pr-5 md:pl-10 md:pr-10">
+          {recommendedProducts.length > 0 && (
+            <ProductCarousel
+              status="recommended"
+              title="Recommandations"
+              products={recommendedProducts}
+            />
+          )}
+          <ProductCarousel
+            status="newDrop"
+            title="Explore Latest"
+            products={newDropData}
           />
-        )}
+        </div>
       </div>
-    </div>
+    </ReviewProvider>
   );
 }
