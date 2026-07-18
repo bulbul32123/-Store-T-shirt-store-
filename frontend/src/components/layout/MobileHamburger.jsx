@@ -60,10 +60,8 @@ export default function MobileHamburger() {
     const fetchRealCategories = async () => {
       try {
         const categories = await productsApi.getCategories();
-        // Map the API categories into the formatting expected by NextSideBar
         const formattedLists = categories.map((cat) => ({
           name: cat.name,
-          // If your category routes require an ID or slug, you can customize this:
           link: `/products?category=${cat._id}`,
         }));
 
