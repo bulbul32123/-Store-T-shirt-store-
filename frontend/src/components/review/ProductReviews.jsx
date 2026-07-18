@@ -1,6 +1,6 @@
 // ProductReview.jsx
 'use client';
-import { ReviewProvider, useReviews } from '@/context/ReviewContext';
+import { useReviews } from '@/context/ReviewContext';
 import ReviewSummaryWidget from './ReviewSummaryWidget';
 import ReviewCard          from './ReviewCard';
 import ReviewForm          from './ReviewForm';
@@ -158,10 +158,8 @@ function ReviewsInner() {
 }
 
 // ── Public export — wraps with the provider ───────────────────────────────────
-export default function ProductReviews({ product }) {
-    return (
-        <ReviewProvider product={product}>
-            <ReviewsInner />
-        </ReviewProvider>
-    );
+export default function ProductReviews() {
+    return (<ReviewsInner /> );
 }
+
+
