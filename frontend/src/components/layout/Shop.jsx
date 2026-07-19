@@ -18,7 +18,6 @@ export default function Shop({ megaMenuContent }) {
         Shop All <IoIosArrowDown className={`transition-all duration-200 ease-in-out ${isOpenShopAllDropdown ? 'rotate-180' : ''}`} />
       </motion.button>
 
-      {/* AnimatePresence helps handle exit animations */}
       <AnimatePresence>
         {isOpenShopAllDropdown && (
           <motion.div
