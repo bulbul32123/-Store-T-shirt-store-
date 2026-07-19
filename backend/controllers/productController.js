@@ -15,8 +15,14 @@ exports.getAvailableColors = async (req, res) => {
   try {
     const colors = await Product.aggregate([
       { $unwind: "$colors" },
-      { $group: { _id: "$colors.name", code: { $first: "$colors.code" } } },
-      { $project: { _id: 0, name: "$_id", code: 1 } },
+      {
+        $group: {
+          _id: { $toLower: { $trim: { input: "$colors.name" } } },
+          name: { $first: { $trim: { input: "$colors.name" } } },
+          code: { $first: "$colors.code" },
+        },
+      },
+      { $project: { _id: 0, name: 1, code: 1 } },
       { $sort: { name: 1 } },
     ]);
     res.status(200).json(colors);
@@ -345,7 +351,6 @@ exports.createProduct = async (req, res) => {
     }
 
     const slug = await generateUniqueSlug(body.name);
-    console.log(`Generated unique slug: ${slug}`);
 
     if (body.colors) {
       body.colors = formatColorsData(body.colors);
@@ -397,6 +402,10 @@ exports.createProduct = async (req, res) => {
     if (body.popular !== undefined)
       productData.popular = Boolean(
         body.popular === true || body.popular === "true",
+      );
+    if (body.newDrop !== undefined)
+      productData.newDrop = Boolean(
+        body.newDrop === true || body.newDrop === "true",
       );
     if (body.isFreeShipping !== undefined)
       productData.isFreeShipping = Boolean(
@@ -519,6 +528,7 @@ exports.addColorImages = async (req, res) => {
         folder: `payra-store/products/${product.slug}/${colorName}`,
         width: 800,
         crop: "scale",
+        format: "jpg",
       });
 
       return {
@@ -643,6 +653,7 @@ exports.uploadProductImages = async (req, res) => {
         folder: "payra-store/products",
         width: 800,
         crop: "scale",
+        format: "jpg",
       });
 
       return {
