@@ -25,6 +25,7 @@ exports.getRecommendations = async (req, res) => {
       const fallback = await Product.find({
         $or: [{ featured: true }, { popular: true }],
       })
+        .populate("category", "name")
         .limit(FALLBACK_LIMIT)
         .lean();
       return res.json({ products: fallback, personalized: false });
@@ -50,6 +51,7 @@ exports.getRecommendations = async (req, res) => {
       const fallback = await Product.find({
         $or: [{ featured: true }, { popular: true }],
       })
+        .populate("category", "name")
         .limit(FALLBACK_LIMIT)
         .lean();
       return res.json({ products: fallback, personalized: false });
@@ -70,21 +72,23 @@ exports.getRecommendations = async (req, res) => {
       const fallback = await Product.find({
         $or: [{ featured: true }, { popular: true }],
       })
+        .populate("category", "name")
         .limit(FALLBACK_LIMIT)
         .lean();
       return res.json({ products: fallback, personalized: false });
     }
 
-    const categoryIds = topCategories.map((c) => c._id);
+    const categoryIds = topCategories.map((c) => c.category);
 
     const recommendations = await Product.find({
       category: { $in: categoryIds },
-      _id: { $nin: seenObjectIds }, 
+      _id: { $nin: seenObjectIds },
     })
+      .populate("category", "name")
       .sort({ averageRating: -1, popular: -1, createdAt: -1 })
       .limit(FALLBACK_LIMIT)
       .lean();
-  
+
     if (recommendations.length < FALLBACK_LIMIT) {
       const excludeIds = [
         ...seenObjectIds,
@@ -94,6 +98,7 @@ exports.getRecommendations = async (req, res) => {
         _id: { $nin: excludeIds },
         $or: [{ featured: true }, { popular: true }],
       })
+        .populate("category", "name")
         .limit(FALLBACK_LIMIT - recommendations.length)
         .lean();
       recommendations.push(...topUp);
