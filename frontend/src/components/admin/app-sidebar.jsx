@@ -49,9 +49,9 @@ export function AppSidebar(props) {
   return (
     <Sidebar {...props} className="bg-white!">
       <SidebarHeader className="border-b bg-white">
-        <Link href="/admin/dashboard" className="flexCenter gap-1 ">
+        <Link href="/admin/dashboard" className="flex h-[46.5px] items-center gap-3 md:pl-5">
           <Image src="/Logo.svg" alt="logo" width={80} height={80} />{" "}
-          <h2 className="text-[20.5px] font-bold px-2 py-2">Admin</h2>
+          <Image src="/Admin.svg" alt="logo" width={60} height={60} />{" "}
         </Link>
       </SidebarHeader>
 

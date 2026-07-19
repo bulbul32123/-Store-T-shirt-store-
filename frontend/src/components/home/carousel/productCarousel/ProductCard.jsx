@@ -48,7 +48,7 @@ export default function ProductCard({ product, status, isLoading = false }) {
   const hasDiscount = discountPercent > 0;
 
   return (
-    <Link href={`/product/${product?._id}`} className="inline-block w-[300px]">
+    <Link href={`/product/${product?._id}?${product.slug}`} className="inline-block w-[300px]">
       <div className="bg-white p-1 relative">
         {hasDiscount && (
           <span className="absolute z-10 top-4 left-3 text-black bg-primary py-1 px-2 rounded-full text-xs">
@@ -70,6 +70,7 @@ export default function ProductCard({ product, status, isLoading = false }) {
             src={firstImage}
             alt={product?.name || "Product"}
             fill
+            unoptimized={firstImage?.endsWith(".avif")}
             className="object-cover object-center"
             sizes="(max-width:768px) 100vw, 300px"
           />
