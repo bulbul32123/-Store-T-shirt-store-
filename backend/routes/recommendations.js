@@ -4,6 +4,6 @@ const {
   getRecommendations,
 } = require("../controllers/recommendationController");
 
-router.get("/", getRecommendations); // no `protect` — must work for guests too
+router.get("/", getRecommendations); 
 
 module.exports = router;
