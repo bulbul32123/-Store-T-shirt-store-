@@ -17,7 +17,6 @@ export async function generateMetadata({ searchParams }) {
 
   let titleSnippet = "Shop All Products";
 
-  // 1. Handle live database category mapping
   if (category) {
     try {
       const categories = await productsApi.getCategories();
@@ -34,7 +33,6 @@ export async function generateMetadata({ searchParams }) {
       titleSnippet = "Category Collection";
     }
   }
-  // 2. Handle specific query flags explicitly matching your Nav links
   else if (status && STATUS_TITLES[status]) {
     titleSnippet = STATUS_TITLES[status];
   } else if (sale === "true") {

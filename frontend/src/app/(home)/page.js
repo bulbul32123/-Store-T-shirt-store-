@@ -25,10 +25,9 @@ export const metadata = {
   },
 };
 
-// Home pagee
 export default async function Home() {
   const cookieStore = await cookies();
-  const cookieHeader = cookieStore.toString(); 
+  const cookieHeader = cookieStore.toString();
 
   const [{ data }, recRes] = await Promise.all([
     axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/products`),
@@ -58,11 +57,10 @@ export default async function Home() {
   const featuredProducts = products.filter((product) => product.featured);
   const latestProducts = products.filter((product) => product.newDrop);
   const popularProducts = products.filter((product) => product.popular);
-const bannerRes = await axios
-  .get(`${process.env.NEXT_PUBLIC_API_URL}/api/banner`)
-  .catch(() => ({ data: { banner: null } }));
-const bannerData = bannerRes.data.banner;
-
+  const bannerRes = await axios
+    .get(`${process.env.NEXT_PUBLIC_API_URL}/api/banner`)
+    .catch(() => ({ data: { banner: null } }));
+  const bannerData = bannerRes.data.banner;
 
   return (
     <div className="w-full h-full pl-5 pr-5 md:pl-10 md:pr-10">
@@ -78,14 +76,6 @@ const bannerData = bannerRes.data.banner;
 
       <BrowseByCategory />
 
-       {recommendedProducts.length > 0 && (
-        <ProductCarousel
-          status="recommended"
-          title="Recommandations"
-          products={recommendedProducts}
-        />
-      )} 
-
       <ProductCarousel
         status="newDrop"
         title="Explore Latest"
@@ -98,6 +88,14 @@ const bannerData = bannerRes.data.banner;
       />
 
       {bannerData && <Banner banner={bannerData} />}
+
+      {recommendedProducts.length > 0 && (
+        <ProductCarousel
+          status="recommended"
+          title="Recommandations"
+          products={recommendedProducts}
+        />
+      )}
 
       <ProductCarousel
         status="popular"
