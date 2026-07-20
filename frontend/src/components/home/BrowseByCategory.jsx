@@ -4,15 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 const BrowseByCategory = async ({ isLoading = false }) => {
-  // Output will contain the remaining 6 categories
 
   const { data } = await axios.get(`${API_URL}/api/categories`);
   let categories = data.categories.slice(0, 6);
-  // Graphic Tees
-  // Classic Fit
-  // Long Sleeve
-  // Oversized
-  console.log("categories", data);
   return (
     <section className="max-w-6xl mx-auto pb-16 pt-9">
       <h2 className="text-3xl font-bold mb-6">Browse by Categories</h2>
@@ -40,7 +34,8 @@ const BrowseByCategory = async ({ isLoading = false }) => {
                   <Image
                     src={cat?.image?.url}
                     alt={cat.name}
-                    fill
+                    width={100}
+                    height={100}
                     className={`object-cover w-full h-full transition duration-300`}
                   />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
