@@ -82,7 +82,7 @@ export default function ProductCarousel({
         className="overflow-x-auto whitespace-nowrap scroll-smooth hide-scrollbar gap-4"
       >
         {isLoading
-          ? // Render 4 static placeholder card skeletons when API is executing
+          ? 
             Array.from({ length: 4 }).map((_, index) => (
               <ProductCard key={`skeleton-${index}`} isLoading={true} />
             ))
@@ -95,14 +95,16 @@ export default function ProductCarousel({
             ))}
       </div>
 
-      <div className="flex justify-center mt-6">
-        <Link
-          href={`/products?status=${status}`}
-          className="px-6 py-2 rounded-full border border-border text-sm hover:bg-muted transition"
-        >
-          View All
-        </Link>
-      </div>
+      {status === "recommended" ? <span></span> : (
+        <div className="flex justify-center mt-6">
+          <Link
+            href={`/products?status=${status}`}
+            className="px-6 py-2 rounded-full border border-border text-sm hover:bg-muted transition"
+          >
+            View All
+          </Link>
+        </div>
+      )}
     </section>
   );
 }
