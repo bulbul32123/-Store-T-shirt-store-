@@ -21,7 +21,7 @@ export default function Carousel({ items }) {
 
   const startAutoSlide = () => {
     if (!isLoading) {
-      intervalRef.current = setInterval(goToNext, 6000);
+      intervalRef.current = setInterval(goToNext, 7000);
     }
   };
 
@@ -30,7 +30,6 @@ export default function Carousel({ items }) {
   };
 
   useEffect(() => {
-    // Preload all images
     const imagePromises = items.map((item) => {
       return new Promise((resolve) => {
         const img = new Image();
@@ -42,7 +41,7 @@ export default function Carousel({ items }) {
           }));
           resolve();
         };
-        img.onerror = () => resolve(); // Still resolve on error to not block loading
+        img.onerror = () => resolve();
       });
     });
 
@@ -61,7 +60,7 @@ export default function Carousel({ items }) {
   }, [isLoading]);
 
   useEffect(() => {
-    setOpenDetails(false); // close when slide changes
+    setOpenDetails(false);
   }, [currentIndex]);
 
   const currentItem = items[currentIndex];
@@ -72,7 +71,7 @@ export default function Carousel({ items }) {
       onMouseEnter={stopAutoSlide}
       onMouseLeave={startAutoSlide}
     >
-      <div className="relative w-full h-[500px] overflow-hidden group rounded-3xl inverted-radius">
+      <div className="relative w-full h-[600px] overflow-hidden group rounded-3xl inverted-radius">
         {isLoading ? (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-200 rounded-3xl animate-pulse"></div>
         ) : (
