@@ -86,49 +86,50 @@ export const CartProvider = ({ children }) => {
     }, [flushNow]);
 
  const addToCart = (product, { size, color, quantity = 1 } = {}) => {
-    const resolvedSize = size || product.sizes?.[0] || 'M';
-    const resolvedColor = color || product.colors?.[0]?.name || null;
+    console.log("Product", product)
+   const resolvedSize = size || product.sizes?.[0] || "M";
+   const resolvedColor = color || product.colors?.[0]?.name || null;
 
-    const image = getImageForColor(product, resolvedColor);
+   const image = getImageForColor(product, resolvedColor);
 
-    const lineId = `${product._id}-${resolvedSize}-${resolvedColor}`;
+   const lineId = `${product._id}-${resolvedSize}-${resolvedColor}`;
 
-    const existing = items.find((i) => i.lineId === lineId);
+   const existing = items.find((i) => i.lineId === lineId);
 
-    if (existing) {
-        setItems((prev) =>
-            prev.map((i) =>
-                i.lineId === lineId
-                    ? { ...i, quantity: i.quantity + quantity }
-                    : i
-            )
-        );
+   if (existing) {
+     setItems((prev) =>
+       prev.map((i) =>
+         i.lineId === lineId ? { ...i, quantity: i.quantity + quantity } : i,
+       ),
+     );
 
-        toast.success(
-            `${product.name} quantity updated (${existing.quantity + quantity} in cart)`
-        );
+     toast.success(
+       `${product.name} quantity updated (${existing.quantity + quantity} in cart)`,
+     );
 
-        return;
-    }
+     return;
+   }
 
-    setItems((prev) => [
-        ...prev,
-        {
-            lineId,
-            productId: product._id,
-            name: product.name,
-            slug: product.slug,
-            price: computeFinalPrice(product),
-            image,
-            size: resolvedSize,
-            color: resolvedColor,
-            quantity,
-            addedAt: Date.now(),
-        },
-    ]);
+   // ... inside your addToCart definition ...
+   setItems((prev) => [
+     ...prev,
+     {
+       lineId,
+       productId: product._id,
+       name: product.name,
+       slug: product.slug,
+       price: computeFinalPrice(product),
+       image,
+       size: resolvedSize,
+       color: resolvedColor,
+       quantity,
+       isFreeShipping: product.isFreeShipping, // 👈 Add this line here
+       addedAt: Date.now(),
+     },
+   ]);
 
-    toast.success(`${product.name} added to cart`);
-};
+   toast.success(`${product.name} added to cart`);
+ };;
 
 const getProductQuantityInCart = (productId) =>
     items.filter((i) => i.productId === productId).reduce((sum, i) => sum + i.quantity, 0);
