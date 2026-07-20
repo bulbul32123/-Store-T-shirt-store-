@@ -1,3 +1,4 @@
+//src/context/authContext.js
 "use client";
 import { API_URL } from "@/utils/config";
 import axios from "axios";
@@ -39,6 +40,7 @@ export const AuthProvider = ({ children }) => {
         const { data } = await axios.get(`${API_URL}/api/auth/me`);
         if (data.success && data.user) {
           setUser(data.user);
+            console.log("user data on context:", data.user);
         } else {
           setUser(null);
         }
