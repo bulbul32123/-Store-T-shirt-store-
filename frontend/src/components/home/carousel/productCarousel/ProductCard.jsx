@@ -3,19 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function ProductCard({ product, status, isLoading = false }) {
-  // Loading Skeleton State
   if (isLoading) {
     return (
       <div className="inline-block w-[300px] bg-white p-1 animate-pulse">
-        {/* Image Skeleton */}
         <div className="relative w-full h-[19rem] rounded-2xl bg-gray-200 mb-3" />
-        {/* Category Skeleton */}
+
         <div className="h-3 bg-gray-200 rounded w-1/3 mb-2" />
-        {/* Title Skeleton */}
+
         <div className="h-5 bg-gray-200 rounded w-3/4 mb-2" />
-        {/* Price Skeleton */}
+
         <div className="h-6 bg-gray-200 rounded w-1/2 mb-3" />
-        {/* Color Variants Skeleton */}
+
         <div className="flex gap-1">
           <div className="w-3 h-3 rounded-full bg-gray-200" />
           <div className="w-3 h-3 rounded-full bg-gray-200" />
@@ -25,7 +23,6 @@ export default function ProductCard({ product, status, isLoading = false }) {
     );
   }
 
-  // Actual Product Card Logic
   const discountPercent = Number(product?.discount || 0);
   const finalPrice =
     discountPercent > 0
@@ -34,6 +31,8 @@ export default function ProductCard({ product, status, isLoading = false }) {
           (Number(product.price || 0) * discountPercent) / 100
         ).toFixed(2)
       : Number(product.price || 0).toFixed(2);
+
+  const hasDiscount = discountPercent > 0;
 
   const firstImage =
     product?.colors?.[0]?.images?.[0]?.url ||
@@ -45,10 +44,12 @@ export default function ProductCard({ product, status, isLoading = false }) {
     ...new Set(product?.colors?.map((color) => color.code) || []),
   ];
 
-  const hasDiscount = discountPercent > 0;
 
   return (
-    <Link href={`/product/${product?._id}?${product.slug}`} className="inline-block w-[300px]">
+    <Link
+      href={`/product/${product?._id}?${product.slug}`}
+      className="inline-block w-[300px]"
+    >
       <div className="bg-white p-1 relative">
         {hasDiscount && (
           <span className="absolute z-10 top-4 left-3 text-black bg-primary py-1 px-2 rounded-full text-xs">
@@ -75,8 +76,8 @@ export default function ProductCard({ product, status, isLoading = false }) {
             sizes="(max-width:768px) 100vw, 300px"
           />
         </div>
-        <p className="text-xs text-muted-foreground mb-1">
-          {product?.category?.name || product?.category}
+        <p className="text-xs text-muted-foreground mb-1 flex gap-2">
+          {product?.category?.name || product?.category} <span>{product?.averageRating}</span>
         </p>
         <h3 className="font-extrabold text-sm md:text-lg mb-1 line-clamp-2">
           {product?.name}
