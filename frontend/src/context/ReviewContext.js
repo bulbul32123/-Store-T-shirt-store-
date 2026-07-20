@@ -67,14 +67,13 @@ export function ReviewProvider({ children, product }) {
         setLoadingMore(false);
       }
     },
-    [sortBy, filterRating],
+    [sortBy, filterRating, product?._id],
   );
 
   useEffect(() => {
     statsRef.current = false;
     fetchReviews(1, false);
   }, [fetchReviews]);
-
 
   const scheduleVoteSync = useCallback(
     (reviewId, targetState) => {
@@ -130,6 +129,7 @@ export function ReviewProvider({ children, product }) {
       }),
     );
     const current = reviews.find((r) => r._id === reviewId);
+    const nextState = current?.isLiked ? "none" : "like";
 
     scheduleVoteSync(reviewId, nextState);
   };
@@ -158,6 +158,7 @@ export function ReviewProvider({ children, product }) {
     const nextState = current?.isDisliked ? "none" : "dislike";
     scheduleVoteSync(reviewId, nextState);
   };
+
   const handleReport = async (reviewId, title, details) => {
     try {
       await axios.post(
@@ -170,6 +171,7 @@ export function ReviewProvider({ children, product }) {
       toast.error(err.response?.data?.message || "Failed to report review");
     }
   };
+
   const handleEdit = async (reviewId, formData) => {
     const oldReview = editingReview;
     const { data } = await axios.put(
@@ -177,7 +179,7 @@ export function ReviewProvider({ children, product }) {
       formData,
       { withCredentials: true },
     );
-    const updated = data.review;
+    const updated = data.review || data.data || data;
 
     setReviews((prev) =>
       prev.map((r) =>
@@ -254,14 +256,16 @@ export function ReviewProvider({ children, product }) {
       { withCredentials: true },
     );
 
+    const created = data.review || data.data || data;
+
     const newReview = {
-      ...data.review,
-      displayName: data.review.isAnonymous
+      ...created,
+      displayName: created.isAnonymous
         ? "Anonymous"
-        : data.review.user?.name || "You",
-      userAvatar: data.review.isAnonymous
+        : created.user?.name || "You",
+      userAvatar: created.isAnonymous
         ? null
-        : data.review.user?.profilePicture?.url || null,
+        : created.user?.profilePicture?.url || null,
       likesCount: 0,
       dislikesCount: 0,
       isLiked: false,
@@ -314,6 +318,7 @@ export function ReviewProvider({ children, product }) {
     closeForm();
     toast.success("Review published!");
   };
+
   const loadMore = () => {
     if (pagination.page < pagination.pages && !loadingMore)
       fetchReviews(pagination.page + 1, true);
