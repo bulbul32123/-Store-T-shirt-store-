@@ -1,4 +1,3 @@
-//uploadsController.js
 const cloudinary = require("cloudinary").v2;
 const fs = require("fs");
 const path = require("path");
@@ -13,23 +12,11 @@ exports.uploadImage = async (req, res) => {
   let tempFilePath = null;
 
   try {
-    console.log(
-      "Upload request received:",
-      req.file ? req.file.originalname : "no file",
-    );
-
     if (!req.file) {
       return res
         .status(400)
         .json({ success: false, message: "No image file provided" });
     }
-
-    console.log("File details:", {
-      name: req.file.originalname,
-      size: `${(req.file.size / 1024).toFixed(2)} KB`,
-      type: req.file.mimetype,
-      path: req.file.path,
-    });
 
     const maxSize = 5 * 1024 * 1024;
     if (req.file.size > maxSize) {
@@ -48,12 +35,6 @@ exports.uploadImage = async (req, res) => {
 
     tempFilePath = req.file.path;
 
-    console.log("Cloudinary credentials status:", {
-      cloudName: process.env.CLOUDINARY_CLOUD_NAME ? "set" : "missing",
-      apiKey: process.env.CLOUDINARY_API_KEY ? "set" : "missing",
-      apiSecret: process.env.CLOUDINARY_API_SECRET ? "set" : "missing",
-    });
-
     if (
       !process.env.CLOUDINARY_CLOUD_NAME ||
       !process.env.CLOUDINARY_API_KEY ||
@@ -64,8 +45,6 @@ exports.uploadImage = async (req, res) => {
         message: "Server configuration error: Missing Cloudinary credentials",
       });
     }
-
-    console.log("Attempting Cloudinary upload...");
 
     const folderMap = {
       product: "payra-store/products",
@@ -84,11 +63,6 @@ exports.uploadImage = async (req, res) => {
       req.file.path,
       uploadOptions,
     );
-
-    console.log("Cloudinary upload successful:", {
-      url: result.secure_url,
-      publicId: result.public_id,
-    });
 
     try {
       fs.unlinkSync(req.file.path);
