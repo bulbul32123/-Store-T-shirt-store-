@@ -1,4 +1,3 @@
-// Admin Routes
 const express = require("express");
 const router = express.Router();
 const reportController = require("../controllers/reportController");
@@ -39,22 +38,18 @@ router.route("/coupons").get(getCoupons).post(createCoupon);
 router.patch("/coupons/:id/toggle-status", toggleCouponStatus);
 router.delete("/coupons/:id", deleteCoupon);
 
-// Apply auth + admin guard to every route in this file
+
 router.use(protect);
 router.use(admin);
 
-// Stats must come before parameterised routes
+
 router.get("/reviews/stats", reviewController.getReviewStats);
 
-// List
-// admin reviews routes — add
 router.get("/reviews/reports", reviewController.getReportedReviews);
-// existing delete route stays the same, controller behavior changed above
 router.get("/reviews", reviewController.getReviews);
 
 router.patch("/reviews/bulk", reviewController.bulkUpdateStatus);
 
-// Single-review moderation
 router.patch("/reviews/:id/approve", reviewController.approveReview);
 router.patch("/reviews/:id/reject", reviewController.rejectReview);
 router.delete("/reviews/:id", reviewController.deleteReview);
@@ -63,7 +58,7 @@ router.get("/reviews/:id", reviewController.getReviewById);
 router.get("/chats", chatController.getAdminChats);
 router.get("/chats/:id", chatController.getAdminChatById);
 router.patch("/chats/:id/notes", chatController.updateChatCustomerNote);
-router.delete("/chats/:id", chatController.deleteChat); // was closeChat
+router.delete("/chats/:id", chatController.deleteChat);
 
 router.get("/reports/overview", reportController.getReportOverview);
 router.get("/reports/acquisition", reportController.getAcquisitionTrend);
