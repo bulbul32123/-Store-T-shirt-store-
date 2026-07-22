@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
 const { notifyAdmins } = require("../utils/notify");
 const User = require("../models/User");
+const { PASSWORD_REGEX, PASSWORD_MESSAGE } = require("../utils/passwordPolicy");
 const generateToken = (id, role) => {
   return jwt.sign({ id, role }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN || "7d",
@@ -46,13 +47,11 @@ exports.register = async (req, res) => {
       });
     }
 
-    if (password.length < 6) {
-      return res.status(400).json({
-        success: false,
-        message: "Password must be at least 6 characters long",
-      });
+    if (!PASSWORD_REGEX.test(password)) {
+      return res
+        .status(400)
+        .json({ success: false, message: PASSWORD_MESSAGE });
     }
-
     const userExists = await User.findOne({ email: email.toLowerCase() });
     if (userExists) {
       return res.status(400).json({
@@ -96,7 +95,6 @@ exports.register = async (req, res) => {
   }
 };
 
-
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -136,7 +134,7 @@ exports.login = async (req, res) => {
     res.json({
       success: true,
       message: "Login successful",
-      user: userPayload, 
+      user: userPayload,
       token,
     });
   } catch (err) {
@@ -185,7 +183,7 @@ exports.forgotPassword = async (req, res) => {
 
     const resetToken = uuidv4();
     user.resetPasswordToken = resetToken;
-    user.resetPasswordExpires = Date.now() + 60 * 60 * 1000; 
+    user.resetPasswordExpires = Date.now() + 60 * 60 * 1000;
     await user.save();
 
     const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}`;
@@ -216,11 +214,10 @@ exports.resetPassword = async (req, res) => {
       });
     }
 
-    if (password.length < 6) {
-      return res.status(400).json({
-        success: false,
-        message: "Password must be at least 6 characters long",
-      });
+    if (!PASSWORD_REGEX.test(password)) {
+      return res
+        .status(400)
+        .json({ success: false, message: PASSWORD_MESSAGE });
     }
 
     const user = await User.findOne({
@@ -274,7 +271,7 @@ exports.updateProfile = async (req, res) => {
       name,
       email,
       password,
-      oldPassword, 
+      oldPassword,
       gender,
       phoneNumber,
       dateOfBirth,
@@ -304,12 +301,10 @@ exports.updateProfile = async (req, res) => {
           message: "Incorrect current password. Please try again.",
         });
       }
-
-      if (password.length < 6) {
-        return res.status(400).json({
-          success: false,
-          message: "Password must be at least 6 characters long",
-        });
+      if (!PASSWORD_REGEX.test(password)) {
+        return res
+          .status(400)
+          .json({ success: false, message: PASSWORD_MESSAGE });
       }
 
       user.password = password;
