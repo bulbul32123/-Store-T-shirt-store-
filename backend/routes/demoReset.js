@@ -1,3 +1,4 @@
+//backend/routes/demoRoutes
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
@@ -5,7 +6,6 @@ const path = require("path");
 
 const { getLastActivity } = require("../utils/activityTracker");
 
-// ...rest unchanged
 
 const MODELS = {
   Banner: "../models/Banner",

@@ -11,28 +11,29 @@ const generateToken = (id, role) => {
 };
 
 const setTokenCookie = (res, token) => {
+  const isProduction = process.env.NODE_ENV === "production";
+
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    // Cross-site cookies (Vercel <-> Render) REQUIRE sameSite: 'none' and secure: true
+    secure: isProduction ? true : false,
+    sameSite: isProduction ? "none" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000,
     path: "/",
   };
-
-  if (process.env.NODE_ENV !== "production") {
-    cookieOptions.secure = false;
-  }
 
   res.cookie("token", token, cookieOptions);
 };
 
 const clearTokenCookie = (res) => {
+  const isProduction = process.env.NODE_ENV === "production";
+
   res.cookie("token", "", {
     httpOnly: true,
     expires: new Date(0),
     path: "/",
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    secure: isProduction ? true : false,
+    sameSite: isProduction ? "none" : "lax",
   });
 };
 
