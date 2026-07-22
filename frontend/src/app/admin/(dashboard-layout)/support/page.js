@@ -1,5 +1,5 @@
 "use client";
-import toast from "react-hot-toast";
+
 import ChatSidebar from "@/components/admin/support/ChatSidebar";
 import ChatThread from "@/components/admin/support/ChatThread";
 import CustomerPanel from "@/components/admin/support/CustomerPanel";
@@ -7,9 +7,10 @@ import { useAdminNotifications } from "@/context/AdminNotificationContext";
 import { adminChatApi } from "@/lib/adminChatApi";
 import { getSocket } from "@/lib/socket";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 
-export default function AdminSupportPage() {
+function SupportContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -43,7 +44,7 @@ export default function AdminSupportPage() {
           setChats((prev) =>
             prev.map((c) => (c._id === id ? { ...c, unreadByAdmin: 0 } : c)),
           );
-          markChatRead(id); // ADD
+          markChatRead(id);
           const socket = getSocket();
           if (!socket.connected) socket.connect();
           if (joinedRoom.current !== id) {
@@ -56,6 +57,7 @@ export default function AdminSupportPage() {
     },
     [markChatRead],
   );
+
   useEffect(() => {
     const chatId = searchParams.get("chatId");
     if (chatId) {
@@ -130,7 +132,6 @@ export default function AdminSupportPage() {
     };
   }, [activeChat, fetchChats]);
 
-  
   return (
     <div className="flex h-[calc(100vh-4rem)] overflow-hidden bg-white rounded-xl border border-gray-200">
       <ChatSidebar
@@ -153,5 +154,17 @@ export default function AdminSupportPage() {
         onToggleCollapse={() => setRightCollapsed((v) => !v)}
       />
     </div>
+  );
+}
+
+export default function AdminSupportPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-6 text-gray-500">Loading support chat...</div>
+      }
+    >
+      <SupportContent />
+    </Suspense>
   );
 }
