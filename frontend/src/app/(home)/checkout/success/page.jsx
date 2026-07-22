@@ -16,6 +16,7 @@ export default function CheckoutSuccessRedirectPage() {
       router.replace("/");
     }
   }, [router, searchParams]);
+  
 
   return (
     <div className="flex min-h-[50vh] items-center justify-center">
