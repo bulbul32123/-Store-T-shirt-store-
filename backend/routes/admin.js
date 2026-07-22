@@ -4,7 +4,7 @@ const reportController = require("../controllers/reportController");
 const { admin, protect } = require("../middleware/authMiddleware");
 const adminController = require("../controllers/adminController");
 const adminOrderController = require("../controllers/adminOrderController");
-const adminCustomerController = require("../controllers/adminCustomerController"); // ← NEW
+const adminCustomerController = require("../controllers/adminCustomerController"); 
 const reviewController = require("../controllers/reviewController");
 const chatController = require("../controllers/chatController");
 
@@ -13,7 +13,7 @@ const {
   getCoupons,
   toggleCouponStatus,
   deleteCoupon,
-} = require("../controllers/couponcontroller");
+} = require("../controllers/couponController");
 
 router.use(protect);
 router.use(admin);
@@ -38,10 +38,8 @@ router.route("/coupons").get(getCoupons).post(createCoupon);
 router.patch("/coupons/:id/toggle-status", toggleCouponStatus);
 router.delete("/coupons/:id", deleteCoupon);
 
-
 router.use(protect);
 router.use(admin);
-
 
 router.get("/reviews/stats", reviewController.getReviewStats);
 

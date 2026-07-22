@@ -2,7 +2,7 @@ const Order = require("../models/Order");
 const User = require("../models/User");
 const Coupon = require("../models/Coupon");
 const Product = require("../models/Product");
-const { createRewardCoupon } = require("./couponcontroller");
+const { createRewardCoupon } = require("./couponController");
 const { notifyUser } = require("../utils/notify");
 const { notifyAdmins } = require("../utils/notify");
 const { recalculateUserSegment } = require("../utils/segmentUser");
@@ -145,7 +145,7 @@ exports.createCheckoutSession = async (req, res) => {
           price_data: {
             currency: "usd",
             product_data: { name: `Order (${enrichedItems.length} item(s))` },
-            unit_amount: Math.round(totalPrice * 100), 
+            unit_amount: Math.round(totalPrice * 100),
           },
           quantity: 1,
         },
@@ -374,7 +374,7 @@ exports.createOrder = async (req, res) => {
         customization: item.customization,
       });
 
-      product.stock -= item.quantity; 
+      product.stock -= item.quantity;
       await product.save();
     }
 
@@ -483,7 +483,7 @@ exports.createOrder = async (req, res) => {
       couponDoc.usedCount += 1;
       await couponDoc.save();
     }
-    recalculateUserSegment(req.user.id); 
+    recalculateUserSegment(req.user.id);
     let rewardCoupon = null;
     if (totalPrice > 200) {
       try {
