@@ -1,40 +1,52 @@
-'use client';
-import { useState, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+"use client";
+
+import BulkActionsBar from "@/components/BulkActionsBar";
+import OrderDetailDrawer from "@/components/OrderDetailDrawer";
+import OrderFiltersBar from "@/components/OrderFiltersBar";
+import OrderMetricsCards from "@/components/OrderMetricsCards";
+import OrdersTable from "@/components/OrdersTable";
+import Pagination from "@/components/Pagination";
+import OrdersPageSkeleton from "@/components/admin/LoadingSkeletons/OrdersPageSkeleton";
+import { useOrders } from "@/hooks/useOrders";
+import { adminOrdersApi } from "@/lib/adminOrdersApi";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useOrders } from '@/hooks/useOrders';
-import { adminOrdersApi } from '@/lib/adminOrdersApi';
-import OrderMetricsCards from '@/components/OrderMetricsCards';
-import OrderFiltersBar from '@/components/OrderFiltersBar';
-import BulkActionsBar from '@/components/BulkActionsBar';
-import OrdersTable from '@/components/OrdersTable';
-import Pagination from '@/components/Pagination';
-import OrderDetailDrawer from '@/components/OrderDetailDrawer';
-import OrdersPageSkeleton from '@/components/admin/LoadingSkeletons/OrdersPageSkeleton';
 
 function exportOrdersAsCsv(orders) {
-    const headers = ['Order ID', 'Date', 'Customer', 'Email', 'Total', 'Payment Status', 'Fulfillment Status'];
-    const rows = orders.map((o) => [
-        o.displayId,
-        new Date(o.createdAt).toISOString(),
-        o.customer.name,
-        o.customer.email,
-        o.totalPrice,
-        o.paymentStatus,
-        o.orderStatus
-    ]);
-    const csv = [headers, ...rows].map((row) => row.map((cell) => `"${cell}"`).join(',')).join('\n');
+  const headers = [
+    "Order ID",
+    "Date",
+    "Customer",
+    "Email",
+    "Total",
+    "Payment Status",
+    "Fulfillment Status",
+  ];
+  const rows = orders.map((o) => [
+    o.displayId,
+    new Date(o.createdAt).toISOString(),
+    o.customer.name,
+    o.customer.email,
+    o.totalPrice,
+    o.paymentStatus,
+    o.orderStatus,
+  ]);
+  const csv = [headers, ...rows]
+    .map((row) => row.map((cell) => `"${cell}"`).join(","))
+    .join("\n");
 
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `orders-export-${Date.now()}.csv`;
-    link.click();
-    URL.revokeObjectURL(url);
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `orders-export-${Date.now()}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
 }
 
-export default function AdminOrdersPage() {
+// Inner component that accesses searchParams safely
+function OrdersContent() {
   const {
     orders,
     loading,
@@ -60,10 +72,9 @@ export default function AdminOrdersPage() {
     const highlightId = searchParams.get("highlight");
     if (highlightId) {
       setActiveOrderId(highlightId);
-      // clean the URL so refresh/back doesn't reopen it
       router.replace("/admin/orders", { scroll: false });
     }
-  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchParams, router]);
 
   const toggleSelect = (id) =>
     setSelectedIds((prev) =>
@@ -86,6 +97,7 @@ export default function AdminOrdersPage() {
       toast.error(err.message || "Bulk update failed");
     }
   };
+
   const handleArchiveToggle = async (orderId, archive) => {
     try {
       await adminOrdersApi.archiveOrder(orderId, archive);
@@ -100,9 +112,11 @@ export default function AdminOrdersPage() {
     exportOrdersAsCsv(selectedOrders);
     toast.success(`Exported ${selectedOrders.length} order(s) to CSV`);
   };
+
   if (loading && orders.length === 0) {
     return <OrdersPageSkeleton />;
   }
+
   return (
     <div>
       <div className="flex items-center justify-between mb-5">
@@ -161,5 +175,14 @@ export default function AdminOrdersPage() {
         onOrderUpdated={refetch}
       />
     </div>
+  );
+}
+
+// Default export wrapped with Suspense boundary
+export default function AdminOrdersPage() {
+  return (
+    <Suspense fallback={<OrdersPageSkeleton />}>
+      <OrdersContent />
+    </Suspense>
   );
 }
