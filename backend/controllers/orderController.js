@@ -272,7 +272,7 @@ exports.handleStripeWebhook = async (req, res) => {
     const { notifyUser } = require("../utils/notify");
     await notifyUser(pending.user, {
       type: "order_update",
-      title: "Order placed",
+      title: "Order placed so",
       message: `Your order #${order.orderNumber} has been placed successfully.`,
       link: `/profile/orders/${order._id}`,
     });
@@ -749,7 +749,7 @@ exports.cancelOrder = async (req, res) => {
       type: "order_update",
       title: "Order Cancelled",
       message: `Order #${updatedOrder.orderNumber} was cancelled${req.user.role === "admin" ? " by admin" : " by customer"}.`,
-      link: `/?highlight=${updatedOrder._id}`,
+      link: `/admin/orders/?highlight=${updatedOrder._id}`,
     });
     res.status(200).json(updatedOrder);
   } catch (error) {
