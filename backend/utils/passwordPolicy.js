@@ -3,3 +3,4 @@ const PASSWORD_REGEX =
 const PASSWORD_MESSAGE =
   "Password must be 8+ characters and include uppercase, lowercase, a number, and a special character";
 module.exports = { PASSWORD_REGEX, PASSWORD_MESSAGE };
+

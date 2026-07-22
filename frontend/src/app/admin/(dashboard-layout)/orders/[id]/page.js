@@ -175,7 +175,6 @@ export default function OrderDetailPage() {
   const router = useRouter();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [notes, setNotes] = useState("");
   const [statusModalOpen, setStatusModalOpen] = useState(false);
   const [archiving, setArchiving] = useState(false);
 
@@ -198,7 +197,6 @@ export default function OrderDetailPage() {
       .getById(id)
       .then((data) => {
         setOrder(data);
-        setNotes(data.internalNotes || "");
       })
       .catch(() => toast.error("Failed to load order"))
       .finally(() => setLoading(false));
@@ -219,15 +217,6 @@ export default function OrderDetailPage() {
       load();
     } catch (err) {
       toast.error(err.message || "Failed to update status");
-    }
-  };
-
-  const saveNotes = async () => {
-    try {
-      await adminOrdersApi.updateOrder(id, { internalNotes: notes });
-      toast.success("Notes saved");
-    } catch (err) {
-      toast.error(err.message || "Failed to save notes");
     }
   };
 
@@ -423,25 +412,6 @@ export default function OrderDetailPage() {
                 ))}
               </div>
             )}
-          </div>
-
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
-            <h3 className="text-sm font-semibold text-gray-900 mb-2">
-              Internal admin notes
-            </h3>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={3}
-              placeholder="Notes visible only to admins…"
-              className="w-full text-sm border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            />
-            <button
-              onClick={saveNotes}
-              className="mt-2 flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-gray-900 text-white hover:bg-gray-800"
-            >
-              <Check className="h-3.5 w-3.5" /> Save note
-            </button>
           </div>
         </div>
 

@@ -1,11 +1,14 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { CheckCircle2, Circle } from "lucide-react";
+import { FiAlertTriangle, FiX, FiLoader } from "react-icons/fi";
 import { ordersApi } from "@/lib/ordersApi";
+import ConfirmModal from "@/components/common/ConfirmModal";
 
 const STEPS = ["pending", "processing", "confirmed", "shipped", "delivered"];
 
@@ -15,6 +18,7 @@ export default function OrderDetailPage() {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
   const fetchOrder = () => {
     setLoading(true);
@@ -30,12 +34,12 @@ export default function OrderDetailPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  const handleCancel = async () => {
-    if (!confirm("Cancel this order?")) return;
+  const handleCancelConfirm = async () => {
     setCancelling(true);
     try {
       await ordersApi.cancel(id);
-      toast.success("Order cancelled");
+      toast.success("Order cancelled successfully");
+      setIsCancelModalOpen(false);
       fetchOrder();
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to cancel order");
@@ -47,6 +51,7 @@ export default function OrderDetailPage() {
   if (loading) {
     return <OrderDetailSkeleton />;
   }
+
   if (!order) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 text-center text-gray-500">
@@ -59,14 +64,13 @@ export default function OrderDetailPage() {
   const currentStepIndex = STEPS.indexOf(order.orderStatus);
   const canCancel =
     !isCancelled && !["shipped", "delivered"].includes(order.orderStatus);
-
   const isDelivered = order.orderStatus === "delivered";
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
       <button
         onClick={() => router.push("/profile/orders")}
-        className="text-sm text-gray-500 mb-6"
+        className="text-sm text-gray-500 mb-6 hover:text-black transition-colors"
       >
         ← Back to Orders
       </button>
@@ -80,11 +84,10 @@ export default function OrderDetailPage() {
         </div>
         {canCancel && (
           <button
-            onClick={handleCancel}
-            disabled={cancelling}
-            className="text-sm border border-red-300 text-red-600 px-4 py-2 rounded-xl disabled:opacity-50"
+            onClick={() => setIsCancelModalOpen(true)}
+            className="text-sm border border-red-300 text-red-600 px-4 py-2 rounded-xl hover:bg-red-50 transition"
           >
-            {cancelling ? "Cancelling..." : "Cancel Order"}
+            Cancel Order
           </button>
         )}
       </div>
@@ -163,7 +166,11 @@ export default function OrderDetailPage() {
                     </span>
                   ) : (
                     <Link
-                      href={`/product/${typeof item.product === "object" ? item.product._id : item.product || item.productId}`}
+                      href={`/product/${
+                        typeof item.product === "object"
+                          ? item.product._id
+                          : item.product || item.productId
+                      }`}
                       className="inline-block mt-2 text-xs font-medium text-black underline hover:text-gray-600 transition"
                     >
                       Write a review
@@ -214,18 +221,30 @@ export default function OrderDetailPage() {
           {order.shippingAddress.country}
         </p>
       </div>
+
+      {/* CONFIRMATION MODAL */}
+      <ConfirmModal
+        isOpen={isCancelModalOpen}
+        onClose={() => setIsCancelModalOpen(false)}
+        onConfirm={handleCancelConfirm}
+        title="Cancel Order"
+        message={`Are you sure you want to cancel Order #${order.orderNumber}? This action cannot be undone.`}
+        confirmText="Yes, Cancel Order"
+        cancelText="No, Keep Order"
+        type="danger"
+        isLoading={cancelling}
+      />
     </div>
   );
 }
+
 
 // ─── ORDER DETAIL SKELETON ────────────────────────────────────────────────────
 function OrderDetailSkeleton() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-10 animate-pulse">
-      {/* Back Button */}
       <div className="h-4 w-28 bg-gray-200 rounded mb-6" />
 
-      {/* Header section (Title & Button) */}
       <div className="flex items-center justify-between mb-8">
         <div className="space-y-2">
           <div className="h-8 w-48 bg-gray-200 rounded-lg" />
@@ -234,7 +253,6 @@ function OrderDetailSkeleton() {
         <div className="h-9 w-28 bg-gray-200 rounded-xl" />
       </div>
 
-      {/* Tracker Steps Bar */}
       <div className="flex justify-between mb-10 items-center">
         {[1, 2, 3, 4, 5].map((step, idx) => (
           <div key={idx} className="flex-1 flex flex-col items-center relative">
@@ -247,7 +265,6 @@ function OrderDetailSkeleton() {
         ))}
       </div>
 
-      {/* Items List */}
       <div className="space-y-4 mb-8">
         {[1, 2].map((i) => (
           <div key={i} className="flex items-center gap-4 border-b pb-4">
@@ -262,7 +279,6 @@ function OrderDetailSkeleton() {
         ))}
       </div>
 
-      {/* Bill Summary Block */}
       <div className="border rounded-2xl p-6 space-y-3">
         {[1, 2, 3].map((i) => (
           <div key={i} className="flex justify-between">
@@ -276,7 +292,6 @@ function OrderDetailSkeleton() {
         </div>
       </div>
 
-      {/* Address Block */}
       <div className="border rounded-2xl p-6 mt-6 space-y-2">
         <div className="h-5 w-32 bg-gray-200 rounded" />
         <div className="h-4 w-5/6 bg-gray-200 rounded" />

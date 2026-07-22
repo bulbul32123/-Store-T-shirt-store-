@@ -92,7 +92,7 @@ function Pagination({ page, pages, total, limit, onPageChange }) {
 const DEFAULT_FILTERS = { rating: '', search: '', dateFrom: '', dateTo: '', sort: 'newest' };
 
 export default function ReviewsPage() {
-  const [activeTab, setActiveTab] = useState("all"); // 'all' | 'reported'
+  const [activeTab, setActiveTab] = useState("all");
 
   const [reviews, setReviews] = useState([]);
   const [stats, setStats] = useState(null);
@@ -366,7 +366,6 @@ if (id) {
         />
       </div>
 
-      {/* Tabs */}
       <div className="flex items-center gap-1 bg-white rounded-xl border border-gray-100 p-1.5 w-fit">
         <button
           onClick={() => setActiveTab("all")}

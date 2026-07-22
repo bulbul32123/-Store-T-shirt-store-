@@ -1,4 +1,3 @@
-// customer admin page
 "use client";
 import CustomerDrawer from "@/components/admin/CustomerDrawer";
 import CustomersTable from "@/components/admin/CustomersTable";

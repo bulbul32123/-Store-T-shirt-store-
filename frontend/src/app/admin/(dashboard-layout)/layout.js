@@ -1,4 +1,3 @@
-// 'use client'
 import "../../globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import AdminSidebarLayout from "@/components/admin/AdminSidebarLayout";

@@ -1,7 +1,6 @@
-// app/product/[id]/page.js
-
 import ProductDetailClient from "@/components/productDetail/ProductDetailClient";
 import axios from "axios";
+import { cookies } from "next/headers";
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
@@ -53,6 +52,25 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default function ProductDetailPage() {
-  return <ProductDetailClient />;
+export default async function ProductDetailPage() {
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.toString();
+
+  const { data } = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/recommendations`,
+    {
+      headers: { Cookie: cookieHeader },
+    },
+  );
+  const recommendedProducts = data.products || [];
+  const { data: newData } = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/products`,
+  );
+  const latestProducts = newData.products.filter((product) => product.newDrop);
+  return (
+    <ProductDetailClient
+      recommendedProducts={recommendedProducts}
+      newDropData={latestProducts}
+    />
+  );
 }

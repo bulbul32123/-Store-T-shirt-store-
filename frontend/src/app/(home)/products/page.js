@@ -3,7 +3,6 @@ import { ProductsPageInner, SkeletonCard } from "@/components/products/ProductsP
 import { productsApi } from "@/lib/productsApi";
 import { Suspense } from "react";
 
-// Maps static query statuses to human-readable Meta Title phrases
 const STATUS_TITLES = {
   featured: "Featured Products",
   newDrop: "New Drops & Arrivals",
