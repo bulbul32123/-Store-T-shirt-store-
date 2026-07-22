@@ -1,3 +1,4 @@
+//Admin dashboard
 const Product = require("../models/Product");
 const Order = require("../models/Order");
 const User = require("../models/User");
@@ -84,7 +85,7 @@ exports.getStats = async (req, res) => {
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
     sixMonthsAgo.setDate(1);
 
-    const revenueTrend = await Order.aggregate([
+    const revenueTrendRaw = await Order.aggregate([
       { $match: { paymentStatus: "paid", createdAt: { $gte: sixMonthsAgo } } },
       {
         $group: {
@@ -96,8 +97,24 @@ exports.getStats = async (req, res) => {
           orders: { $sum: 1 },
         },
       },
-      { $sort: { "_id.year": 1, "_id.month": 1 } },
     ]);
+    const revTrendMap = new Map(
+      revenueTrendRaw.map((t) => [`${t._id.year}-${t._id.month}`, t]),
+    );
+    const revenueTrend = [];
+    const cursor = new Date(sixMonthsAgo);
+    const nowMonth = new Date();
+    while (cursor <= nowMonth) {
+      const y = cursor.getFullYear(),
+        m = cursor.getMonth() + 1;
+      const existing = revTrendMap.get(`${y}-${m}`);
+      revenueTrend.push({
+        _id: { year: y, month: m },
+        revenue: existing?.revenue || 0,
+        orders: existing?.orders || 0,
+      });
+      cursor.setMonth(cursor.getMonth() + 1);
+    }
 
     const topProducts = await Order.aggregate([
       { $match: { paymentStatus: "paid" } },

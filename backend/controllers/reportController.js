@@ -1,4 +1,6 @@
+//reportContoller
 const User = require("../models/User");
+const { recalculateAllSegments } = require("../utils/segmentUser");
 const Order = require("../models/Order");
 
 function getDateRange(range) {
@@ -15,9 +17,26 @@ function getDateRange(range) {
       start.setFullYear(end.getFullYear() - 1);
       break;
     default:
-      start.setDate(end.getDate() - 30); 
+      start.setDate(end.getDate() - 30);
   }
   return { start, end };
+}
+
+function fillRange(start, end, groupByDay, dataMap, keys) {
+  const result = [];
+  const cursor = new Date(start);
+  while (cursor <= end) {
+    const key = groupByDay
+      ? `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}-${String(cursor.getDate()).padStart(2, "0")}`
+      : `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}`;
+    const existing = dataMap.get(key);
+    const row = { date: key };
+    keys.forEach((k) => (row[k] = existing?.[k] || 0));
+    result.push(row);
+    if (groupByDay) cursor.setDate(cursor.getDate() + 1);
+    else cursor.setMonth(cursor.getMonth() + 1);
+  }
+  return result;
 }
 
 exports.getReportOverview = async (req, res) => {
@@ -139,13 +158,17 @@ exports.getAcquisitionTrend = async (req, res) => {
       },
       { $sort: { "_id.y": 1, "_id.m": 1, "_id.d": 1 } },
     ]);
-
-    const formatted = trend.map((t) => ({
-      date: groupByDay
-        ? `${t._id.y}-${String(t._id.m).padStart(2, "0")}-${String(t._id.d).padStart(2, "0")}`
-        : `${t._id.y}-${String(t._id.m).padStart(2, "0")}`,
-      newCustomers: t.count,
-    }));
+    const dataMap = new Map(
+      trend.map((t) => [
+        groupByDay
+          ? `${t._id.y}-${String(t._id.m).padStart(2, "0")}-${String(t._id.d).padStart(2, "0")}`
+          : `${t._id.y}-${String(t._id.m).padStart(2, "0")}`,
+        { newCustomers: t.count },
+      ]),
+    );
+    const formatted = fillRange(start, end, groupByDay, dataMap, [
+      "newCustomers",
+    ]);
 
     res.json({ trend: formatted });
   } catch (err) {
@@ -158,6 +181,8 @@ exports.getRetentionTrend = async (req, res) => {
   try {
     const { range = "30d" } = req.query;
     const { start, end } = getDateRange(range);
+    const groupByDay = range === "7d" || range === "30d";
+
     const orders = await Order.aggregate([
       {
         $match: {
@@ -168,44 +193,54 @@ exports.getRetentionTrend = async (req, res) => {
       { $sort: { createdAt: 1 } },
       {
         $group: {
-          _id: { y: { $year: "$createdAt" }, m: { $month: "$createdAt" } },
-          orders: { $push: { user: "$user", createdAt: "$createdAt" } },
+          _id: groupByDay
+            ? {
+                y: { $year: "$createdAt" },
+                m: { $month: "$createdAt" },
+                d: { $dayOfMonth: "$createdAt" },
+              }
+            : { y: { $year: "$createdAt" }, m: { $month: "$createdAt" } },
+          orders: { $push: { user: "$user" } },
         },
       },
-      { $sort: { "_id.y": 1, "_id.m": 1 } },
+      { $sort: { "_id.y": 1, "_id.m": 1, "_id.d": 1 } },
     ]);
 
     const seenUsers = new Set();
-    const formatted = [];
+    const dataMap = new Map();
     for (const bucket of orders) {
-      let newCount = 0;
-      let returningCount = 0;
-      const usersThisMonth = new Set();
-      for (const o of bucket.orders) {
-        const uid = o.user.toString();
-        usersThisMonth.add(uid);
-      }
-      for (const uid of usersThisMonth) {
+      const key = groupByDay
+        ? `${bucket._id.y}-${String(bucket._id.m).padStart(2, "0")}-${String(bucket._id.d).padStart(2, "0")}`
+        : `${bucket._id.y}-${String(bucket._id.m).padStart(2, "0")}`;
+      const usersThisBucket = new Set(
+        bucket.orders.map((o) => o.user.toString()),
+      );
+      let newCount = 0,
+        returningCount = 0;
+      for (const uid of usersThisBucket) {
         if (seenUsers.has(uid)) returningCount++;
         else newCount++;
         seenUsers.add(uid);
       }
-      formatted.push({
-        date: `${bucket._id.y}-${String(bucket._id.m).padStart(2, "0")}`,
+      dataMap.set(key, {
         newCustomers: newCount,
         returningCustomers: returningCount,
       });
     }
 
+    const formatted = fillRange(start, end, groupByDay, dataMap, [
+      "newCustomers",
+      "returningCustomers",
+    ]);
     res.json({ trend: formatted });
   } catch (err) {
     console.error("getRetentionTrend:", err);
     res.status(500).json({ message: "Failed to load retention trend" });
   }
 };
-
 exports.getCustomerSegments = async (req, res) => {
   try {
+    await recalculateAllSegments();
     const segments = await User.aggregate([
       { $match: { role: "user" } },
       { $group: { _id: "$segment", count: { $sum: 1 } } },
@@ -250,13 +285,18 @@ exports.getRevenueTrend = async (req, res) => {
       { $sort: { "_id.y": 1, "_id.m": 1, "_id.d": 1 } },
     ]);
 
-    const formatted = trend.map((t) => ({
-      date: groupByDay
-        ? `${t._id.y}-${String(t._id.m).padStart(2, "0")}-${String(t._id.d).padStart(2, "0")}`
-        : `${t._id.y}-${String(t._id.m).padStart(2, "0")}`,
-      revenue: t.revenue,
-      orders: t.orders,
-    }));
+    const dataMap = new Map(
+      trend.map((t) => [
+        groupByDay
+          ? `${t._id.y}-${String(t._id.m).padStart(2, "0")}-${String(t._id.d).padStart(2, "0")}`
+          : `${t._id.y}-${String(t._id.m).padStart(2, "0")}`,
+        { revenue: t.revenue, orders: t.orders },
+      ]),
+    );
+    const formatted = fillRange(start, end, groupByDay, dataMap, [
+      "revenue",
+      "orders",
+    ]);
 
     res.json({ trend: formatted });
   } catch (err) {

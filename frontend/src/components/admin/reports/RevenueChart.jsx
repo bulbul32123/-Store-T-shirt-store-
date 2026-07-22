@@ -1,3 +1,4 @@
+//admin/reports/RevenuceChart
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -5,7 +6,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 const chartConfig = {
   revenue: { label: "Revenue", color: "hsl(var(--chart-1))" },
@@ -40,14 +41,16 @@ export default function RevenueChart({ data, loading }) {
                 axisLine={false}
                 fontSize={11}
                 width={40}
+                domain={["dataMin - 20", "dataMax + 20"]}
               />
               <ChartTooltip content={<ChartTooltipContent />} />
               <Line
-                type="monotone"
+                type="natural"
                 dataKey="revenue"
                 stroke="var(--color-revenue)"
                 strokeWidth={2}
-                dot={false}
+                dot={{ r: 4, strokeWidth: 0, fill: "var(--color-revenue)" }}
+                activeDot={{ r: 6 }}
               />
             </LineChart>
           </ChartContainer>

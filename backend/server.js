@@ -103,6 +103,12 @@ app.use("/api/notifications", require("./routes/notifications"));
 app.use("/api/coupons", require("./routes/coupons"));
 app.use("/api/recommendations", require("./routes/recommendations"));
 app.use("/api/upload", require("./routes/upload"));
+app.use("/api/demo", require("./routes/demoReset"));
+const { trackActivity } = require("./utils/activityTracker");
+app.use((req, res, next) => {
+  if (req.path.startsWith("/api/demo/reset")) return next();
+  trackActivity(req, res, next);
+});
 
 app.use((err, req, res, next) => {
   console.error("Unhandled error:", err);

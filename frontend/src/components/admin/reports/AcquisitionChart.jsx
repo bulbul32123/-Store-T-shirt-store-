@@ -40,15 +40,23 @@ export default function AcquisitionChart({ data, loading }) {
                 axisLine={false}
                 fontSize={11}
                 width={30}
+                domain={[0, "dataMax + 2"]}
+                allowDecimals={false}
               />
               <ChartTooltip content={<ChartTooltipContent />} />
               <Area
-                type="monotone"
+                type="natural"
                 dataKey="newCustomers"
                 stroke="var(--color-newCustomers)"
                 fill="var(--color-newCustomers)"
                 fillOpacity={0.2}
                 strokeWidth={2}
+                dot={{
+                  r: 4,
+                  strokeWidth: 0,
+                  fill: "var(--color-newCustomers)",
+                }}
+                activeDot={{ r: 6 }}
               />
             </AreaChart>
           </ChartContainer>
