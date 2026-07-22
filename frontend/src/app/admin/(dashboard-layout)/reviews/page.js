@@ -1,4 +1,5 @@
 'use client';
+
 import ReviewDetailDrawer from '@/components/admin/reviews/ReviewDetailDrawer';
 import ReviewFiltersBar from '@/components/admin/reviews/ReviewFiltersBar';
 import ReviewsTable from '@/components/admin/reviews/ReviewsTable';
@@ -6,7 +7,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { adminReviewsApi } from '@/lib/adminReviewsApi';
 import { getSocket } from '@/lib/socket';
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, Suspense } from 'react';
 import toast from 'react-hot-toast';
 import { FiFlag, FiLoader, FiMessageSquare, FiStar, FiTrash2, FiX } from 'react-icons/fi';
 
@@ -91,7 +92,7 @@ function Pagination({ page, pages, total, limit, onPageChange }) {
 
 const DEFAULT_FILTERS = { rating: '', search: '', dateFrom: '', dateTo: '', sort: 'newest' };
 
-export default function ReviewsPage() {
+function ReviewsContent() {
   const [activeTab, setActiveTab] = useState("all");
 
   const [reviews, setReviews] = useState([]);
@@ -121,14 +122,14 @@ export default function ReviewsPage() {
     const id = searchParams.get("id");
     const tabParam = searchParams.get("tab");
     if (tabParam === "reported") setActiveTab("reported");
-if (id) {
-  adminReviewsApi
-    .getReviewById(id)
-    .then((data) => setDetailReview(data.review)) // ← also see note below
-    .catch((err) => toast.error(err.message || "Failed to load review"));
-  router.replace("/admin/reviews", { scroll: false });
-}
-  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (id) {
+      adminReviewsApi
+        .getReviewById(id)
+        .then((data) => setDetailReview(data.review))
+        .catch((err) => toast.error(err.message || "Failed to load review"));
+      router.replace("/admin/reviews", { scroll: false });
+    }
+  }, [searchParams, router]);
 
   const fetchStats = useCallback(async () => {
     setStatsLoading(true);
@@ -159,8 +160,6 @@ if (id) {
         };
         const data = await adminReviewsApi.getReviews(params);
         setReviews(data.reviews);
-        console.log(data);
-        
         setPagination(data.pagination);
       } catch (err) {
         toast.error(err.message || "Failed to load reviews");
@@ -199,7 +198,6 @@ if (id) {
     setSelectedIds(new Set());
     if (activeTab === "all") fetchAllReviews(1);
     else fetchReportedReviews();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
   const isFirstRender = useRef(true);
@@ -212,7 +210,6 @@ if (id) {
     setPage(1);
     setSelectedIds(new Set());
     fetchAllReviews(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     filters.rating,
     debouncedSearch,
@@ -229,7 +226,6 @@ if (id) {
       return;
     }
     fetchAllReviews(page);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   useEffect(() => {
@@ -249,7 +245,6 @@ if (id) {
     return () => {
       socket.off("review:reported", handleReported);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
   const refetchCurrentTab = useCallback(() => {
@@ -449,5 +444,13 @@ if (id) {
         />
       )}
     </div>
+  );
+}
+
+export default function ReviewsPage() {
+  return (
+    <Suspense fallback={<div className="p-6 text-gray-500">Loading reviews...</div>}>
+      <ReviewsContent />
+    </Suspense>
   );
 }
