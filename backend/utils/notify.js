@@ -37,7 +37,6 @@ exports.notifyUser = async (
   userId,
   { type, title, message, link = null, image = null, meta = {} },
 ) => {
-  console.log("review error1", userId, type, title, message, link);
   try {
     const notification = await Notification.create({
       recipient: userId,
