@@ -8,8 +8,6 @@ const http = require("http");
 const jwt = require("jsonwebtoken");
 const { Server } = require("socket.io");
 const { initSocket } = require("./utils/socket");
-const cron = require("node-cron");
-const { restoreDemoData } = require("./scripts/restoreDefaultData");
 const { registerChatEvents } = require("./utils/chatSocket")
 
 const fs = require("fs");
@@ -48,7 +46,6 @@ mongoose
   .then(() => {
     console.log("✅ MongoDB Atlas connected successfully");
     ensureAdmin();
-    cron.schedule("0 */6 * * *", restoreDemoData);
   })
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err.message);
