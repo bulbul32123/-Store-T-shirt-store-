@@ -16,8 +16,8 @@ const setTokenCookie = (res, token) => {
   const cookieOptions = {
     httpOnly: true,
     // Cross-site cookies (Vercel <-> Render) REQUIRE sameSite: 'none' and secure: true
-    secure: isProduction ? true : false,
-    sameSite: isProduction ? "none" : "lax",
+    secure: true,
+    sameSite: 'None',
     maxAge: 7 * 24 * 60 * 60 * 1000,
     path: "/",
   };
@@ -32,8 +32,8 @@ const clearTokenCookie = (res) => {
     httpOnly: true,
     expires: new Date(0),
     path: "/",
-    secure: isProduction ? true : false,
-    sameSite: isProduction ? "none" : "lax",
+    secure: true,
+    sameSite: 'None',
   });
 };
 

@@ -1,7 +1,6 @@
 import { jwtVerify } from "jose";
 import { NextResponse } from "next/server";
 
-const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 export async function proxy(req) {
   const { pathname } = req.nextUrl;
 
@@ -10,16 +9,21 @@ export async function proxy(req) {
   }
 
   const token = req.cookies.get("token")?.value;
-  console.log("token", token);
   let isAdmin = false;
 
   if (token) {
     try {
-      const { payload } = await jwtVerify(token, secret);
-      console.log("secret", secret);
-      console.log("payload", payload);
+      // Encode secret properly
+      const secretKey = new TextEncoder().encode(process.env.JWT_SECRET);
+
+      const { payload } = await jwtVerify(token, secretKey, {
+        algorithms: ["HS256"], // Default algorithm used by jsonwebtoken
+      });
+
+      console.log("Verified Payload:", payload);
       isAdmin = payload.role === "admin";
-    } catch {
+    } catch (err) {
+      console.error("JWT Verification Error:", err.message);
       isAdmin = false;
     }
   }
