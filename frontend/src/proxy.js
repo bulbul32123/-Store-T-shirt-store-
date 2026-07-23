@@ -15,6 +15,7 @@ export async function proxy(req) {
   if (token) {
     try {
       const { payload } = await jwtVerify(token, secret);
+      console.log(payload)
       isAdmin = payload.role === "admin";
     } catch {
       isAdmin = false;
