@@ -13,11 +13,18 @@ const { registerChatEvents } = require("./utils/chatSocket");
 const fs = require("fs");
 dotenv.config();
 const app = express();
+app.set("trust proxy", 1);
 
 app.use(cookieParser());
+const allowedOrigins = (
+  process.env.CLIENT_URL || "http://localhost:3000"
+).split(",");
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: (origin, cb) => {
+      if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+      cb(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   }),
 );
