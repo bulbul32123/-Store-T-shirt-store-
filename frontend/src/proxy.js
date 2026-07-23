@@ -10,12 +10,14 @@ export async function proxy(req) {
   }
 
   const token = req.cookies.get("token")?.value;
+  consoloe.log("token", token);
   let isAdmin = false;
 
   if (token) {
     try {
       const { payload } = await jwtVerify(token, secret);
-      console.log(payload)
+      consoloe.log("secret", secret);
+      consoloe.log("payload", payload);
       isAdmin = payload.role === "admin";
     } catch {
       isAdmin = false;

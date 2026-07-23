@@ -24,15 +24,10 @@ export default function AccountForm() {
       country: user?.address?.country || "Bangladesh",
     },
   });
-  console.log("form", form);
 
   const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
-    console.log("useEffect fired");
-    console.log("user in effect:", user);
-    console.log("useEffect fired");
-    console.log("user in effect:", user);
 
     if (user) {
       const newForm = {
@@ -48,8 +43,6 @@ export default function AccountForm() {
           country: user.address?.country || "Bangladesh",
         },
       };
-
-      console.log("Setting form:", newForm);
       setForm(newForm);
     }
   }, [user]);

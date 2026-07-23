@@ -40,7 +40,6 @@ export const AuthProvider = ({ children }) => {
         const { data } = await axios.get(`${API_URL}/api/auth/me`);
         if (data.success && data.user) {
           setUser(data.user);
-            console.log("user data on context:", data.user);
         } else {
           setUser(null);
         }
