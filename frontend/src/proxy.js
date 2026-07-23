@@ -4,32 +4,51 @@ import { NextResponse } from "next/server";
 export async function proxy(req) {
   const { pathname } = req.nextUrl;
 
+  // Allow login page access without infinite loop
   if (pathname === "/admin/login") {
     return NextResponse.next();
   }
 
-  const token = req.cookies.get("token")?.value;
+  // Get token cookie from request
+  const tokenCookie = req.cookies.get("token");
+  const token = tokenCookie?.value;
+
+  console.log("--- PROXY DEBUG ---");
+  console.log("Cookie found:", !!token);
+
   let isAdmin = false;
 
   if (token) {
     try {
-      // Encode secret properly
-      const secretKey = new TextEncoder().encode(process.env.JWT_SECRET);
+      // Ensure secret exists
+      const secretStr = process.env.JWT_SECRET;
+      if (!secretStr) {
+        throw new Error(
+          "JWT_SECRET is not defined in Next.js environment variables!",
+        );
+      }
 
+      const secretKey = new TextEncoder().encode(secretStr);
+
+      // Verify JWT with jose using HS256 algorithm used by jsonwebtoken
       const { payload } = await jwtVerify(token, secretKey, {
-        algorithms: ["HS256"], // Default algorithm used by jsonwebtoken
+        algorithms: ["HS256"],
       });
 
-      console.log("Verified Payload:", payload);
-      isAdmin = payload.role === "admin";
+      console.log("Decoded Payload:", payload);
+      isAdmin = payload?.role === "admin";
+      console.log("Is Admin Check:", isAdmin);
     } catch (err) {
-      console.error("JWT Verification Error:", err.message);
+      console.error("JWT Verification Failed:", err.message);
       isAdmin = false;
     }
+  } else {
+    console.log("No 'token' cookie attached to request.");
   }
 
   if (!isAdmin) {
-    return NextResponse.redirect(new URL("/admin/login", req.url));
+    console.log("Redirecting to /admin/login...");
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
   return NextResponse.next();
