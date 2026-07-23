@@ -3,6 +3,7 @@
 import CouponFormModal from "@/components/admin/coupons/CouponFormModal";
 import CouponsTable from "@/components/admin/coupons/CouponsTable";
 import CouponsPageSkeleton from "@/components/admin/LoadingSkeletons/CouponsPageSkeleton";
+import ConfirmModal from "@/components/common/ConfirmModal";
 import { adminCouponsApi } from "@/lib/adminOrdersApi";
 import { useCallback, useEffect, useState } from "react";
 
@@ -14,6 +15,7 @@ export default function CouponsPage() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [togglingId, setTogglingId] = useState(null);
+  const [couponToDelete, setCouponToDelete] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
 
   const loadCoupons = useCallback(async () => {
@@ -56,21 +58,24 @@ export default function CouponsPage() {
     }
   };
 
-  const handleDelete = async (coupon) => {
-    if (
-      !window.confirm(`Delete coupon "${coupon.code}"? This cannot be undone.`)
-    )
-      return;
-    setDeletingId(coupon._id);
+  const handleDelete = (coupon) => {
+    setCouponToDelete(coupon);
+  };
+
+  const confirmDelete = async () => {
+    if (!couponToDelete) return;
+    setDeletingId(couponToDelete._id);
     try {
-      await adminCouponsApi.remove(coupon._id);
-      setCoupons((prev) => prev.filter((c) => c._id !== coupon._id));
+      await adminCouponsApi.remove(couponToDelete._id);
+      setCoupons((prev) => prev.filter((c) => c._id !== couponToDelete._id));
+      setCouponToDelete(null);
     } catch (err) {
       setError(err.message || "Failed to delete coupon");
     } finally {
       setDeletingId(null);
     }
   };
+
   if (loading && coupons.length === 0) {
     return <CouponsPageSkeleton />;
   }
@@ -134,6 +139,16 @@ export default function CouponsPage() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleCreate}
+      />
+      <ConfirmModal
+        isOpen={!!couponToDelete}
+        onClose={() => setCouponToDelete(null)}
+        onConfirm={confirmDelete}
+        title="Delete Coupon"
+        message={`Delete coupon "${couponToDelete?.code}"? This cannot be undone.`}
+        confirmText="Delete"
+        type="danger"
+        isLoading={!!deletingId}
       />
     </div>
   );
