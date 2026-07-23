@@ -89,6 +89,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   };
+
   const login = async (email, password, { requireAdmin = false } = {}) => {
     try {
       setLoading(true);
@@ -101,11 +102,19 @@ export const AuthProvider = ({ children }) => {
 
       if (data.success && data.user) {
         if (requireAdmin && data.user.role !== "admin") {
-          await axios.post(`${API_URL}/api/auth/logout`); 
+          await axios.post(`${API_URL}/api/auth/logout`);
+          // Clear token cookie
+          document.cookie =
+            "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
           setUser(null);
           const msg = "You are not authorized to access the admin panel";
           toast.error(msg);
           throw new Error(msg);
+        }
+
+        // SET TOKEN COOKIE FOR NEXT.JS MIDDLEWARE / PROXY
+        if (data.token) {
+          document.cookie = `token=${data.token}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax;`;
         }
 
         setUser(data.user);
@@ -133,6 +142,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   };
+
   const adminLogin = async (email, password) => {
     try {
       setLoading(true);
@@ -146,11 +156,20 @@ export const AuthProvider = ({ children }) => {
       if (data.success && data.user) {
         if (data.user.role !== "admin") {
           await axios.post(`${API_URL}/api/auth/logout`);
+          // Clear token cookie
+          document.cookie =
+            "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
           setUser(null);
           const msg = "This login is for admin accounts only";
           toast.error(msg);
           throw new Error(msg);
         }
+
+        // SET TOKEN COOKIE FOR NEXT.JS MIDDLEWARE / PROXY
+        if (data.token) {
+          document.cookie = `token=${data.token}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax;`;
+        }
+
         setUser(data.user);
         toast.success("Login successful!");
         router.push("/admin/dashboard");
@@ -172,16 +191,23 @@ export const AuthProvider = ({ children }) => {
     try {
       await axios.post(`${API_URL}/api/auth/logout`);
 
+      // Clear Next.js token cookie
+      document.cookie =
+        "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+
       setUser(null);
       toast.success("Logged out successfully");
       router.push("/");
     } catch (error) {
       console.error("Logout error:", error);
+      document.cookie =
+        "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
       setUser(null);
       toast.success("Logged out successfully");
       router.push("/");
     }
   };
+
   const updateProfile = async (userData) => {
     try {
       setLoading(true);

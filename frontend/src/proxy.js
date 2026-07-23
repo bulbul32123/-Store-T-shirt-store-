@@ -47,7 +47,6 @@ export async function proxy(req) {
   }
 
   if (!isAdmin) {
-    console.log("Redirecting to /admin/login...");
     return NextResponse.redirect(new URL("/", req.url));
   }
 
