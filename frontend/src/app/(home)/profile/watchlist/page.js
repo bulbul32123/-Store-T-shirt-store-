@@ -1,5 +1,12 @@
 import LivingWatchlistPanel from '@/components/profile/watchlist/LivingWatchlistPanel';
 
+export const metadata = {
+  title: "Watchlist | Payra",
+  description:
+    "Things you're keeping an eye on. Tap the heart on products you love and they'll appear here.",
+};
+
+
 export default function WatchlistPage() {
     return (
         <div>

@@ -1,5 +1,12 @@
 import LivingCartPanel from '@/components/profile/cart/LivingCartPanel';
 
+export const metadata = {
+  title: "Shopping Cart | Payra",
+  description:
+    "Review the items in your cart, adjust quantities, and get ready to secure your favorite styles.",
+};
+
+
 export default function CartPage() {
     return (
         <div>

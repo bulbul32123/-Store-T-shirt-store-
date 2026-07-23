@@ -1,5 +1,11 @@
 import NotificationsPanel from '@/components/profile/notifications/NotificationsPanel';
 
+export const metadata = {
+  title: "Notifications | Payra",
+  description: "Orders, discounts, coupons, reviews, and Support chat notification.",
+};
+
+
 export default function NotificationsPage() {
     return (
         <div>

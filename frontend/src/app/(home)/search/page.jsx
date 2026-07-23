@@ -6,7 +6,6 @@ export async function generateMetadata({ searchParams }){
   const params = await searchParams;
   const query = params.query?.trim() || "";
 
-  // Capitalize the first letter of the query for a cleaner tab title
   const formattedQuery = query 
     ? `"${query.charAt(0).toUpperCase() + query.slice(1)}"` 
     : "";
@@ -26,7 +25,6 @@ export async function generateMetadata({ searchParams }){
         ? `Find the best deals on ${query} and more items at Payra.` 
         : "Search the Payra collection.",
     },
-    // Prevents search engines from indexing empty or infinite custom query combinations
     robots: {
       index: false,
       follow: true,
