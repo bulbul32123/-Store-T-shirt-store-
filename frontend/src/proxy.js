@@ -47,7 +47,7 @@ export async function proxy(req) {
   }
 
   if (!isAdmin) {
-    return NextResponse.redirect(new URL("/", req.url));
+    return NextResponse.redirect(new URL("/auth/login", req.url));
   }
 
   return NextResponse.next();
