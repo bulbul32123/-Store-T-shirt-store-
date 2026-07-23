@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
+import { NextResponse } from "next/server";
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 export async function proxy(req) {
@@ -15,8 +15,6 @@ export async function proxy(req) {
   if (token) {
     try {
       const { payload } = await jwtVerify(token, secret);
-      console.log(payload);
-
       isAdmin = payload.role === "admin";
     } catch {
       isAdmin = false;
@@ -24,7 +22,7 @@ export async function proxy(req) {
   }
 
   if (!isAdmin) {
-    return NextResponse.rewrite(new URL("/admin-not-found", req.url));
+    return NextResponse.redirect(new URL("/admin/login", req.url));
   }
 
   return NextResponse.next();
