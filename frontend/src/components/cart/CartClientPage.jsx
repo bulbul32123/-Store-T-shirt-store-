@@ -62,7 +62,8 @@ export default function CartClientPage() {
                   <Image
                     src={item.image}
                     alt={item.name}
-                    fill
+                    height={100}
+                    width={100}
                     className="object-cover"
                   />
                 </div>

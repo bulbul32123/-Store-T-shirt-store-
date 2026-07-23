@@ -108,20 +108,20 @@ export default function ProfileOrdersPage() {
   );
 }
 
-// ─── ORDERS LIST SKELETON ─────────────────────────────────────────────────────
+
 function ProfileOrdersSkeleton() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-10 animate-pulse">
-      {/* Page Title */}
+      
       <div className="h-9 w-32 bg-gray-200 rounded-lg mb-6" />
 
-      {/* Tabs */}
+      
       <div className="flex gap-6 mb-8 border-b pb-3">
         <div className="h-5 w-28 bg-gray-200 rounded" />
         <div className="h-5 w-28 bg-gray-200 rounded" />
       </div>
 
-      {/* Loading Item Cards */}
+      
       <div className="space-y-4">
         {[1, 2, 3].map((i) => (
           <div
@@ -129,20 +129,20 @@ function ProfileOrdersSkeleton() {
             className="flex items-center justify-between border border-gray-100 rounded-2xl p-5"
           >
             <div className="flex items-center gap-4">
-              {/* Thumbnail Box */}
+              
               <div className="h-16 w-16 bg-gray-200 rounded-xl shrink-0" />
               <div className="space-y-2">
-                {/* Order ID placeholder */}
+                
                 <div className="h-5 w-36 bg-gray-200 rounded" />
-                {/* Timestamp placeholder */}
+                
                 <div className="h-4 w-48 bg-gray-200 rounded" />
               </div>
             </div>
 
             <div className="flex items-center gap-4">
-              {/* Status tag */}
+              
               <div className="h-7 w-20 bg-gray-200 rounded-full" />
-              {/* Price element */}
+              
               <div className="h-6 w-16 bg-gray-200 rounded" />
             </div>
           </div>

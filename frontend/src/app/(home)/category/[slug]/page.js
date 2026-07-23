@@ -85,7 +85,7 @@ export default function CategoryPage() {
                         ))}
                     </div>
 
-                    {/* Pagination */}
+                    
                     {totalPages > 1 && (
                         <div className="flex justify-center mt-12">
                             <div className="flex space-x-1">

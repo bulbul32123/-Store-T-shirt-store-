@@ -1,7 +1,7 @@
 export default function CouponsPageSkeleton() {
     return (
         <div className="p-6 space-y-6 animate-pulse">
-            {/* Header */}
+
             <div className="flex items-center justify-between">
                 <div className="space-y-2">
                     <div className="h-8 w-64 rounded bg-gray-200" />
@@ -11,15 +11,15 @@ export default function CouponsPageSkeleton() {
                 <div className="h-10 w-40 rounded-lg bg-gray-200" />
             </div>
 
-            {/* Filters */}
+   
             <div className="flex flex-col gap-3 sm:flex-row">
                 <div className="h-10 w-full max-w-xs rounded-lg bg-gray-100" />
                 <div className="h-10 w-40 rounded-lg bg-gray-100" />
             </div>
 
-            {/* Table */}
+     
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                {/* Header */}
+      
                 <div className="grid grid-cols-7 gap-4 px-6 py-4 border-b">
                     {Array.from({ length: 7 }).map((_, i) => (
                         <div
@@ -29,7 +29,7 @@ export default function CouponsPageSkeleton() {
                     ))}
                 </div>
 
-                {/* Rows */}
+     
                 {Array.from({ length: 4 }).map((_, row) => (
                     <div
                         key={row}

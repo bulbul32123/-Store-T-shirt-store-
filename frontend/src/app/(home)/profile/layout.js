@@ -11,16 +11,16 @@ export default function ProfileLayout({ children }) {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Welcome band */}
+      
       {loading ? (
         <div className="border-b border-[#E5E5E5]">
           <div className="max-w-6xl mx-auto px-6 py-10 flex items-center gap-4">
-            {/* Avatar Circle */}
+            
             <div className="h-16 w-16 rounded-full bg-[#E5E5E5] shrink-0" />
             <div className="space-y-2">
-              {/* Subtitle */}
+              
               <div className="h-3 w-24 bg-[#E5E5E5] rounded" />
-              {/* Username Title */}
+              
               <div className="h-7 w-44 md:w-56 bg-[#E5E5E5] rounded" />
             </div>
           </div>
@@ -30,7 +30,7 @@ export default function ProfileLayout({ children }) {
           <div className="max-w-6xl mx-auto px-6 py-10 flex items-center gap-4">
             <div className="h-16 w-16 rounded-full bg-[#111] text-white flex items-center justify-center text-xl font-bold uppercase shrink-0 overflow-hidden">
               {user?.profilePicture?.url ? (
-                // eslint-disable-next-line @next/next/no-img-element
+                
                 <img
                   src={user.profilePicture.url}
                   alt={user?.name}

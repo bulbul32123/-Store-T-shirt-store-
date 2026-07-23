@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { FiCheck, FiX, FiTrash2, FiEye, FiShield } from 'react-icons/fi';
 
-// ─── Shared primitives ────────────────────────────────────────────────────────
 
 function StarRating({ value, size = 14 }) {
     return (
@@ -40,7 +39,6 @@ function ReviewStatusBadge({ status }) {
     );
 }
 
-/** Resolve a product image regardless of whether images[] holds strings or {url} objects */
 function productThumb(product) {
     if (!product?.images?.length) return null;
     const first = product.images[0];
@@ -67,7 +65,6 @@ function TruncatedText({ text, limit = 120 }) {
     );
 }
 
-// ─── Skeleton row ─────────────────────────────────────────────────────────────
 
 function SkeletonRow() {
     return (
@@ -116,7 +113,6 @@ function SkeletonCard() {
     );
 }
 
-// ─── Row actions ──────────────────────────────────────────────────────────────
 
 function RowActions({ review, onApprove, onReject, onDelete, onViewDetail }) {
     return (
@@ -157,7 +153,6 @@ function RowActions({ review, onApprove, onReject, onDelete, onViewDetail }) {
     );
 }
 
-// ─── Mobile card ──────────────────────────────────────────────────────────────
 
 function ReviewCard({ review, selected, onSelect, onApprove, onReject, onDelete, onViewDetail }) {
     const thumb    = productThumb(review.product);
@@ -174,7 +169,6 @@ function ReviewCard({ review, selected, onSelect, onApprove, onReject, onDelete,
             onClick={() => onViewDetail(review)}
         >
             <div className="p-4">
-                {/* Top row: checkbox + product */}
                 <div className="flex items-start gap-3 mb-3">
                     <input
                         type="checkbox"
@@ -203,7 +197,6 @@ function ReviewCard({ review, selected, onSelect, onApprove, onReject, onDelete,
                     </div>
                 </div>
 
-                {/* Customer + stars */}
                 <div className="flex items-center justify-between mb-2 pl-7">
                     <div className="flex items-center gap-2">
                         <div className="h-6 w-6 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
@@ -214,12 +207,10 @@ function ReviewCard({ review, selected, onSelect, onApprove, onReject, onDelete,
                     <StarRating value={review.rating} size={13} />
                 </div>
 
-                {/* Review text */}
                 <div className="pl-7 mb-3">
                     <TruncatedText text={review.reviewText} limit={100} />
                 </div>
 
-                {/* Footer: status + actions */}
                 <div className="flex items-center justify-between pl-7">
                     <ReviewStatusBadge status={review.status} />
                     <RowActions
@@ -235,7 +226,6 @@ function ReviewCard({ review, selected, onSelect, onApprove, onReject, onDelete,
     );
 }
 
-// ─── Main export ──────────────────────────────────────────────────────────────
 
 export default function ReviewsTable({
     reviews,
@@ -253,7 +243,6 @@ export default function ReviewsTable({
     const someSelected =
         reviews.length > 0 && reviews.some((r) => selectedIds.has(r._id));
 
-    // ── Empty state ─────────────────────────────────────────────────────────
     if (!loading && reviews.length === 0) {
         return (
             <div className="bg-white rounded-xl border border-gray-100 py-20 text-center">
@@ -270,7 +259,6 @@ export default function ReviewsTable({
         );
     }
 
-    // ── Desktop table ───────────────────────────────────────────────────────
     const desktopTable = (
         <div className="hidden md:block bg-white rounded-xl border border-gray-100 overflow-hidden">
             <div className="overflow-x-auto">
@@ -311,7 +299,7 @@ export default function ReviewsTable({
                                         }`}
                                         onClick={() => onViewDetail(review)}
                                     >
-                                        {/* Checkbox */}
+                                     
                                         <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                                             <input
                                                 type="checkbox"
@@ -321,7 +309,7 @@ export default function ReviewsTable({
                                             />
                                         </td>
 
-                                        {/* Product */}
+                                     
                                         <td className="px-4 py-3">
                                             <div className="flex items-center gap-2.5 min-w-0 max-w-[180px]">
                                                 {thumb ? (
@@ -335,7 +323,7 @@ export default function ReviewsTable({
                                             </div>
                                         </td>
 
-                                        {/* Customer */}
+                             
                                         <td className="px-4 py-3">
                                             <div className="flex items-center gap-2 min-w-0 max-w-[160px]">
                                                 <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
@@ -358,7 +346,7 @@ export default function ReviewsTable({
                                             </div>
                                         </td>
 
-                                        {/* Rating */}
+                                    
                                         <td className="px-4 py-3 whitespace-nowrap">
                                             <div className="flex items-center gap-1.5">
                                                 <StarRating value={review.rating} />
@@ -366,22 +354,22 @@ export default function ReviewsTable({
                                             </div>
                                         </td>
 
-                                        {/* Review text */}
+                                   
                                         <td className="px-4 py-3 max-w-[260px]">
                                             <TruncatedText text={review.reviewText} limit={90} />
                                         </td>
 
-                                        {/* Date */}
+                                    
                                         <td className="px-4 py-3 whitespace-nowrap">
                                             <span className="text-sm text-gray-500">{date}</span>
                                         </td>
 
-                                        {/* Status */}
+                                   
                                         <td className="px-4 py-3">
                                             <ReviewStatusBadge status={review.status} />
                                         </td>
 
-                                        {/* Actions */}
+                                      
                                         <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                                             <RowActions
                                                 review={review}
@@ -400,7 +388,6 @@ export default function ReviewsTable({
         </div>
     );
 
-    // ── Mobile cards ─────────────────────────────────────────────────────────
     const mobileCards = (
         <div className="md:hidden space-y-3">
             {loading

@@ -41,7 +41,6 @@ export default function ReviewFiltersBar({
 
     return (
         <div className="bg-white rounded-xl border border-gray-100 p-4 space-y-4">
-            {/* ── Status tabs ───────────────────────────────────────────── */}
             <div className="flex items-center gap-1 flex-wrap">
                 {STATUS_TABS.map((tab) => (
                     <button
@@ -68,9 +67,7 @@ export default function ReviewFiltersBar({
                 )}
             </div>
 
-            {/* ── Search + controls row ─────────────────────────────────── */}
             <div className="flex flex-wrap gap-3">
-                {/* Search */}
                 <div className="relative flex-1 min-w-[200px]">
                     <FiSearch
                         className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
@@ -93,7 +90,6 @@ export default function ReviewFiltersBar({
                     )}
                 </div>
 
-                {/* Rating */}
                 <select
                     value={rating}
                     onChange={(e) => onRatingChange(e.target.value)}
@@ -104,7 +100,6 @@ export default function ReviewFiltersBar({
                     ))}
                 </select>
 
-                {/* Sort */}
                 <select
                     value={sort}
                     onChange={(e) => onSortChange(e.target.value)}
@@ -115,7 +110,6 @@ export default function ReviewFiltersBar({
                     ))}
                 </select>
 
-                {/* Date from */}
                 <div className="flex items-center gap-2">
                     <label className="text-xs text-gray-500 whitespace-nowrap">From</label>
                     <input
@@ -127,7 +121,6 @@ export default function ReviewFiltersBar({
                     />
                 </div>
 
-                {/* Date to */}
                 <div className="flex items-center gap-2">
                     <label className="text-xs text-gray-500 whitespace-nowrap">To</label>
                     <input

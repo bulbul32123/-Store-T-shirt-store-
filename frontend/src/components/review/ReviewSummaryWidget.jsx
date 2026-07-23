@@ -62,7 +62,6 @@ export default function ReviewSummaryWidget() {
 
     return (
         <div className="space-y-6">
-            {/* Avg rating header */}
             <div>
                 <div className="flex items-baseline gap-3 mb-1">
                     <span className="text-5xl font-bold text-gray-900 tracking-tight">{avgRating}</span>
@@ -83,7 +82,6 @@ export default function ReviewSummaryWidget() {
                 </div>
             </div>
 
-            {/* Star distribution */}
             <div className="space-y-2">
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Ratings</p>
                 {[5,4,3,2,1].map(star => (
@@ -106,7 +104,7 @@ export default function ReviewSummaryWidget() {
                 )}
             </div>
 
-            {/* Fit feedback */}
+      
             {totalFit > 0 && (
                 <div className="border-t border-gray-100 pt-5">
                     <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Fit Feedback</p>
@@ -137,7 +135,7 @@ export default function ReviewSummaryWidget() {
                 </div>
             )}
 
-            {/* Write a review */}
+        
             <button
                 onClick={() => openForm(null)}
                 className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-xl transition-colors"

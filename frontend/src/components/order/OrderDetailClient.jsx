@@ -14,7 +14,6 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-// import { FiAlertTriangle, FiLoader, FiX } from "react-icons/fi";
 import ConfirmModal from "../common/ConfirmModal";
 
 const STEPS = [
@@ -235,7 +234,8 @@ export default function OrderDetailClient() {
                 <Image
                   src={item.image}
                   alt={item.name}
-                  fill
+                  height={100}
+                  width={100}
                   sizes="80px"
                   className="object-cover"
                 />

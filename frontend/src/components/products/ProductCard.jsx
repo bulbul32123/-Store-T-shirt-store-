@@ -24,7 +24,6 @@ export default function ProductCard({ product }) {
 
     return (
         <div className="group relative bg-white">
-            {/* Watchlist + compare overlay buttons */}
             <div className="absolute z-10 top-3 right-3 flex flex-col gap-2">
                 <button
                     type="button"
@@ -44,7 +43,6 @@ export default function ProductCard({ product }) {
                 </button>
             </div>
 
-            {/* Status badges */}
             <div className="absolute z-10 top-3 left-3 flex flex-col gap-1.5">
                 {hasDiscount && (
                     <span className="text-white bg-red-500 py-1 px-2 rounded-full text-xs font-bold uppercase">Sale</span>

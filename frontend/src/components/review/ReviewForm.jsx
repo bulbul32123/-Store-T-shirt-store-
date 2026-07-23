@@ -1,4 +1,3 @@
-// REviewForm
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { FiX, FiUpload, FiTrash2, FiLoader, FiVideo } from 'react-icons/fi';
@@ -9,7 +8,6 @@ import axios from 'axios';
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 const FIT_OPTIONS = ['Too Small', 'True to Size', 'Too Large'];
 
-// ── Interactive star picker ───────────────────────────────────────────────────
 function StarPicker({ value, onChange }) {
     const [hover, setHover] = useState(0);
     const labels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
@@ -45,7 +43,6 @@ function StarPicker({ value, onChange }) {
     );
 }
 
-// ── Image upload tile ─────────────────────────────────────────────────────────
 function ImageUploadTile({ image, onRemove }) {
     return (
         <div className="relative h-20 w-20 rounded-xl overflow-hidden border border-gray-200 group flex-shrink-0">
@@ -76,15 +73,14 @@ export default function ReviewForm() {
     isAnonymous: false,
 });
 
-const [video, setVideo] = useState(null); // { url, public_id } | null
+const [video, setVideo] = useState(null); 
 const [uploadingVideo, setUploadingVideo] = useState(false);
 const videoRef = useRef(null);
-    const [images,       setImages]       = useState([]);  // [{url, public_id}]
+    const [images,       setImages]       = useState([]);  
     const [uploading,    setUploading]    = useState(false);
     const [submitting,   setSubmitting]   = useState(false);
     const fileRef = useRef(null);
 
-    // Pre-fill on edit
     useEffect(() => {
         if (editingReview) {
            setForm({
@@ -139,7 +135,6 @@ setVideo(null);
     }
 };
 
-    // Close on Escape
     useEffect(() => {
         if (!showForm) return;
         const handler = (e) => { if (e.key === 'Escape') closeForm(); };
@@ -147,7 +142,6 @@ setVideo(null);
         return () => window.removeEventListener('keydown', handler);
     }, [showForm, closeForm]);
 
-    // ── Image upload ───────────────────────────────────────────────────────────
   const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
@@ -159,7 +153,6 @@ setVideo(null);
         const uploaded = await Promise.all(files.map(async (file) => {
             const fd = new FormData();
             
-            // 🔴 CHANGE THIS FROM 'file' TO MATCH WHAT YOUR BACKEND EXPECTS (e.g., 'image')
             fd.append('image', file); 
             
             const { data } = await axios.post(`${API}/api/upload/review-image`, fd, {
@@ -179,8 +172,6 @@ setVideo(null);
         if (fileRef.current) fileRef.current.value = '';
     }
 };
-
-    // ── Submit ─────────────────────────────────────────────────────────────────
     const onSubmit = async () => {
         if (!currentUser) { toast.error('Please login to submit a review'); return; }
         if (!form.rating) { toast.error('Please select a rating'); return; }
@@ -209,12 +200,11 @@ setVideo(null);
 
     return (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4">
-            {/* Backdrop */}
+          
             <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeForm} />
 
-            {/* Modal */}
             <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden">
-                {/* Header */}
+             
                 <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
                     <h2 className="text-lg font-bold text-gray-900">
                         {isEdit ? 'Edit Review' : 'Write a Review'}
@@ -224,9 +214,9 @@ setVideo(null);
                     </button>
                 </div>
 
-                {/* Body */}
+              
                 <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
-                    {/* Star rating */}
+                
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                             Rating <span className="text-rose-500">*</span>
@@ -234,7 +224,7 @@ setVideo(null);
                         <StarPicker value={form.rating} onChange={(v) => setForm(f => ({ ...f, rating: v }))} />
                     </div>
 
-                    {/* Review text */}
+                 
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                             Your Review <span className="text-rose-500">*</span>
@@ -252,7 +242,7 @@ setVideo(null);
                         </p>
                     </div>
 
-                    {/* Size + Color */}
+           
                     <div className="grid grid-cols-2 gap-3">
                         {product?.sizes?.length > 0 && (
                             <div>
@@ -282,7 +272,7 @@ setVideo(null);
                         )}
                     </div>
 
-                    {/* Fit feedback */}
+           
                     <div>
                         <label className="block text-xs font-semibold text-gray-600 mb-2">How does it fit?</label>
                         <div className="flex gap-2 flex-wrap">
@@ -303,7 +293,7 @@ setVideo(null);
                         </div>
                     </div>
 
-                    {/* Image upload */}
+          
                     <div>
                         <label className="block text-xs font-semibold text-gray-600 mb-2">
                             Photos <span className="text-gray-400 font-normal">(up to 3)</span>
@@ -374,7 +364,7 @@ setVideo(null);
     />
 </div>
 
-                    {/* Anonymous toggle */}
+       
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-sm font-semibold text-gray-700">Post anonymously</p>
@@ -394,7 +384,7 @@ setVideo(null);
                     </div>
                 </div>
 
-                {/* Footer */}
+    
                 <div className="flex-shrink-0 border-t border-gray-100 px-6 py-4 flex gap-3">
                     <button
                         type="button"

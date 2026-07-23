@@ -15,37 +15,36 @@ export default function CartPage() {
   );
 }
 
-// ─── CART SKELETON COMPONENT ──────────────────────────────────────────────────
 function CartSkeleton() {
   return (
     <div className="max-w-7xl mx-auto pl-5 pr-5 md:pl-10 md:pr-10 border-b border-gray-300 py-10 animate-pulse">
-      {/* Header Skeleton */}
+      
       <div className="mb-10">
         <div className="h-10 w-24 bg-gray-200 rounded-xl mb-2" />
         <div className="h-4 w-16 bg-gray-200 rounded-md" />
       </div>
 
-      {/* Free Shipping Progress Skeleton */}
+      
       <div className="mb-10 bg-gray-50 border border-gray-100 rounded-3xl p-6 space-y-3">
         <div className="h-5 w-64 bg-gray-200 rounded-md" />
         <div className="h-2 w-full bg-gray-200 rounded-full" />
       </div>
 
       <div className="grid lg:grid-cols-[1fr_380px] gap-10">
-        {/* Cart Items Skeleton (Simulating 1-2 items loading) */}
+        
         <div className="space-y-6">
           {[1, 2].map((i) => (
             <div key={i} className="flex gap-4 border-b border-gray-200 pb-6">
-              {/* Image Skeleton */}
+              
               <div className="h-36 w-36 rounded-2xl bg-gray-200 flex-shrink-0" />
 
-              {/* Details Skeleton */}
+              
               <div className="flex-1 space-y-3">
                 <div className="h-5 w-1/2 bg-gray-200 rounded-md" />
                 <div className="h-4 w-24 bg-gray-200 rounded-md" />
                 <div className="h-4 w-32 bg-gray-200 rounded-md" />
                 <div className="h-6 w-16 bg-gray-200 rounded-md mt-3" />
-                {/* Quantity Buttons Skeleton */}
+                
                 <div className="flex items-center gap-3 mt-4">
                   <div className="h-9 w-9 bg-gray-200 rounded-full" />
                   <div className="h-5 w-5 bg-gray-200 rounded-md" />
@@ -53,13 +52,13 @@ function CartSkeleton() {
                 </div>
               </div>
 
-              {/* Delete Button Skeleton */}
+              
               <div className="h-5 w-5 bg-gray-200 rounded-md self-start" />
             </div>
           ))}
         </div>
 
-        {/* Summary Side Panel Skeleton */}
+
         <div>
           <div className="border rounded-3xl p-6 space-y-6">
             <div className="h-6 w-24 bg-gray-200 rounded-md" />
@@ -83,7 +82,7 @@ function CartSkeleton() {
               </div>
             </div>
 
-            {/* Checkout Button Skeleton */}
+            
             <div className="w-full h-14 bg-gray-200 rounded-xl" />
           </div>
         </div>

@@ -48,7 +48,7 @@ export default function ProductDetailClient({
   const [activeTab, setActiveTab] = useState("description");
 
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
-  const [sizeUnit, setSizeUnit] = useState("cm"); // cm or in
+  const [sizeUnit, setSizeUnit] = useState("cm"); 
 
   const { addToCart } = useCart();
   const { toggleWatchlist, isInWatchlist } = useWatchlist();

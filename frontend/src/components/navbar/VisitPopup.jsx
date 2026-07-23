@@ -31,7 +31,6 @@ export default function VisitPopup({ icon: Icon, headline, message, cta, href, o
         remainingRef.current = AUTO_DISMISS_MS;
         startTimer(AUTO_DISMISS_MS);
         return clearTimer;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleMouseEnter = () => {

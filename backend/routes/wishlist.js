@@ -1,4 +1,4 @@
-//wishlist.js
+
 const express = require('express');
 const router = express.Router();
 const { syncCart, getCart } = require('../controllers/cartController');

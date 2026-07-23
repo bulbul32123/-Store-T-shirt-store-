@@ -66,7 +66,7 @@ export default function ClientLoginPage() {
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
-            {/* Email Field */}
+      
             <div>
               <label
                 htmlFor="email"
@@ -96,7 +96,7 @@ export default function ClientLoginPage() {
               )}
             </div>
 
-            {/* Password Field */}
+            
             <div>
               <label
                 htmlFor="password"

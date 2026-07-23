@@ -86,7 +86,6 @@ export const CartProvider = ({ children }) => {
     }, [flushNow]);
 
  const addToCart = (product, { size, color, quantity = 1 } = {}) => {
-    console.log("Product", product)
    const resolvedSize = size || product.sizes?.[0] || "M";
    const resolvedColor = color || product.colors?.[0]?.name || null;
 
@@ -110,7 +109,6 @@ export const CartProvider = ({ children }) => {
      return;
    }
 
-   // ... inside your addToCart definition ...
    setItems((prev) => [
      ...prev,
      {
@@ -123,7 +121,7 @@ export const CartProvider = ({ children }) => {
        size: resolvedSize,
        color: resolvedColor,
        quantity,
-       isFreeShipping: product.isFreeShipping, // 👈 Add this line here
+       isFreeShipping: product.isFreeShipping, 
        addedAt: Date.now(),
      },
    ]);

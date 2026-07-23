@@ -77,7 +77,7 @@ export default function ProductCard({ product, status, isLoading = false }) {
           />
         </div>
         <p className="text-xs text-muted-foreground mb-1 flex gap-2">
-          {product?.category?.name || product?.category} <span>{product?.averageRating}</span>
+          {product?.category?.name || product?.category}
         </p>
         <h3 className="font-extrabold text-sm md:text-lg mb-1 line-clamp-2">
           {product?.name}

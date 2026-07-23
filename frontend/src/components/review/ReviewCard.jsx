@@ -157,7 +157,6 @@ export default function ReviewCard({ review }) {
       
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex items-center gap-3 min-w-0">
-          {/* Avatar */}
           <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex-shrink-0 flex items-center justify-center overflow-hidden">
             {review.userAvatar ? (
               <img
@@ -297,7 +296,6 @@ export default function ReviewCard({ review }) {
       
       {isReportModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop Overlay with Blur */}
           <div
             className="absolute inset-0 bg-black/40 backdrop-blur-md transition-opacity duration-300"
             onClick={() => setIsReportModalOpen(false)}

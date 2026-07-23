@@ -41,7 +41,7 @@ export default function ShopSidebar({
         </h2>
       </div>
 
-      {/* Categories */}
+   
       <div className="border-t py-4 space-y-1">
         {categories.map((cat) => (
           <button
@@ -61,7 +61,7 @@ export default function ShopSidebar({
         ))}
       </div>
 
-      {/* Price */}
+     
       <div className="border-t py-4">
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-bold text-sm">Price</h3>
@@ -94,7 +94,7 @@ export default function ShopSidebar({
         </div>
       </div>
 
-      {/* Colors */}
+
       {availableColors.length > 0 && (
         <div className="border-t py-4">
           <h3 className="font-bold text-sm mb-3">Colors</h3>
@@ -121,7 +121,6 @@ export default function ShopSidebar({
         </div>
       )}
 
-      {/* Sizes */}
       <div className="border-t py-4">
         <h3 className="font-bold text-sm mb-3">Size</h3>
         <div className="flex flex-wrap gap-2">
@@ -143,13 +142,10 @@ export default function ShopSidebar({
           })}
         </div>
       </div>
-      {/* Rating */}
-      {/* Rating */}
       <div className="border-t py-4">
         <h3 className="font-bold text-sm mb-3">Rating</h3>
         <div className="flex flex-col gap-1.5">
           {[4, 3, 2].map((r) => {
-            // Create a clean boolean check
             const isSelected = Number(filters.minRating) === r;
 
             return (
@@ -158,7 +154,7 @@ export default function ShopSidebar({
                 onClick={() => onChange("minRating", isSelected ? "" : r)}
                 className={`text-left text-sm px-2 py-1.5 rounded transition-colors ${
                   isSelected
-                    ? "font-bold text-black bg-gray-100" // Added a soft background so it stands out beautifully
+                    ? "font-bold text-black bg-gray-100" 
                     : "text-gray-600 hover:text-black hover:bg-gray-50"
                 }`}
               >
@@ -170,7 +166,7 @@ export default function ShopSidebar({
         </div>
       </div>
 
-      {/* Product Status */}
+
       <div className="border-t py-4">
         <h3 className="font-bold text-sm mb-3">Product Status</h3>
         <div className="space-y-2 text-sm">

@@ -58,10 +58,9 @@ export const ProductsPageInner = () => {
     status: searchParams.get("status") || "",
   };
 
-  // Pending filters (sidebar edits before "Apply Filter" is pressed)
   const [pendingFilters, setPendingFilters] = useState(filters);
   useEffect(() => {
-    setPendingFilters(filters); /* eslint-disable-next-line */
+    setPendingFilters(filters);
   }, [searchParams.toString()]);
 
   const pushFilters = useCallback(
@@ -83,7 +82,6 @@ export const ProductsPageInner = () => {
     [router],
   );
 
-  // Category clicks apply immediately (feels like navigation); price/color/size wait for "Apply Filter"
   const handleSidebarChange = (key, value) => {
     setPendingFilters((prev) => ({ ...prev, [key]: value }));
     if (
@@ -107,7 +105,6 @@ export const ProductsPageInner = () => {
     setLoading(true);
     productsApi
       .getProducts({
-        // 1. Clean backend API call (No 'sale' parameter passed here)
         category: filters.category,
         minPrice: filters.minPrice,
         maxPrice: filters.maxPrice,
@@ -123,7 +120,6 @@ export const ProductsPageInner = () => {
       .then((data) => {
         let localProducts = data.products || [];
 
-        // 2. Client-side recalculation: Filter out items without discounts
         if (filters.sale) {
           localProducts = localProducts.filter(
             (product) => Number(product.discount || 0) > 0,
@@ -132,7 +128,6 @@ export const ProductsPageInner = () => {
 
         setProducts(localProducts);
 
-        // 3. Recalculate pagination totals seamlessly based on the filtered results
         setPagination({
           currentPage: data.currentPage,
           totalPages: filters.sale
@@ -143,7 +138,6 @@ export const ProductsPageInner = () => {
       })
       .catch(() => setProducts([]))
       .finally(() => setLoading(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams.toString()]);
 
   useEffect(() => {
@@ -157,7 +151,6 @@ export const ProductsPageInner = () => {
       .catch(() => setAvailableColors([]));
   }, []);
 
-  // The Array.isArray check ensures it won't crash even if state isn't an array yet
   const STATUS_LABELS = {
     featured: "Featured",
     popular: "Popular",
@@ -173,7 +166,6 @@ export const ProductsPageInner = () => {
     (filters.sale ? "Sale" : "Shop");
   return (
     <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-8">
-      {/* Mobile filter toggle */}
       <button
         onClick={() => setMobileFiltersOpen(true)}
         className="lg:hidden mb-4 flex items-center gap-2 px-4 py-2 border rounded-full text-sm font-medium"
@@ -182,7 +174,6 @@ export const ProductsPageInner = () => {
       </button>
 
       <div className="flex gap-10">
-        {/* Sidebar — desktop */}
         <div className="hidden lg:block">
           <ShopSidebar
             categories={categories}
@@ -193,7 +184,6 @@ export const ProductsPageInner = () => {
           />
         </div>
 
-        {/* Sidebar — mobile drawer */}
         {mobileFiltersOpen && (
           <div className="fixed inset-0 z-50 lg:hidden">
             <div

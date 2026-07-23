@@ -1,16 +1,14 @@
-
+import UserAvatar from "@/components/common/UserAvatar"; // 👈 Import here
 import {
   ChevronLeft,
   ChevronRight,
-  Mail,
-  Phone,
-  MapPin,
   Hash,
+  Mail,
+  MapPin,
+  Phone,
 } from "lucide-react";
-import UserAvatar from "@/components/common/UserAvatar"; // 👈 Import here
 
 export default function CustomerPanel({ chat, collapsed, onToggleCollapse }) {
-
   if (collapsed) {
     return (
       <div className="w-12 flex-shrink-0 border-l border-gray-200 bg-white flex flex-col items-center py-3">
@@ -44,7 +42,6 @@ export default function CustomerPanel({ chat, collapsed, onToggleCollapse }) {
       </div>
 
       <div className="flex flex-col items-center py-5 border-b border-gray-100">
-        {/* 👈 Reusable avatar setup with matching layout sizes */}
         <UserAvatar
           user={u}
           size="h-16 w-16"

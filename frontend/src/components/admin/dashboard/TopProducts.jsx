@@ -19,7 +19,7 @@ export default function TopProducts({ products = [] }) {
                                 {String(i + 1).padStart(2, '0')}
                             </span>
                             <div className="relative h-11 w-11 rounded-lg overflow-hidden bg-[#FAFAF9] shrink-0">
-                                {p.image && <Image src={p.image} alt={p.name} fill className="object-cover" />}
+                                {p.image && <Image src={p.image} alt={p.name} width={100} height={100} className="object-cover" />}
                             </div>
                             <div className="flex-1 min-w-0">
                                 <p className="text-sm font-semibold text-[#18181B] truncate">{p.name}</p>

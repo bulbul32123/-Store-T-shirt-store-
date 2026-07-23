@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import { FiX, FiExternalLink, FiShield, FiImage, FiVideo } from 'react-icons/fi';
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
 
 function StarRating({ value }) {
     return (
@@ -35,7 +34,6 @@ function productThumb(product) {
     return typeof first === 'string' ? first : first?.url || null;
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
 
 export default function ReviewDetailDrawer({
     review,
@@ -46,7 +44,6 @@ export default function ReviewDetailDrawer({
 }) {
     const open = Boolean(review);
 
-    // Close on Escape
     useEffect(() => {
         if (!open) return;
         const handler = (e) => { if (e.key === 'Escape') onClose(); };
@@ -54,7 +51,6 @@ export default function ReviewDetailDrawer({
         return () => window.removeEventListener('keydown', handler);
     }, [open, onClose]);
 
-    // Prevent body scroll while drawer is open
     useEffect(() => {
         document.body.style.overflow = open ? 'hidden' : '';
         return () => { document.body.style.overflow = ''; };
@@ -70,15 +66,13 @@ export default function ReviewDetailDrawer({
 
     return (
         <>
-            {/* Backdrop */}
             <div
                 className="fixed inset-0 z-40 bg-black/40 transition-opacity"
                 onClick={onClose}
             />
 
-            {/* Drawer */}
             <div className="fixed inset-y-0 right-0 z-50 flex flex-col w-full max-w-lg bg-white shadow-2xl overflow-hidden">
-                {/* Header */}
+               
                 <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
                     <div>
                         <h2 className="text-lg font-semibold text-gray-900">Review Detail</h2>
@@ -92,10 +86,10 @@ export default function ReviewDetailDrawer({
                     </button>
                 </div>
 
-                {/* Scrollable body */}
+               
                 <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6">
 
-                    {/* ── Status badge ──────────────────────────────────── */}
+             
                     <div className="flex items-center gap-3">
                         <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ring-1 capitalize ${STATUS_STYLES[review.status] || 'bg-gray-100 text-gray-700 ring-gray-200'}`}>
                             {review.status}
@@ -108,7 +102,7 @@ export default function ReviewDetailDrawer({
                         )}
                     </div>
 
-                    {/* ── Product ───────────────────────────────────────── */}
+           
                     <section>
                         <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Product</h3>
                         <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
@@ -135,7 +129,6 @@ export default function ReviewDetailDrawer({
                         </div>
                     </section>
 
-                    {/* ── Customer ──────────────────────────────────────── */}
                     <section>
                         <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Customer</h3>
                         <div className="flex items-center gap-3">
@@ -153,13 +146,11 @@ export default function ReviewDetailDrawer({
                         </div>
                     </section>
 
-                    {/* ── Rating ────────────────────────────────────────── */}
                     <section>
                         <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Rating</h3>
                         <StarRating value={review.rating} />
                     </section>
 
-                    {/* ── Review text ───────────────────────────────────── */}
                     <section>
                         <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Review</h3>
                         <p className="text-sm text-gray-800 leading-relaxed bg-gray-50 rounded-xl p-4 whitespace-pre-wrap">
@@ -167,7 +158,6 @@ export default function ReviewDetailDrawer({
                         </p>
                     </section>
 
-                    {/* ── Images ────────────────────────────────────────── */}
                     {review.images?.length > 0 && (
                         <section>
                             <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 flex items-center gap-1.5">
@@ -186,8 +176,6 @@ export default function ReviewDetailDrawer({
                             </div>
                         </section>
                     )}
-
-                    {/* ── Video ─────────────────────────────────────────── */}
                     {review.video?.url && (
                         <section>
                             <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 flex items-center gap-1.5">
@@ -200,8 +188,6 @@ export default function ReviewDetailDrawer({
                             />
                         </section>
                     )}
-
-                    {/* ── Moderation meta ───────────────────────────────── */}
                     {review.moderatedBy && (
                         <section>
                             <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Moderated by</h3>
@@ -219,7 +205,6 @@ export default function ReviewDetailDrawer({
                     )}
                 </div>
 
-                {/* ── Action footer ────────────────────────────────────── */}
                 <div className="flex-shrink-0 border-t border-gray-100 px-6 py-4">
                     <div className="flex items-center gap-3 flex-wrap">
                         {review.status !== 'approved' && (

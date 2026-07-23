@@ -57,7 +57,6 @@ export default function ProductCardShop({ product, status, selectedFilters = [] 
           )}
         </div>
 
-        {/* Right Badge */}
         {product?.isFreeShipping && (
           <span className="absolute z-10 top-4 right-3 text-white bg-green-600 py-1 px-2 rounded-full text-xs font-semibold">
             Free Shipping
@@ -97,7 +96,7 @@ export default function ProductCardShop({ product, status, selectedFilters = [] 
         </div>
       </Link>
 
-      {/* Color swatches — click to swap displayed image. Kept outside the <Link> so clicks don't navigate. */}
+      
       {colors.length > 0 && (
         <div className="flex items-center gap-1.5 mt-2 px-1">
           {colors.slice(0, 6).map((color, idx) => (

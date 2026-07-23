@@ -13,17 +13,14 @@ export default function CartNotificationPopover() {
 
     const containerRef = useRef(null);
 
-    // Reminder engine: isolated from cart context implementation details.
     const { visible, stage, pauseAutoClose, resumeAutoClose, resetHistory, onManualClose } = useCartReminder(items, updatedAt);
 
-    // Reset engine when cart becomes empty
     useEffect(() => {
         if (!items || items.length === 0) {
             resetHistory();
         }
     }, [items, resetHistory]);
 
-    // Close popup when clicking outside
     useEffect(() => {
         if (!visible) return;
         const onDoc = (e) => {

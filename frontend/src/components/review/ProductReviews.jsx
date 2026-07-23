@@ -1,4 +1,3 @@
-// ProductReview.jsx
 'use client';
 import { useReviews } from '@/context/ReviewContext';
 import ReviewSummaryWidget from './ReviewSummaryWidget';
@@ -7,7 +6,6 @@ import ReviewForm          from './ReviewForm';
 import ReviewMediaModal    from './ReviewMediaModal';
 import { FiRefreshCw }    from 'react-icons/fi';
 
-// ── Skeleton card ─────────────────────────────────────────────────────────────
 function SkeletonCard() {
     return (
         <div className="bg-white rounded-2xl border border-gray-100 p-5 animate-pulse space-y-3">
@@ -34,7 +32,6 @@ function SkeletonCard() {
     );
 }
 
-// ── Sort + filter bar ─────────────────────────────────────────────────────────
 function SortBar() {
     const { sortBy, setSortBy, pagination, filterRating } = useReviews();
 
@@ -63,7 +60,6 @@ function SortBar() {
     );
 }
 
-// ── Empty state ───────────────────────────────────────────────────────────────
 function EmptyState() {
     const { filterRating, setFilterRating, openForm } = useReviews();
     return (
@@ -100,20 +96,17 @@ function EmptyState() {
     );
 }
 
-// ── Inner content (must be inside ReviewProvider) ─────────────────────────────
 function ReviewsInner() {
     const { reviews, loading, loadingMore, pagination, loadMore } = useReviews();
 
     return (
         <div className="grid lg:grid-cols-3 gap-8 pt-6">
-            {/* ── Left: summary widget ──────────────────────────── */}
             <div className="lg:col-span-1">
                 <div className="lg:sticky lg:top-6">
                     <ReviewSummaryWidget />
                 </div>
             </div>
 
-            {/* ── Right: review list ────────────────────────────── */}
             <div className="lg:col-span-2">
                 <SortBar />
 
@@ -131,7 +124,6 @@ function ReviewsInner() {
                             ))}
                         </div>
 
-                        {/* Load more */}
                         {pagination.page < pagination.pages && (
                             <div className="mt-6 text-center">
                                 <button
@@ -150,14 +142,12 @@ function ReviewsInner() {
                 )}
             </div>
 
-            {/* ── Modals (rendered at root of this subtree) ─────── */}
             <ReviewForm />
             <ReviewMediaModal />
         </div>
     );
 }
 
-// ── Public export — wraps with the provider ───────────────────────────────────
 export default function ProductReviews() {
     return (<ReviewsInner /> );
 }

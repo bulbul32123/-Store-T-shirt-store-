@@ -1,4 +1,4 @@
-//hearoSlideController.js
+
 const HeroSlide = require("../models/HeroSlide");
 
 exports.getHeroSlides = async (req, res) => {

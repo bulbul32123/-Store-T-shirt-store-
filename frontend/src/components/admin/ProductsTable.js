@@ -256,7 +256,7 @@ export default function ProductsTable({
         </table>
       </div>
 
-      {/* ── Pagination ── */}
+      
       <div className="mt-4 flex justify-end">
         <nav
           className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"

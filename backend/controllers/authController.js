@@ -1,3 +1,4 @@
+// AuthController
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
@@ -15,9 +16,9 @@ const setTokenCookie = (res, token) => {
 
   const cookieOptions = {
     httpOnly: true,
-    // Cross-site cookies (Vercel <-> Render) REQUIRE sameSite: 'none' and secure: true
-    secure: true,
-    sameSite: "Lax",
+    
+    secure: isProduction ? true : false,
+    sameSite: isProduction ? "None" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000,
     path: "/",
   };
@@ -32,8 +33,8 @@ const clearTokenCookie = (res) => {
     httpOnly: true,
     expires: new Date(0),
     path: "/",
-    secure: true,
-    sameSite: "Lax",
+    secure: isProduction ? true : false,
+    sameSite: isProduction ? "None" : "lax",
   });
 };
 

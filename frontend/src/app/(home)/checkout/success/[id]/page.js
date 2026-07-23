@@ -7,7 +7,7 @@ export const metadata = {
     "Thank you for your purchase! Your payment has been successfully verified and processed.",
   robots: {
     index: false,
-    follow: false, // Prevents search engines from indexing individual dynamic checkout sessions
+    follow: false, 
   },
 };
 

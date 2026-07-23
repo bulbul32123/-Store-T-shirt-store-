@@ -78,10 +78,10 @@ function MiniProgress({ status }) {
             <div
               className={`h-1 w-full rounded-full transition-all duration-500 ${
                 isCompleted || (isActive && isFinalStep)
-                  ? "bg-black" // Solid black for finished steps OR if the final step is reached
+                  ? "bg-black" 
                   : isActive
-                    ? "bg-gradient-to-r from-black to-gray-200 shadow-[0_0_5px_rgba(0,0,0,0.1)]" // Beautiful fading gradient for the current in-progress step
-                    : "bg-gray-100" // Light gray for upcoming steps
+                    ? "bg-gradient-to-r from-black to-gray-200 shadow-[0_0_5px_rgba(0,0,0,0.1)]" 
+                    : "bg-gray-100" 
               }`}
             />
             <span
@@ -183,7 +183,8 @@ export default function OrdersClientPage() {
                         <Image
                           src={order.orderItems[0].image}
                           alt={order.orderItems[0].name}
-                          fill
+                          height={100}
+                          width={100}
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       )}

@@ -1,7 +1,5 @@
 "use client";
 import Link from "next/link";
-import FavouriteIcon from "./FavouriteIcon";
-import ShoppingCartIcon from "./ShoppingCartIcon";
 
 export default function MobileHamburgerLinks({ setOpenHamburger }) {
   return (

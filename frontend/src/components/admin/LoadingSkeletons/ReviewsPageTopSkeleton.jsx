@@ -1,13 +1,13 @@
 export default function ReviewsPageTopSkeleton() {
     return (
         <div className="space-y-5 animate-pulse">
-            {/* Header */}
+    
             <div>
                 <div className="h-8 w-64 rounded bg-gray-200 mb-2" />
                 <div className="h-4 w-80 rounded bg-gray-100" />
             </div>
 
-            {/* Stats */}
+     
             <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
                 {Array.from({ length: 4 }).map((_, i) => (
                     <div
@@ -24,7 +24,7 @@ export default function ReviewsPageTopSkeleton() {
                 ))}
             </div>
 
-            {/* Filter Bar */}
+       
             <div className="bg-white rounded-xl border border-gray-200 p-4">
                 <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
                     {Array.from({ length: 6 }).map((_, i) => (

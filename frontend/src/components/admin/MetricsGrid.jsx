@@ -1,15 +1,9 @@
 'use client';
 
-/**
- * frontend/src/components/admin/customers/MetricsGrid.jsx
- * ─────────────────────────────────────────────────────────────────────────────
- * Four top-level KPI cards: Total Customers, Active, AOV, New This Month.
- * Shows animated skeleton while loading.
- */
 
 import { Users, UserCheck, TrendingUp, UserPlus } from 'lucide-react';
 
-// ── Config: one object per card ───────────────────────────────────────────────
+
 const CARDS = [
   {
     key:     'totalCustomers',
@@ -61,7 +55,7 @@ const CARDS = [
   }
 ];
 
-// ── Skeleton card ─────────────────────────────────────────────────────────────
+
 function SkeletonCard() {
   return (
     <div className="bg-white rounded-xl border border-gray-100 ring-1 ring-gray-100 p-5 flex items-center gap-4 animate-pulse">
@@ -75,7 +69,7 @@ function SkeletonCard() {
   );
 }
 
-// ── Single live card ──────────────────────────────────────────────────────────
+
 function MetricCard({ config, value }) {
   const { title, icon: Icon, format, palette } = config;
 
@@ -100,7 +94,7 @@ function MetricCard({ config, value }) {
   );
 }
 
-// ── Grid ──────────────────────────────────────────────────────────────────────
+
 export default function MetricsGrid({ metrics, loading }) {
   if (loading) {
     return (

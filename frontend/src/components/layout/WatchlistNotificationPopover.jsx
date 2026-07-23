@@ -10,17 +10,16 @@ import { X } from 'lucide-react';
 
 const HOUR = 60 * 60 * 1000;
 
-// Timing thresholds configuration
 const TIMINGS = {
     normal: {
-        EMPTY: 30 * 60 * 1000,          // 30 minutes
-        SAVED: 5 * 60 * 1000,           // 5 minutes
-        WAITING_A_DAY: 24 * HOUR,       // 24 hours
+        EMPTY: 30 * 60 * 1000,          
+        SAVED: 5 * 60 * 1000,           
+        WAITING_A_DAY: 24 * HOUR,       
     },
     test: {
-        EMPTY: 15 * 1000,                // 15 seconds
-        SAVED: 10 * 1000,                // 10 seconds
-        WAITING_A_DAY: 30 * 1000,        // 30 seconds
+        EMPTY: 15 * 1000,                
+        SAVED: 10 * 1000,                
+        WAITING_A_DAY: 30 * 1000,        
     }
 };
 
@@ -47,14 +46,10 @@ function getNextWatchlistPopupTrigger(items, updatedAt, lastShown, isTestMode) {
     if (!updatedAt) return { stateToShow: null, triggerTime: null };
 
     const isNewWatchlistState = !lastShown || lastShown.updatedAt !== updatedAt;
-
-    // 1. Saved for Later
     const savedTrigger = updatedAt + config.SAVED;
     if (isNewWatchlistState) {
         return { stateToShow: 'saved_for_later', triggerTime: savedTrigger };
     }
-
-    // 2. Waiting a Day
     const waitingTrigger = updatedAt + config.WAITING_A_DAY;
     if (lastShown.state === 'saved_for_later') {
         return { stateToShow: 'waiting_a_day', triggerTime: waitingTrigger };
@@ -69,13 +64,11 @@ export default function WatchlistNotificationPopover() {
     const [showPopup, setShowPopup] = useState(false);
     const [hydrated, setHydrated] = useState(false);
     
-    // Track the last shown popup in React state to trigger scheduling recalculation
     const [lastShownState, setLastShownState] = useState(null);
 
     const activeTimeoutRef = useRef(null);
     const autoCloseTimeoutRef = useRef(null);
 
-    // Initial hydration and loading storage history
     useEffect(() => {
         setHydrated(true);
         try {
@@ -84,11 +77,10 @@ export default function WatchlistNotificationPopover() {
                 setLastShownState(JSON.parse(raw));
             }
         } catch (e) {
-            // Ignore parse errors
+           
         }
     }, []);
 
-    // Cross-tab syncing & storage listener
     useEffect(() => {
         const handleStorage = (e) => {
             if (e.key === 'watchlist_popup_last_shown') {
@@ -105,7 +97,7 @@ export default function WatchlistNotificationPopover() {
         return () => window.removeEventListener('storage', handleStorage);
     }, []);
 
-    // Scheduler Effect
+    
     useEffect(() => {
         if (!hydrated) return;
 
@@ -120,7 +112,7 @@ export default function WatchlistNotificationPopover() {
             return;
         }
 
-        // Avoid rescheduling if the target state and triggerTime have not changed
+        
         if (
             activeTimeoutRef.current &&
             activeTimeoutRef.current.state === stateToShow &&
@@ -129,7 +121,7 @@ export default function WatchlistNotificationPopover() {
             return;
         }
 
-        // Clear existing scheduler timer
+        
         if (activeTimeoutRef.current) {
             clearTimeout(activeTimeoutRef.current.id);
         }
@@ -147,7 +139,7 @@ export default function WatchlistNotificationPopover() {
             localStorage.setItem('watchlist_popup_last_shown', JSON.stringify(newShown));
             setLastShownState(newShown);
 
-            // Auto-close after 5 seconds
+            
             if (autoCloseTimeoutRef.current) {
                 clearTimeout(autoCloseTimeoutRef.current);
             }
@@ -167,7 +159,7 @@ export default function WatchlistNotificationPopover() {
         };
     }, [items, updatedAt, hydrated, lastShownState]);
 
-    // Cleanup auto close on unmount
+    
     useEffect(() => {
         return () => {
             if (autoCloseTimeoutRef.current) {
@@ -189,7 +181,7 @@ export default function WatchlistNotificationPopover() {
         router.push('/watchlist');
     };
 
-    // Calculate current mood at point in time
+    
     const mood = useMemo(() => {
         if (!hydrated) return null;
         return getWatchlistMood(items, updatedAt, Date.now());
@@ -212,7 +204,7 @@ export default function WatchlistNotificationPopover() {
                     className="absolute right-0 mt-3 w-80 bg-white/95 dark:bg-[#111]/95 backdrop-blur-md text-black dark:text-white border border-gray-200 dark:border-neutral-800 shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-2xl p-4 z-50 transition-all duration-300 transform scale-100 cursor-pointer hover:border-primary/50 dark:hover:border-primary/50"
                     role="alert"
                 >
-                    {/* Header line with pulsing indicator and close button */}
+                    
                     <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                             <span className="relative flex h-2 w-2">
@@ -232,7 +224,7 @@ export default function WatchlistNotificationPopover() {
                         </button>
                     </div>
 
-                    {/* Mood Content */}
+                    
                     <h4 className="font-bold text-sm text-neutral-900 dark:text-white mb-1">
                         {mood.headline}
                     </h4>
@@ -240,7 +232,7 @@ export default function WatchlistNotificationPopover() {
                         {mood.message}
                     </p>
 
-                    {/* View Watchlist Link Hint */}
+                    
                     <div className="text-[11px] font-bold text-primary flex items-center gap-1">
                         Click to view watchlist &rarr;
                     </div>

@@ -90,7 +90,7 @@ export default function AdminLayout({ children }) {
 
   return (
     <div className="min-h-screen bg-gray-100 relative z-[11]">
-      {/* Mobile Sidebar */}
+      
       <div
         className={`fixed inset-0 z-[12] lg:hidden ${
           isMobileOpen ? 'block' : 'hidden'
@@ -148,7 +148,7 @@ export default function AdminLayout({ children }) {
         </div>
       </div>
 
-      {/* Desktop Sidebar */}
+      
       <div className="fixed inset-y-0 hidden w-64 flex-col lg:flex">
         <div className="flex flex-grow flex-col overflow-y-auto bg-white shadow-xl">
           <div className="mt-[13px] flex h-16 items-center border-b px-6">
@@ -218,7 +218,7 @@ export default function AdminLayout({ children }) {
         </div>
       </div>
 
-      {/* Main Content */}
+      
       <div className="flex flex-1 flex-col lg:pl-64">
         <AdminHeader />
 

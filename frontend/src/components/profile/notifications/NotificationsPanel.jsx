@@ -73,7 +73,6 @@ export default function NotificationsPanel() {
           const Icon = ICONS[n.type] || Info;
           const isChat = n.type === "chat_message";
 
-          // Define internal content so we can reuse it between button and link elements
           const rowInnerContent = (
             <>
               <p className="text-sm font-bold text-[#111]">{n.title}</p>

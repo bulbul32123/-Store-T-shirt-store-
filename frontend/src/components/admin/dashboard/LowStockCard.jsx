@@ -19,7 +19,6 @@ export default function LowStockCard({ products = [] }) {
       ) : (
         <div className="space-y-2">
           {products.map((product) => {
-           console.log(product)
             const imageObj = product.images?.[0];
             const imageUrl =
               typeof imageObj === "object" ? imageObj?.url : imageObj;
@@ -31,7 +30,7 @@ export default function LowStockCard({ products = [] }) {
                 className="flex justify-between items-center p-3 rounded-xl hover:bg-[#FAFAF9] transition-colors cursor-pointer group border border-transparent hover:border-black/5"
               >
                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                  {/* Product Image / Placeholder */}
+         
                   <div className="h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden border border-black/5 shrink-0">
                     {imageUrl ? (
                       <img

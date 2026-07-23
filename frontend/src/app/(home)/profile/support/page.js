@@ -31,7 +31,7 @@ export default function SupportPage() {
   const [openFaq, setOpenFaq] = useState(null);
 
   const handleOpenChat = () => {
-    // Dispatches the global event that your ChatWidget listens to
+    
     window.dispatchEvent(
       new CustomEvent("open-support-chat", {
         detail: { chatId: null },
@@ -45,7 +45,7 @@ export default function SupportPage() {
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
-      {/* Header section */}
+      
       <div className="text-center mb-10">
         <h1 className="text-2xl font-bold uppercase tracking-tight text-[#111] mb-2">
           Customer Support
@@ -56,7 +56,7 @@ export default function SupportPage() {
         </p>
       </div>
 
-      {/* Trust Badges / How it works */}
+      
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         <div className="flex flex-col items-center text-center p-5 bg-white border border-[#E5E5E5] rounded-xl">
           <MessageSquare className="text-[#FF5A1F] mb-3" size={24} />
@@ -87,7 +87,7 @@ export default function SupportPage() {
         </div>
       </div>
 
-      {/* Call to Action to open Chatbox */}
+      
       <div className="bg-[#FF5A1F]/5 border border-[#FF5A1F]/20 rounded-2xl p-8 text-center mb-12">
         <h2 className="text-lg font-bold text-[#111] mb-2">
           Need immediate assistance?
@@ -106,7 +106,7 @@ export default function SupportPage() {
         </button>
       </div>
 
-      {/* FAQ Accordion Section */}
+      
       <div>
         <h2 className="text-lg font-bold uppercase tracking-tight text-[#111] mb-6 flex items-center gap-2">
           <HelpCircle size={20} className="text-[#6F6F6F]" /> Frequently Asked

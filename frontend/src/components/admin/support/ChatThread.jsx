@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Send, Loader2, MessageCircle } from "lucide-react";
 import { getSocket } from "@/lib/socket";
-import UserAvatar from "@/components/common/UserAvatar";  // 👈 Import here
+import UserAvatar from "@/components/common/UserAvatar";  
 
 function formatTime(iso) {
   return new Date(iso).toLocaleTimeString("en-US", {
@@ -47,7 +47,7 @@ export default function ChatThread({ chat, loading, online, onNewMessage }) {
   return (
     <div className="flex-1 flex flex-col bg-gray-50 min-w-0">
       <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-200 bg-white flex-shrink-0">
-        {/* 👈 Reusable avatar setup with matching frame bounds */}
+        
         <UserAvatar user={chat.user} size="h-9 w-9" textSize="text-sm" />
 
         <div>

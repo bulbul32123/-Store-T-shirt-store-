@@ -30,7 +30,6 @@ export default function TopProductsTable({ products, loading }) {
                   {i + 1}
                 </span>
                 {p.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={p.image}
                     alt={p.name}

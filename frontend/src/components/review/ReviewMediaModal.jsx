@@ -17,10 +17,8 @@ export default function ReviewMediaModal() {
     const { open, items, startIndex } = mediaModal;
     const [current, setCurrent] = useState(startIndex);
 
-    // Sync when modal opens
     useEffect(() => { if (open) setCurrent(startIndex); }, [open, startIndex]);
 
-    // Keyboard navigation
     useEffect(() => {
         if (!open) return;
         const handler = (e) => {
@@ -32,7 +30,7 @@ export default function ReviewMediaModal() {
         return () => window.removeEventListener('keydown', handler);
     }, [open, items.length, closeMediaModal]);
 
-    // Prevent body scroll
+    
     useEffect(() => {
         document.body.style.overflow = open ? 'hidden' : '';
         return () => { document.body.style.overflow = ''; };
@@ -45,13 +43,13 @@ export default function ReviewMediaModal() {
 
     return (
         <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center">
-            {/* Backdrop */}
+        
             <div
                 className="absolute inset-0 bg-black/90 backdrop-blur-sm"
                 onClick={closeMediaModal}
             />
 
-            {/* Close */}
+
             <button
                 onClick={closeMediaModal}
                 className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
@@ -59,16 +57,16 @@ export default function ReviewMediaModal() {
                 <FiX size={22} />
             </button>
 
-            {/* Counter */}
+         
             {items.length > 1 && (
                 <span className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-sm text-white/70 font-medium">
                     {current + 1} / {items.length}
                 </span>
             )}
 
-            {/* Main media */}
+         
             <div className="relative z-10 flex items-center justify-center w-full max-w-4xl px-12">
-                {/* Prev */}
+              
                 {items.length > 1 && (
                     <button
                         onClick={() => setCurrent(c => Math.max(c - 1, 0))}
@@ -79,7 +77,7 @@ export default function ReviewMediaModal() {
                     </button>
                 )}
 
-                {/* Media container */}
+        
                 <div className="w-full max-h-[75vh] flex items-center justify-center">
                     {isVideo ? (
                         isYouTube(item.url) ? (
@@ -106,7 +104,7 @@ export default function ReviewMediaModal() {
                     )}
                 </div>
 
-                {/* Next */}
+        
                 {items.length > 1 && (
                     <button
                         onClick={() => setCurrent(c => Math.min(c + 1, items.length - 1))}
@@ -118,7 +116,7 @@ export default function ReviewMediaModal() {
                 )}
             </div>
 
-            {/* Thumbnail strip */}
+      
             {items.length > 1 && (
                 <div className="relative z-10 flex gap-2 mt-4 px-4 overflow-x-auto max-w-full">
                     {items.map((it, i) => (

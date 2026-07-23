@@ -56,9 +56,6 @@ export default function PasswordChangeDialog() {
     } catch (error) {
       const message =
         error?.response?.data?.message || "Failed to update password.";
-
-      // Map known server messages back to the specific field they concern,
-      // so the dialog highlights the right input instead of a generic banner.
       if (/current password/i.test(message)) {
         setErrors({ oldPassword: message });
       } else if (/at least 6 characters/i.test(message)) {
@@ -66,7 +63,6 @@ export default function PasswordChangeDialog() {
       } else {
         setErrors({ general: message });
       }
-      // Dialog intentionally stays open — no setOpen(false) here.
     } finally {
       setSubmitting(false);
     }

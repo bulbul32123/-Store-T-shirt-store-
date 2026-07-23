@@ -1,7 +1,7 @@
 "use client";
 import { ChevronLeft, ChevronRight, MoreVertical, Search } from "lucide-react";
 import { useState } from "react";
-import UserAvatar from "@/components/common/UserAvatar"; // 👈 Import here
+import UserAvatar from "@/components/common/UserAvatar"; 
 
 function timeAgo(date) {
   const s = Math.floor((Date.now() - new Date(date)) / 1000);
@@ -92,7 +92,7 @@ export default function ChatSidebar({
                 className={`relative flex items-center gap-3 px-4 py-3 cursor-pointer border-b border-gray-50 hover:bg-gray-50 transition-colors ${activeId === c._id ? "bg-blue-50" : ""}`}
               >
                 <div className="relative flex-shrink-0">
-                  <UserAvatar user={c.user} /> {/* 👈 Reusable usage */}
+                  <UserAvatar user={c.user} /> 
                   {online && (
                     <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-500 border-2 border-white" />
                   )}

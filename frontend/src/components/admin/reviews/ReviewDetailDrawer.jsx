@@ -143,7 +143,7 @@ export default function ReviewDetailDrawer({ review, onClose, onDelete }) {
                         </section>
                     )}
 
-                    {/* ── Reports list ──────────────────────────────────── */}
+                  
                     {review.reports?.length > 0 && (
                         <section>
                             <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">

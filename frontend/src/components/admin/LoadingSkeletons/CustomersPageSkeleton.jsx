@@ -3,7 +3,7 @@ export default function CustomersPageSkeleton() {
         <div className="min-h-screen bg-gray-50 p-6 animate-pulse">
             <div className="max-w-[1400px] mx-auto space-y-5">
 
-                {/* Header */}
+        
                 <div className="flex items-center justify-between">
                     <div className="space-y-2">
                         <div className="h-8 w-64 rounded bg-gray-200" />
@@ -13,7 +13,7 @@ export default function CustomersPageSkeleton() {
                     <div className="h-10 w-32 rounded-lg bg-gray-200" />
                 </div>
 
-                {/* Metrics */}
+               
                 <div className="grid grid-cols-1 md:grid-cols-6 gap-2">
                     {Array.from({ length: 4 }).map((_, i) => (
                         <div
@@ -27,7 +27,7 @@ export default function CustomersPageSkeleton() {
                     ))}
                 </div>
 
-                {/* Filter Bar */}
+           
                 <div className="bg-white border border-gray-200 rounded-xl p-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="h-10 rounded-md bg-gray-100" />
@@ -36,10 +36,10 @@ export default function CustomersPageSkeleton() {
                     </div>
                 </div>
 
-                {/* Customers Table */}
+            
                 <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
 
-                    {/* Header */}
+                  
                     <div className="grid grid-cols-6 gap-4 px-6 py-4 border-b">
                         {Array.from({ length: 6 }).map((_, i) => (
                             <div
@@ -49,13 +49,13 @@ export default function CustomersPageSkeleton() {
                         ))}
                     </div>
 
-                    {/* Rows */}
+
                     {Array.from({ length: 8 }).map((_, row) => (
                         <div
                             key={row}
                             className="grid grid-cols-6 gap-4 items-center px-6 py-5 border-b last:border-b-0"
                         >
-                            {/* Customer */}
+                            
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-full bg-gray-200" />
 
@@ -77,7 +77,7 @@ export default function CustomersPageSkeleton() {
                         </div>
                     ))}
 
-                    {/* Pagination */}
+         
                     <div className="flex justify-between items-center px-6 py-4">
                         <div className="h-4 w-36 rounded bg-gray-200" />
 

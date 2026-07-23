@@ -19,19 +19,19 @@ const SORT_OPTIONS = [
 ];
 
 export default function FilterBar({ filters,loading, onFilterChange }) {
-  // Local input value so typing feels instant
+  
   const [inputValue, setInputValue] = useState(filters.search);
   const debounceRef  = useRef(null);
   const isFirstMount = useRef(true);
 
-  // Sync if parent resets search externally
+  
   useEffect(() => {
     if (filters.search === '') setInputValue('');
   }, [filters.search]);
 
-  // Debounced emit to parent
+  
   useEffect(() => {
-    // Skip emitting on first mount (value already in parent state)
+    
     if (isFirstMount.current) {
       isFirstMount.current = false;
       return;
@@ -43,7 +43,7 @@ export default function FilterBar({ filters,loading, onFilterChange }) {
     }, 300);
 
     return () => clearTimeout(debounceRef.current);
-  }, [inputValue]);   // eslint-disable-line react-hooks/exhaustive-deps
+  }, [inputValue]);   
 
   const clearSearch = useCallback(() => {
     setInputValue('');
@@ -62,10 +62,10 @@ return   <div className="bg-white border border-gray-200 rounded-xl p-4">
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 space-y-3">
 
-      {/* ── Row 1: search + sort ─────────────────────────────────────────── */}
+      
       <div className="flex flex-col sm:flex-row gap-3">
 
-        {/* Search input */}
+        
         <div className="relative flex-1">
           <Search
             className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none"
@@ -91,7 +91,7 @@ return   <div className="bg-white border border-gray-200 rounded-xl p-4">
           )}
         </div>
 
-        {/* Sort dropdown */}
+        
         <div className="relative flex-shrink-0">
           <SlidersHorizontal
             className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none"
@@ -108,11 +108,11 @@ return   <div className="bg-white border border-gray-200 rounded-xl p-4">
               <option key={o.value} value={o.value}>{o.label}</option>
             ))}
           </select>
-          {/* Custom chevron */}
+          
           <span className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 text-xs">▾</span>
         </div>
       </div>
-      {/* ── Row 2: segment pills ─────────────────────────────────────────── */}
+      
       <div className="flex gap-2 flex-wrap" role="group" aria-label="Customer segment filter">
         {SEGMENTS.map(seg => (
           <button

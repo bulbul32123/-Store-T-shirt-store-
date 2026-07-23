@@ -31,7 +31,7 @@ export default function OrderDetailPage() {
 
   useEffect(() => {
     fetchOrder();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [id]);
 
   const handleCancelConfirm = async () => {
@@ -136,7 +136,7 @@ export default function OrderDetailPage() {
         </div>
       )}
 
-      {/* PRODUCT ITEMS LIST */}
+      
       <div className="space-y-4 mb-8">
         {order.orderItems.map((item, i) => (
           <div key={i} className="flex items-center gap-4 border-b pb-4">
@@ -222,7 +222,7 @@ export default function OrderDetailPage() {
         </p>
       </div>
 
-      {/* CONFIRMATION MODAL */}
+      
       <ConfirmModal
         isOpen={isCancelModalOpen}
         onClose={() => setIsCancelModalOpen(false)}
@@ -239,7 +239,7 @@ export default function OrderDetailPage() {
 }
 
 
-// ─── ORDER DETAIL SKELETON ────────────────────────────────────────────────────
+
 function OrderDetailSkeleton() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-10 animate-pulse">

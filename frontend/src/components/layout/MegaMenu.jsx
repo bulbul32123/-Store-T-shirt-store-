@@ -11,16 +11,13 @@ export default function MegaMenu() {
   const [showcaseProduct, setShowcaseProduct] = useState(null);
 
   useEffect(() => {
-    // Fetch live categories from backend
     productsApi
       .getCategories()
       .then((data) => {
-        // Handle array alignment safely based on your API logs
         setCategories(Array.isArray(data) ? data : []);
       })
       .catch(() => setCategories([]));
 
-    // Fetch the single latest product for the visual showcase slot
     productsApi
       .getProducts({ limit: 1 })
       .then((data) => {
@@ -31,7 +28,6 @@ export default function MegaMenu() {
       .catch(() => setShowcaseProduct(null));
   }, []);
 
-  // Safe image path resolution matching your ProductCard logic
   const displayImage =
     showcaseProduct?.colors?.[0]?.images?.[0]?.url ||
     showcaseProduct?.images?.[0]?.url ||
@@ -54,16 +50,13 @@ export default function MegaMenu() {
                         <div className="mx-auto max-w-7xl px-8">
                           <div className="py-5 w-full">
                             <div className="flex justify-center items-start flex-wrap gap-8 md:gap-12 w-full gap-y-10 text-sm">
-                              {/* 1. Status Filter Column */}
+                    
                               <MegaMenuFeatured />
-
-                              {/* 2. Simplified Shop By Column */}
                               <ShopBy />
 
-                              {/* 3. Live Database Categories Column */}
                               <ShopByCategory categories={categories} />
 
-                              {/* 4. Live Showcase Product Card */}
+                            
                               {showcaseProduct && (
                                 <div className="max-lg:hidden flex">
                                   <Link

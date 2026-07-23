@@ -5,7 +5,6 @@ import UserProfile from "./userProfile/UserProfile";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Header() {
-  // 2. Consume the real authentication values from Context
   const { isAuthenticated, user, loading: isLoading } = useAuth();
 
   return (

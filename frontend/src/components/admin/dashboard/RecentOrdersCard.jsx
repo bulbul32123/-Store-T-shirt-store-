@@ -1,5 +1,5 @@
 "use client";
-import UserAvatar from "@/components/common/UserAvatar"; // 👈 Adjust path matching your project directory
+import UserAvatar from "@/components/common/UserAvatar"; 
 import Link from "next/link";
 import { FiFileText } from "react-icons/fi";
 
@@ -13,7 +13,6 @@ const STATUS_COLORS = {
 };
 
 export default function RecentOrdersCard({ orders = [] }) {
-  console.log(orders);
   return (
     <div className="bg-white rounded-2xl border border-black/5 p-6">
       <h2 className="text-lg font-bold text-[#18181B] mb-5">Recent Orders</h2>
@@ -35,7 +34,7 @@ export default function RecentOrdersCard({ orders = [] }) {
                 className="flex justify-between items-center p-3 rounded-xl hover:bg-[#FAFAF9] transition-colors cursor-pointer group border border-transparent hover:border-black/5"
               >
                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                  {/* User Avatar Component Integration */}
+             
                   <UserAvatar
                     user={order.user}
                     size="h-10 w-10"
