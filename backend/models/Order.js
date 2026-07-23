@@ -11,7 +11,6 @@ const orderSchema = new mongoose.Schema({
   orderNumber: {
     type: Number,
     unique: true,
-    index: true,
   },
 
   user: {

@@ -27,9 +27,11 @@ export async function proxy(req) {
         algorithms: ["HS256"],
       });
 
+      console.log("MW payload:", payload);
       isAdmin = payload?.role === "admin";
     } catch (err) {
       console.error("JWT Verification Failed:", err.message);
+      console.log("MW token present:", !!token);
       isAdmin = false;
     }
   } else {
