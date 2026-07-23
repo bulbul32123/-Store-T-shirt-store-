@@ -1,5 +1,4 @@
 "use client";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
 import { useState } from "react";
@@ -12,7 +11,22 @@ export default function ClientLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const { login, loading } = useAuth();
+  const [demoLoading, setDemoLoading] = useState(null);
 
+  const handleDemoLogin = async () => {
+    setDemoLoading(true);
+    const demoEmail = "admin@tshirtstore.com";
+    const demoPassword = "123456789";
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    try {
+      await login(demoEmail, demoPassword);
+    } catch (error) {
+      console.error("Demo login error:", error);
+    } finally {
+      setDemoLoading(false);
+    }
+  };
   const validateForm = () => {
     const newErrors = {};
 
@@ -66,7 +80,6 @@ export default function ClientLoginPage() {
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
-      
             <div>
               <label
                 htmlFor="email"
@@ -96,7 +109,6 @@ export default function ClientLoginPage() {
               )}
             </div>
 
-            
             <div>
               <label
                 htmlFor="password"
@@ -192,6 +204,18 @@ export default function ClientLoginPage() {
         <p className="mt-4 text-center text-xs text-gray-400">
           Running on a free-tier database — first request may be slow.
         </p>
+          <button
+            type="button"
+            disabled={demoLoading}
+            onClick={handleDemoLogin}
+            className={`group mt-2 relative w-full flex justify-center py-2 px-4 border border-transparent rounded-md text-white font-medium ${
+              demoLoading
+                ? "bg-[#1a1a1a] cursor-not-allowed"
+                : "bg-[#1a1a1a] hover:[#1a1a1a]/80  focus:outline-none focus:ring-2 focus:ring-offset-2"
+            }`}
+          >
+            {demoLoading ? "Signing in..." : "🔑 Skip — Login as Admin"}
+          </button>
         <div className="mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">

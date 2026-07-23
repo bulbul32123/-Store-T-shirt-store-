@@ -1,4 +1,3 @@
-//proxy.js
 import { jwtVerify } from "jose";
 import { NextResponse } from "next/server";
 
@@ -39,7 +38,7 @@ export async function proxy(req) {
   }
 
   if (!isAdmin) {
-    return NextResponse.redirect(new URL("/auth/login", req.url));
+    return NextResponse.redirect(new URL("/admin-not-found-page", req.url));
   }
 
   return NextResponse.next();

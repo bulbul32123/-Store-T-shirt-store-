@@ -10,11 +10,12 @@ import PasswordChangeDialog from "./PasswordChangeDialog";
 
 export default function AccountForm() {
   const { user, updateProfile, loading } = useAuth();
+  console.log(user);
 
   const [form, setForm] = useState({
     name: user?.name || "",
     gender: user?.gender || "",
-    phone: user?.phone || "",
+    phone: user?.phone || user?.phoneNumber || '',
     dateOfBirth: user?.dateOfBirth ? user.dateOfBirth.slice(0, 10) : "",
     address: {
       street: user?.address?.street || "",
@@ -28,12 +29,11 @@ export default function AccountForm() {
   const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
-
     if (user) {
       const newForm = {
         name: user.name || "",
         gender: user.gender ? String(user.gender).trim().toLowerCase() : "",
-        phone: user.phone || "",
+        phone: user?.phone || user?.phoneNumber || "",
         dateOfBirth: user.dateOfBirth ? user.dateOfBirth.slice(0, 10) : "",
         address: {
           street: user.address?.street || "",

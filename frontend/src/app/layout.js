@@ -1,6 +1,5 @@
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
-import { CompareProvider } from "@/context/CompareContext";
 import { NotificationProvider } from "@/context/NotificationContext";
 import { VisitPopupProvider } from "@/context/VisitPopupContext";
 import { WatchlistProvider } from "@/context/WatchlistContext";
@@ -30,48 +29,46 @@ export default function RootLayout({ children }) {
             <CartProvider>
               <WatchlistProvider>
                 <VisitPopupProvider>
-                  <CompareProvider>
-                    <Toaster
-                      position="top-right"
-                      reverseOrder={false}
-                      gutter={8}
-                      toastOptions={{
-                        duration: 4000,
+                  <Toaster
+                    position="top-right"
+                    reverseOrder={false}
+                    gutter={8}
+                    toastOptions={{
+                      duration: 4000,
+                      style: {
+                        background: "#ffb800",
+                        color: "#000000",
+                        borderRadius: "10px",
+                        padding: "16px",
+                        fontSize: "14px",
+                      },
+                      success: {
+                        duration: 3000,
                         style: {
-                          background: "#ffb800", 
-                          color: "#000000",
-                          borderRadius: "10px",
-                          padding: "16px",
-                          fontSize: "14px",
+                          background: "#22c55e",
+                          color: "#ffffff",
+                          border: "1px solid #16a34a",
                         },
-                        success: {
-                          duration: 3000,
-                          style: {
-                            background: "#22c55e",
-                            color: "#ffffff", 
-                            border: "1px solid #16a34a",
-                          },
-                          iconTheme: {
-                            primary: "#ffffff",
-                            secondary: "#22c55e",
-                          },
+                        iconTheme: {
+                          primary: "#ffffff",
+                          secondary: "#22c55e",
                         },
-                        error: {
-                          duration: 5000,
-                          style: {
-                            background: "#ef4444", 
-                            color: "#ffffff",
-                            border: "1px solid #dc2626",
-                          },
-                          iconTheme: {
-                            primary: "#ffffff",
-                            secondary: "#ef4444",
-                          },
+                      },
+                      error: {
+                        duration: 5000,
+                        style: {
+                          background: "#ef4444",
+                          color: "#ffffff",
+                          border: "1px solid #dc2626",
                         },
-                      }}
-                    />
-                    {children}
-                  </CompareProvider>
+                        iconTheme: {
+                          primary: "#ffffff",
+                          secondary: "#ef4444",
+                        },
+                      },
+                    }}
+                  />
+                  {children}
                 </VisitPopupProvider>
               </WatchlistProvider>
             </CartProvider>

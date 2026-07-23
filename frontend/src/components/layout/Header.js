@@ -1,11 +1,11 @@
 "use client";
 import Link from "next/link";
 import UserProfile from "./userProfile/UserProfile";
-// 1. Import your custom useAuth hook
 import { useAuth } from "@/context/AuthContext";
 
 export default function Header() {
   const { isAuthenticated, user, loading: isLoading } = useAuth();
+  console.log("user", user);
 
   return (
     <div className=" bg-[#f7f5f5]">

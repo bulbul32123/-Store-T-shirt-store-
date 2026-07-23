@@ -1,4 +1,3 @@
-//src/context/authContext.js
 "use client";
 import { API_URL } from "@/utils/config";
 import axios from "axios";
@@ -103,7 +102,6 @@ export const AuthProvider = ({ children }) => {
       if (data.success && data.user) {
         if (requireAdmin && data.user.role !== "admin") {
           await axios.post(`${API_URL}/api/auth/logout`);
-          // Clear token cookie
           document.cookie =
             "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
           setUser(null);
@@ -112,7 +110,6 @@ export const AuthProvider = ({ children }) => {
           throw new Error(msg);
         }
 
-        // SET TOKEN COOKIE FOR NEXT.JS MIDDLEWARE / PROXY
         if (data.token) {
           document.cookie = `token=${data.token}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax;`;
         }
@@ -156,7 +153,6 @@ export const AuthProvider = ({ children }) => {
       if (data.success && data.user) {
         if (data.user.role !== "admin") {
           await axios.post(`${API_URL}/api/auth/logout`);
-          // Clear token cookie
           document.cookie =
             "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
           setUser(null);
@@ -164,8 +160,6 @@ export const AuthProvider = ({ children }) => {
           toast.error(msg);
           throw new Error(msg);
         }
-
-        // SET TOKEN COOKIE FOR NEXT.JS MIDDLEWARE / PROXY
         if (data.token) {
           document.cookie = `token=${data.token}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax;`;
         }
@@ -190,8 +184,6 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await axios.post(`${API_URL}/api/auth/logout`);
-
-      // Clear Next.js token cookie
       document.cookie =
         "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
 

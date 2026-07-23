@@ -143,7 +143,6 @@ export default function ChatWidget() {
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end font-sans">
       {isOpen && (
         <div className="mb-4 w-[360px] sm:w-[400px] h-[560px] bg-white rounded-3xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] flex flex-col overflow-hidden transition-all duration-300 ease-out transform scale-100 origin-bottom-right">
-       
           <div className="flex items-center justify-between px-5 py-4 bg-black text-white shrink-0">
             <div className="flex items-center gap-3">
               <div className="relative">
@@ -152,8 +151,8 @@ export default function ChatWidget() {
                     <Image
                       src="/favicon.svg"
                       alt="logo"
-                      width={30}
-                      height={30}
+                      width={100}
+                      height={100}
                       loading="eager"
                     />
                   </Link>

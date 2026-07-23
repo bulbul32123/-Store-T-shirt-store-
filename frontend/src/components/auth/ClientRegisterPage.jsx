@@ -28,7 +28,21 @@ export default function ClientRegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
-  const { register, loading } = useAuth();
+  const { register, login, loading } = useAuth();
+  const [demoLoading, setDemoLoading] = useState(false);
+
+  const handleDemoLogin = async () => {
+    setDemoLoading(true);
+    const demoEmail = "admin@tshirtstore.com";
+    const demoPassword = "123456789";
+    try {
+      await login(demoEmail, demoPassword);
+    } catch (error) {
+      console.error("Demo login error:", error);
+    } finally {
+      setDemoLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -356,6 +370,18 @@ export default function ClientRegisterPage() {
                   </span>
                 </div>
               </div>
+              <button
+                type="button"
+                disabled={demoLoading}
+                onClick={handleDemoLogin}
+                className={`group mt-2 relative w-full flex justify-center py-2 px-4 border border-transparent rounded-md text-white font-medium ${
+                  demoLoading
+                    ? "bg-[#1a1a1a] cursor-not-allowed"
+                    : "bg-[#1a1a1a] hover:[#1a1a1a]/80  focus:outline-none focus:ring-2 focus:ring-offset-2"
+                }`}
+              >
+                {demoLoading ? "Signing in..." : "🔑 Skip — Login as Admin"}
+              </button>
 
               <div className="mt-6 grid grid-cols-2 gap-3">
                 <button

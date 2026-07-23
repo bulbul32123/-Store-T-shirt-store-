@@ -1,4 +1,3 @@
-// AuthController
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
@@ -16,7 +15,7 @@ const setTokenCookie = (res, token) => {
 
   const cookieOptions = {
     httpOnly: true,
-    
+
     secure: isProduction ? true : false,
     sameSite: isProduction ? "None" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -126,17 +125,12 @@ exports.login = async (req, res) => {
     }
     const token = generateToken(user._id, user.role);
     setTokenCookie(res, token);
-    const userPayload = {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-    };
+    const fullUser = await User.findById(user._id).select("-password");
 
     res.json({
       success: true,
       message: "Login successful",
-      user: userPayload,
+      user: fullUser,
       token,
     });
   } catch (err) {
