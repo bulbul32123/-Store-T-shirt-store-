@@ -1,3 +1,4 @@
+//next.config.mjs
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -21,6 +22,15 @@ const nextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://payra-xsn4.onrender.com/api/:path*",
+      },
+    ];
+  },
 };
+
 
 export default nextConfig;
