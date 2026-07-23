@@ -1,0 +1,100 @@
+[
+  {
+    "_id": "6a5b7e7a1412ffd05d3aeb4a",
+    "product": "6a5b2b1ceb67016e41def11f",
+    "__v": 0,
+    "createdAt": "2026-07-18T13:24:10.584Z",
+    "image": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784485549/payra-store/assets/jq6878ctqqsdt5ix6mus.jpg",
+      "public_id": "payra-store/assets/jq6878ctqqsdt5ix6mus"
+    },
+    "order": 0,
+    "showStatus": false,
+    "title": "",
+    "updatedAt": "2026-07-19T18:25:50.340Z"
+  },
+  {
+    "_id": "6a5b7ecc1412ffd05d3aeb4d",
+    "product": "6a5b1f97eb67016e41deea8e",
+    "__v": 0,
+    "createdAt": "2026-07-18T13:25:32.224Z",
+    "image": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784485358/payra-store/assets/nsgwkkfvkxdv6vvgn5um.jpg",
+      "public_id": "payra-store/assets/nsgwkkfvkxdv6vvgn5um"
+    },
+    "order": 0,
+    "showStatus": false,
+    "title": "",
+    "updatedAt": "2026-07-19T18:22:39.048Z"
+  },
+  {
+    "_id": "6a5b7fd91412ffd05d3aeb4e",
+    "product": "6a43f4aa944f07f16766dbcc",
+    "__v": 0,
+    "createdAt": "2026-07-18T13:30:01.260Z",
+    "image": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784485274/payra-store/assets/fkdvi102pvepq53mfyfd.jpg",
+      "public_id": "payra-store/assets/fkdvi102pvepq53mfyfd"
+    },
+    "order": 0,
+    "showStatus": false,
+    "title": "",
+    "updatedAt": "2026-07-19T18:21:15.648Z"
+  },
+  {
+    "_id": "6a5d131df64993553b5c98e6",
+    "product": "6a5a43dc5bac018e87405532",
+    "__v": 0,
+    "createdAt": "2026-07-19T18:10:37.768Z",
+    "image": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784484637/payra-store/assets/bfqfus5ipj8fotrctmlr.jpg",
+      "public_id": "payra-store/assets/bfqfus5ipj8fotrctmlr"
+    },
+    "order": 0,
+    "showStatus": false,
+    "title": "",
+    "updatedAt": "2026-07-19T18:10:37.768Z"
+  },
+  {
+    "_id": "6a5d136ef64993553b5c98e7",
+    "product": "6a5b2df3eb67016e41def386",
+    "__v": 0,
+    "createdAt": "2026-07-19T18:11:58.509Z",
+    "image": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784485689/payra-store/assets/ge4ocixe1bnzgddo1omd.jpg",
+      "public_id": "payra-store/assets/ge4ocixe1bnzgddo1omd"
+    },
+    "order": 0,
+    "showStatus": false,
+    "title": "",
+    "updatedAt": "2026-07-19T18:28:10.650Z"
+  },
+  {
+    "_id": "6a5d138ff64993553b5c98e8",
+    "product": "6a5b3076eb67016e41def5ba",
+    "__v": 0,
+    "createdAt": "2026-07-19T18:12:30.912Z",
+    "image": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784484750/payra-store/assets/rofvrqhzyaaqb36weran.jpg",
+      "public_id": "payra-store/assets/rofvrqhzyaaqb36weran"
+    },
+    "order": 0,
+    "showStatus": false,
+    "title": "",
+    "updatedAt": "2026-07-19T18:12:30.912Z"
+  },
+  {
+    "_id": "6a5d13e1f64993553b5c98eb",
+    "product": "6a5a42fb5bac018e874054b3",
+    "__v": 0,
+    "createdAt": "2026-07-19T18:13:53.217Z",
+    "image": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784484831/payra-store/assets/pvzpnsqsq9rhdchjhnfb.jpg",
+      "public_id": "payra-store/assets/pvzpnsqsq9rhdchjhnfb"
+    },
+    "order": 0,
+    "showStatus": false,
+    "title": "",
+    "updatedAt": "2026-07-19T18:13:53.217Z"
+  }
+]

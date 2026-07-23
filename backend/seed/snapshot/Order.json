@@ -1,0 +1,1485 @@
+[
+  {
+    "_id": "6a5dd31d53afc1c9d290a3fb",
+    "user": "6a5dd02053afc1c9d290a25e",
+    "orderItems": [
+      {
+        "product": "6a5b3076eb67016e41def5ba",
+        "name": "Brazil National Team",
+        "quantity": 3,
+        "price": 61.75,
+        "size": "M",
+        "color": "Yellow",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784361069/payra-store/assets/bksmhhzwzzcq718pbyih.avif",
+        "_id": "6a5dd19553afc1c9d290a37a"
+      }
+    ],
+    "shippingAddress": {
+      "street": "742 Evergreen Terrace",
+      "city": "Springfield",
+      "state": "OR",
+      "postalCode": "97477",
+      "country": "United States"
+    },
+    "phone": "1-555-019-2834",
+    "paymentMethod": "card",
+    "paymentResult": {
+      "id": "pi_3TvBxPCub7jP1bMn1CPjAxWR",
+      "status": "paid",
+      "update_time": "2026-07-20T07:49:49.343Z",
+      "email_address": "jon@gmail.com"
+    },
+    "stripeSessionId": "cs_test_a1TPmAYfXDs7B10pzqevGKSMSECvoXPVLAhUfVHSGCea22LuSaLktKmMFr",
+    "itemsPrice": 185.25,
+    "taxPrice": 5,
+    "shippingPrice": 0,
+    "totalPrice": 190.25,
+    "isPaid": true,
+    "paidAt": "2026-07-20T07:49:49.343Z",
+    "paymentStatus": "paid",
+    "isDelivered": false,
+    "orderStatus": "pending",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [],
+    "createdAt": "2026-07-20T07:49:49.345Z",
+    "updatedAt": "2026-07-20T07:49:49.350Z",
+    "orderNumber": 27,
+    "__v": 0
+  },
+  {
+    "_id": "6a5dd37b53afc1c9d290a4b0",
+    "user": "6a5dd02053afc1c9d290a25e",
+    "orderItems": [
+      {
+        "product": "6a5a43dc5bac018e87405532",
+        "name": "Max90 tee Sportswear",
+        "quantity": 2,
+        "price": 42.75,
+        "size": "XXL",
+        "color": "Titanium White",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784300485/payra-store/assets/mlvmybhu2crozseq0rgm.avif",
+        "_id": "6a5dd37b53afc1c9d290a4b1"
+      }
+    ],
+    "shippingAddress": {
+      "street": "742 Evergreen Terrace",
+      "city": "Springfield",
+      "state": "OR",
+      "postalCode": "97477",
+      "country": "United States"
+    },
+    "phone": "1-555-019-2834",
+    "paymentMethod": "cod",
+    "stripeSessionId": null,
+    "itemsPrice": 85.5,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 100.5,
+    "isPaid": false,
+    "paymentStatus": "unpaid",
+    "isDelivered": false,
+    "orderStatus": "shipped",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [
+      {
+        "status": "shipped",
+        "note": "",
+        "changedAt": "2026-07-20T07:53:50.826Z",
+        "_id": "6a5dd40e53afc1c9d290a870"
+      }
+    ],
+    "createdAt": "2026-07-20T07:51:23.402Z",
+    "updatedAt": "2026-07-20T07:51:23.404Z",
+    "orderNumber": 28,
+    "__v": 0
+  },
+  {
+    "_id": "6a5dd39a53afc1c9d290a537",
+    "user": "6a5dd02053afc1c9d290a25e",
+    "orderItems": [
+      {
+        "product": "6a5b1f97eb67016e41deea8e",
+        "name": "Jordan Graphic",
+        "quantity": 1,
+        "price": 44.8,
+        "size": "M",
+        "color": "Astronaut Helmet",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784356719/payra-store/assets/jnkitpull2stlq9vkxhg.avif",
+        "_id": "6a5dd39a53afc1c9d290a538"
+      }
+    ],
+    "shippingAddress": {
+      "street": "742 Evergreen Terrace",
+      "city": "Springfield",
+      "state": "OR",
+      "postalCode": "97477",
+      "country": "United States"
+    },
+    "phone": "1-555-019-2834",
+    "paymentMethod": "cod",
+    "stripeSessionId": null,
+    "itemsPrice": 44.8,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 59.8,
+    "isPaid": false,
+    "paymentStatus": "unpaid",
+    "isDelivered": true,
+    "orderStatus": "delivered",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [
+      {
+        "status": "delivered",
+        "note": "",
+        "changedAt": "2026-07-20T07:54:08.513Z",
+        "_id": "6a5dd42053afc1c9d290a8ba"
+      }
+    ],
+    "createdAt": "2026-07-20T07:51:54.548Z",
+    "updatedAt": "2026-07-20T07:51:54.550Z",
+    "orderNumber": 29,
+    "__v": 0,
+    "deliveredAt": "2026-07-20T07:54:08.513Z"
+  },
+  {
+    "_id": "6a5dd3d053afc1c9d290a62a",
+    "user": "6a5dd02053afc1c9d290a25e",
+    "orderItems": [
+      {
+        "product": "6a5b313beb67016e41def684",
+        "name": "Norway National Team",
+        "quantity": 1,
+        "price": 65,
+        "size": "XS",
+        "color": "Red",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784361263/payra-store/assets/hcpojexyueze3snhgs4d.avif",
+        "_id": "6a5dd3c753afc1c9d290a5ff"
+      }
+    ],
+    "shippingAddress": {
+      "street": "742 Evergreen Terrace",
+      "city": "Springfield",
+      "state": "OR",
+      "postalCode": "97477",
+      "country": "United States"
+    },
+    "phone": "1-555-019-2834",
+    "paymentMethod": "card",
+    "paymentResult": {
+      "id": "pi_3TvC0ICub7jP1bMn00ChBXOA",
+      "status": "paid",
+      "update_time": "2026-07-20T07:52:48.073Z",
+      "email_address": "jon@gmail.com"
+    },
+    "stripeSessionId": "cs_test_a1FXlwG2ElxbMDyxBQifxTzXUbCUuTxxB9CfSZ6sFZe9l5MN07TEmcXAo9",
+    "itemsPrice": 65,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 80,
+    "isPaid": true,
+    "paidAt": "2026-07-20T07:52:48.073Z",
+    "paymentStatus": "paid",
+    "isDelivered": true,
+    "orderStatus": "delivered",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [
+      {
+        "status": "delivered",
+        "note": "",
+        "changedAt": "2026-07-20T07:54:22.914Z",
+        "_id": "6a5dd42e53afc1c9d290a8f9"
+      }
+    ],
+    "createdAt": "2026-07-20T07:52:48.075Z",
+    "updatedAt": "2026-07-20T07:52:48.075Z",
+    "orderNumber": 30,
+    "__v": 0,
+    "deliveredAt": "2026-07-20T07:54:22.914Z"
+  },
+  {
+    "_id": "6a5dd82053afc1c9d290aed0",
+    "user": "6a5dd02053afc1c9d290a25e",
+    "orderItems": [
+      {
+        "product": "6a5a42fb5bac018e874054b3",
+        "name": "Max90 T-Shirt",
+        "quantity": 1,
+        "price": 29,
+        "size": "S",
+        "color": "Astronaut Helmet",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784300227/payra-store/assets/pvtqpmezfkjftoim6zv7.avif",
+        "_id": "6a5dd82053afc1c9d290aed1"
+      }
+    ],
+    "shippingAddress": {
+      "street": "742 Evergreen Terrace",
+      "city": "Springfield",
+      "state": "OR",
+      "postalCode": "97477",
+      "country": "United States"
+    },
+    "phone": "1-555-019-2834",
+    "paymentMethod": "cod",
+    "stripeSessionId": null,
+    "itemsPrice": 29,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 44,
+    "isPaid": false,
+    "paymentStatus": "unpaid",
+    "isDelivered": true,
+    "orderStatus": "delivered",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [
+      {
+        "status": "delivered",
+        "note": "",
+        "changedAt": "2026-07-20T08:12:46.568Z",
+        "_id": "6a5dd87e53afc1c9d290af6e"
+      }
+    ],
+    "createdAt": "2026-07-20T08:11:12.669Z",
+    "updatedAt": "2026-07-20T08:11:12.671Z",
+    "orderNumber": 31,
+    "__v": 0,
+    "deliveredAt": "2026-07-20T08:12:46.568Z"
+  },
+  {
+    "_id": "6a5ddd8553afc1c9d290b675",
+    "user": "6a5ddc0a53afc1c9d290b55c",
+    "orderItems": [
+      {
+        "product": "6a43f4aa944f07f16766dbcc",
+        "name": "Classic Cotton Tee",
+        "quantity": 1,
+        "price": 34,
+        "size": "XS",
+        "color": "White",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1782838357/tshirt-store/products/fod5ry6blfms9xpsgesk.webp",
+        "_id": "6a5ddcd753afc1c9d290b628"
+      }
+    ],
+    "shippingAddress": {
+      "street": "456 Oak Avenue",
+      "city": "Seattle",
+      "state": "  WA",
+      "postalCode": "98101",
+      "country": "United States"
+    },
+    "phone": "+1-555-010-1002",
+    "paymentMethod": "card",
+    "paymentResult": {
+      "id": "pi_3TvCeNCub7jP1bMn0HqEZgF8",
+      "status": "paid",
+      "update_time": "2026-07-20T08:34:13.184Z",
+      "email_address": "emily.davis@example.com"
+    },
+    "stripeSessionId": "cs_test_a1V7KXqchJ1t0ExEtPMhg9bFzFISlATfqKMjVZYGlSTCmhI5SPVgyQCOym",
+    "itemsPrice": 34,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 49,
+    "isPaid": true,
+    "paidAt": "2026-07-20T08:34:13.184Z",
+    "paymentStatus": "paid",
+    "isDelivered": false,
+    "orderStatus": "pending",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [],
+    "createdAt": "2026-07-20T08:34:13.185Z",
+    "updatedAt": "2026-07-20T08:34:13.186Z",
+    "orderNumber": 32,
+    "__v": 0
+  },
+  {
+    "_id": "6a5dddaa53afc1c9d290b6eb",
+    "user": "6a5ddc0a53afc1c9d290b55c",
+    "orderItems": [
+      {
+        "product": "6a5b2b81eb67016e41def181",
+        "name": "Midweight cotton",
+        "quantity": 4,
+        "price": 54,
+        "size": "M",
+        "color": "White",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784359805/payra-store/assets/gsvlpe5cnbqzvivga4mc.avif",
+        "_id": "6a5dddaa53afc1c9d290b6ec"
+      }
+    ],
+    "shippingAddress": {
+      "street": "456 Oak Avenue",
+      "city": "Seattle",
+      "state": "  WA",
+      "postalCode": "98101",
+      "country": "United States"
+    },
+    "phone": "+1-555-010-1002",
+    "paymentMethod": "cod",
+    "stripeSessionId": null,
+    "itemsPrice": 216,
+    "taxPrice": 5,
+    "shippingPrice": 0,
+    "totalPrice": 221,
+    "isPaid": false,
+    "paymentStatus": "unpaid",
+    "isDelivered": true,
+    "orderStatus": "delivered",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [
+      {
+        "status": "delivered",
+        "note": "",
+        "changedAt": "2026-07-20T08:44:12.373Z",
+        "_id": "6a5ddfdc53afc1c9d290bedb"
+      }
+    ],
+    "createdAt": "2026-07-20T08:34:50.507Z",
+    "updatedAt": "2026-07-20T08:34:50.508Z",
+    "orderNumber": 33,
+    "__v": 0,
+    "deliveredAt": "2026-07-20T08:44:12.373Z"
+  },
+  {
+    "_id": "6a5ddf3753afc1c9d290bc3a",
+    "user": "6a5ddc0a53afc1c9d290b55c",
+    "orderItems": [
+      {
+        "product": "6a390103a03733eb178607df",
+        "name": "Half-Sleeve T-Shirts",
+        "quantity": 2,
+        "price": 32.3,
+        "size": "XXL",
+        "color": "white",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1782120692/tshirt-store/products/ybmybq5tazkzjg8khmgh.avif",
+        "_id": "6a5ddf3753afc1c9d290bc3b"
+      }
+    ],
+    "shippingAddress": {
+      "street": "456 Oak Avenue",
+      "city": "Seattle",
+      "state": "  WA",
+      "postalCode": "98101",
+      "country": "United States"
+    },
+    "phone": "+1-555-010-1002",
+    "paymentMethod": "cod",
+    "stripeSessionId": null,
+    "itemsPrice": 64.6,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 73.14,
+    "isPaid": false,
+    "paymentStatus": "unpaid",
+    "isDelivered": true,
+    "orderStatus": "delivered",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 6.46,
+    "couponCode": "THANKSA1W0M9",
+    "statusHistory": [
+      {
+        "status": "delivered",
+        "note": "",
+        "changedAt": "2026-07-20T08:44:02.190Z",
+        "_id": "6a5ddfd253afc1c9d290bea1"
+      }
+    ],
+    "createdAt": "2026-07-20T08:41:27.510Z",
+    "updatedAt": "2026-07-20T08:41:27.511Z",
+    "orderNumber": 34,
+    "__v": 0,
+    "deliveredAt": "2026-07-20T08:44:02.190Z"
+  },
+  {
+    "_id": "6a5ddf6553afc1c9d290bcda",
+    "user": "6a5ddc0a53afc1c9d290b55c",
+    "orderItems": [
+      {
+        "product": "6a5a25f25bac018e87404860",
+        "name": "Dri-FIT Golf Long-Sleeve",
+        "quantity": 4,
+        "price": 34,
+        "size": "XS",
+        "color": "Dust grey",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784536708/payra-store/assets/ginsr46eawxmy54wyajq.jpg",
+        "_id": "6a5ddf6553afc1c9d290bcdb"
+      }
+    ],
+    "shippingAddress": {
+      "street": "456 Oak Avenue",
+      "city": "Seattle",
+      "state": "  WA",
+      "postalCode": "98101",
+      "country": "United States"
+    },
+    "phone": "+1-555-010-1002",
+    "paymentMethod": "cod",
+    "stripeSessionId": null,
+    "itemsPrice": 136,
+    "taxPrice": 5,
+    "shippingPrice": 0,
+    "totalPrice": 134.2,
+    "isPaid": false,
+    "paymentStatus": "unpaid",
+    "isDelivered": false,
+    "orderStatus": "cancelled",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 6.8,
+    "couponCode": "SUMMER",
+    "statusHistory": [],
+    "createdAt": "2026-07-20T08:42:13.980Z",
+    "updatedAt": "2026-07-20T08:44:35.682Z",
+    "orderNumber": 35,
+    "__v": 0
+  },
+  {
+    "_id": "6a5ddfb153afc1c9d290be0c",
+    "user": "6a5ddc0a53afc1c9d290b55c",
+    "orderItems": [
+      {
+        "product": "6a5b2ebceb67016e41def430",
+        "name": "Graphic Tees Sportswear",
+        "quantity": 1,
+        "price": 60.06,
+        "size": "XXL",
+        "color": "Concrete Gray",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784360587/payra-store/assets/tsoqrgnnqhngynydavmq.avif",
+        "_id": "6a5ddfb153afc1c9d290be0d"
+      }
+    ],
+    "shippingAddress": {
+      "street": "456 Oak Avenue",
+      "city": "Seattle",
+      "state": "  WA",
+      "postalCode": "98101",
+      "country": "United States"
+    },
+    "phone": "+1-555-010-1002",
+    "paymentMethod": "cod",
+    "stripeSessionId": null,
+    "itemsPrice": 60.06,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 75.06,
+    "isPaid": false,
+    "paymentStatus": "unpaid",
+    "isDelivered": true,
+    "orderStatus": "delivered",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [
+      {
+        "status": "delivered",
+        "note": "",
+        "changedAt": "2026-07-20T08:43:53.033Z",
+        "_id": "6a5ddfc953afc1c9d290be6c"
+      }
+    ],
+    "createdAt": "2026-07-20T08:43:29.122Z",
+    "updatedAt": "2026-07-20T08:43:29.123Z",
+    "orderNumber": 36,
+    "__v": 0,
+    "deliveredAt": "2026-07-20T08:43:53.033Z"
+  },
+  {
+    "_id": "6a5de14c53afc1c9d290c3c2",
+    "user": "6a5ddc0a53afc1c9d290b55c",
+    "orderItems": [
+      {
+        "product": "6a390103a03733eb178607df",
+        "name": "Classic Jordan T-Shirts",
+        "quantity": 2,
+        "price": 32.3,
+        "size": "XXL",
+        "color": "white",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1782120692/tshirt-store/products/ybmybq5tazkzjg8khmgh.avif",
+        "_id": "6a5de14c53afc1c9d290c3c3"
+      }
+    ],
+    "shippingAddress": {
+      "street": "456 Oak Avenue",
+      "city": "Seattle",
+      "state": "  WA",
+      "postalCode": "98101",
+      "country": "United States"
+    },
+    "phone": "+1-555-010-1002",
+    "paymentMethod": "cod",
+    "stripeSessionId": null,
+    "itemsPrice": 64.6,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 79.6,
+    "isPaid": false,
+    "paymentStatus": "unpaid",
+    "isDelivered": true,
+    "orderStatus": "delivered",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [
+      {
+        "status": "delivered",
+        "note": "",
+        "changedAt": "2026-07-20T08:50:37.092Z",
+        "_id": "6a5de15d53afc1c9d290c40a"
+      }
+    ],
+    "createdAt": "2026-07-20T08:50:20.277Z",
+    "updatedAt": "2026-07-20T08:50:20.278Z",
+    "orderNumber": 37,
+    "__v": 0,
+    "deliveredAt": "2026-07-20T08:50:37.092Z"
+  },
+  {
+    "_id": "6a5de20c53afc1c9d290c5d4",
+    "user": "6a5ddc0a53afc1c9d290b55c",
+    "orderItems": [
+      {
+        "product": "6a5a42fb5bac018e874054b3",
+        "name": "Max90 T-Shirt",
+        "quantity": 1,
+        "price": 29,
+        "size": "S",
+        "color": "Turrell Light Blue",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784300278/payra-store/assets/ylijsqqzvvasx9l3swqt.avif",
+        "_id": "6a5de20c53afc1c9d290c5d5"
+      }
+    ],
+    "shippingAddress": {
+      "street": "456 Oak Avenue",
+      "city": "Seattle",
+      "state": "  WA",
+      "postalCode": "98101",
+      "country": "United States"
+    },
+    "phone": "+1-555-010-1002",
+    "paymentMethod": "cod",
+    "stripeSessionId": null,
+    "itemsPrice": 29,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 44,
+    "isPaid": false,
+    "paymentStatus": "unpaid",
+    "isDelivered": true,
+    "orderStatus": "delivered",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [
+      {
+        "status": "delivered",
+        "note": "",
+        "changedAt": "2026-07-20T08:54:03.108Z",
+        "_id": "6a5de22b53afc1c9d290c62c"
+      }
+    ],
+    "createdAt": "2026-07-20T08:53:32.552Z",
+    "updatedAt": "2026-07-20T08:53:32.553Z",
+    "orderNumber": 38,
+    "__v": 0,
+    "deliveredAt": "2026-07-20T08:54:03.108Z"
+  },
+  {
+    "_id": "6a607895fd07f89fea0d8bb4",
+    "user": "6a604242ea7f03a97e90bb46",
+    "orderItems": [
+      {
+        "product": "6a5b2ebceb67016e41def430",
+        "name": "Graphic Tees Sportswear",
+        "quantity": 4,
+        "price": 60.06,
+        "size": "XXL",
+        "color": "Volcanic Basalt",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784360560/payra-store/assets/eicdtoxuaslfqe5s3qkc.avif",
+        "_id": "6a60785cfd07f89fea0d8b7d"
+      }
+    ],
+    "shippingAddress": {
+      "street": "101 Maple Drive",
+      "city": "Chicago",
+      "state": "IL",
+      "postalCode": "60601",
+      "country": "United State"
+    },
+    "phone": "+1-555-010-1004",
+    "paymentMethod": "card",
+    "paymentResult": {
+      "id": "pi_3Tvv4fCub7jP1bMn1KGUiDd1",
+      "status": "paid",
+      "update_time": "2026-07-22T08:00:21.440Z",
+      "email_address": "mark@gmail.com"
+    },
+    "stripeSessionId": "cs_test_a1bcVCy7x8KHuiLMTyLnTZAt7IFMdJIuen6lWxZOl5iFZJ52nlpL6TvHSj",
+    "itemsPrice": 240.24,
+    "taxPrice": 5,
+    "shippingPrice": 0,
+    "totalPrice": 245.24,
+    "isPaid": true,
+    "paidAt": "2026-07-22T08:00:21.440Z",
+    "paymentStatus": "paid",
+    "isDelivered": false,
+    "orderStatus": "cancelled",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [],
+    "createdAt": "2026-07-22T08:00:21.441Z",
+    "updatedAt": "2026-07-22T08:06:57.561Z",
+    "orderNumber": 39,
+    "__v": 0
+  },
+  {
+    "_id": "6a607b11fd07f89fea0d8da7",
+    "user": "6a604242ea7f03a97e90bb46",
+    "orderItems": [
+      {
+        "product": "6a5b2ebceb67016e41def430",
+        "name": "Graphic Tees Sportswear",
+        "quantity": 1,
+        "price": 60.06,
+        "size": "M",
+        "color": "Green Silver",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784360631/payra-store/assets/ilby1jovnggg8uomcrs2.avif",
+        "_id": "6a607b11fd07f89fea0d8da8"
+      }
+    ],
+    "shippingAddress": {
+      "street": "101 Maple Drive",
+      "city": "Chicago",
+      "state": "IL",
+      "postalCode": "60601",
+      "country": "United State"
+    },
+    "phone": "+1-555-010-1004",
+    "paymentMethod": "cod",
+    "stripeSessionId": null,
+    "itemsPrice": 60.06,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 69.05,
+    "isPaid": false,
+    "paymentStatus": "unpaid",
+    "isDelivered": true,
+    "orderStatus": "delivered",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 6.01,
+    "couponCode": "THANKS5097HW",
+    "statusHistory": [
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedAt": "2026-07-22T08:21:10.689Z",
+        "_id": "6a607d76fd07f89fea0d8ec1"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedAt": "2026-07-22T13:05:35.659Z",
+        "_id": "6a60c01f3d1839f619c4ab42"
+      }
+    ],
+    "createdAt": "2026-07-22T08:10:57.961Z",
+    "updatedAt": "2026-07-22T08:10:57.962Z",
+    "orderNumber": 40,
+    "__v": 0,
+    "deliveredAt": "2026-07-22T13:05:35.659Z"
+  },
+  {
+    "_id": "6a607e3bfd07f89fea0d8fcb",
+    "user": "6a604242ea7f03a97e90bb46",
+    "orderItems": [
+      {
+        "product": "6a5b1f97eb67016e41deea8e",
+        "name": "Jordan Graphic",
+        "quantity": 3,
+        "price": 44.8,
+        "size": "M",
+        "color": "Astronaut Helmet",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784356719/payra-store/assets/jnkitpull2stlq9vkxhg.avif",
+        "_id": "6a607e3bfd07f89fea0d8fcc"
+      }
+    ],
+    "shippingAddress": {
+      "street": "101 Maple Drive",
+      "city": "Chicago",
+      "state": "IL",
+      "postalCode": "60601",
+      "country": "United State"
+    },
+    "phone": "+1-555-010-1004",
+    "paymentMethod": "cod",
+    "stripeSessionId": null,
+    "itemsPrice": 134.4,
+    "taxPrice": 5,
+    "shippingPrice": 0,
+    "totalPrice": 139.4,
+    "isPaid": false,
+    "paymentStatus": "unpaid",
+    "isDelivered": false,
+    "orderStatus": "cancelled",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "good",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [],
+    "createdAt": "2026-07-22T08:24:27.650Z",
+    "updatedAt": "2026-07-22T08:25:39.233Z",
+    "orderNumber": 41,
+    "__v": 0
+  },
+  {
+    "_id": "6a60c14b3d1839f619c4aec3",
+    "user": "6a604242ea7f03a97e90bb46",
+    "orderItems": [
+      {
+        "product": "6a5b313beb67016e41def684",
+        "name": "Norway National Team",
+        "quantity": 3,
+        "price": 65,
+        "size": "3XL",
+        "color": "Black",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784361239/payra-store/assets/ewesax9ihjpfuf4dvn6f.avif",
+        "_id": "6a60c14b3d1839f619c4aec4"
+      }
+    ],
+    "shippingAddress": {
+      "street": "101 Maple Drive",
+      "city": "Chicago",
+      "state": "IL",
+      "postalCode": "60601",
+      "country": "United State"
+    },
+    "phone": "+1-555-010-1004",
+    "paymentMethod": "cod",
+    "stripeSessionId": null,
+    "itemsPrice": 195,
+    "taxPrice": 5,
+    "shippingPrice": 0,
+    "totalPrice": 200,
+    "isPaid": false,
+    "paymentStatus": "unpaid",
+    "isDelivered": true,
+    "orderStatus": "delivered",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [
+      {
+        "status": "delivered",
+        "note": "",
+        "changedAt": "2026-07-22T13:11:35.897Z",
+        "_id": "6a60c1873d1839f619c4b05d"
+      }
+    ],
+    "createdAt": "2026-07-22T13:10:35.514Z",
+    "updatedAt": "2026-07-22T13:10:35.516Z",
+    "orderNumber": 42,
+    "__v": 0,
+    "deliveredAt": "2026-07-22T13:11:35.897Z"
+  },
+  {
+    "_id": "6a60df3e3d1839f619c4b4dd",
+    "user": "6a604242ea7f03a97e90bb46",
+    "orderItems": [
+      {
+        "product": "6a5b3076eb67016e41def5ba",
+        "name": "Brazil National Team",
+        "quantity": 1,
+        "price": 61.75,
+        "size": "M",
+        "color": "Yellow",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784361069/payra-store/assets/bksmhhzwzzcq718pbyih.avif",
+        "_id": "6a60df3e3d1839f619c4b4de"
+      }
+    ],
+    "shippingAddress": {
+      "street": "101 Maple Drive",
+      "city": "Chicago",
+      "state": "IL",
+      "postalCode": "60601",
+      "country": "United State"
+    },
+    "phone": "+1-555-010-1004",
+    "paymentMethod": "cod",
+    "stripeSessionId": null,
+    "itemsPrice": 61.75,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 76.75,
+    "isPaid": false,
+    "paymentStatus": "unpaid",
+    "isDelivered": true,
+    "orderStatus": "delivered",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [
+      {
+        "status": "delivered",
+        "note": "",
+        "changedAt": "2026-07-22T15:18:35.188Z",
+        "_id": "6a60df4b3d1839f619c4b500"
+      }
+    ],
+    "createdAt": "2026-07-22T15:18:22.061Z",
+    "updatedAt": "2026-07-22T15:18:22.069Z",
+    "orderNumber": 43,
+    "__v": 0,
+    "deliveredAt": "2026-07-22T15:18:35.188Z"
+  },
+  {
+    "_id": "6a60f6866ce09ad64420466f",
+    "user": "6a604242ea7f03a97e90bb46",
+    "orderItems": [
+      {
+        "product": "6a396084a03733eb17860fc0",
+        "name": "Classic Fit Jordan",
+        "quantity": 1,
+        "price": 122,
+        "size": "3XL",
+        "color": "Orange",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1782144953/tshirt-store/products/rmwkmlsl2fc0enorz5bo.avif",
+        "_id": "6a60f6586ce09ad644204639"
+      }
+    ],
+    "shippingAddress": {
+      "street": "101 Maple Drive",
+      "city": "Chicago",
+      "state": "IL",
+      "postalCode": "60601",
+      "country": "United State"
+    },
+    "phone": "+1-555-010-1004",
+    "paymentMethod": "card",
+    "paymentResult": {
+      "id": "pi_3Tw3SiCub7jP1bMn1ahhZnoL",
+      "status": "paid",
+      "update_time": "2026-07-22T16:57:42.806Z",
+      "email_address": "mark@gmail.com"
+    },
+    "stripeSessionId": "cs_test_a1vjPhzFH99m3srNL0WwdjsDVx57Khc11l1RUtlHbtcZILvgoZ2Mep9Xlh",
+    "itemsPrice": 122,
+    "taxPrice": 5,
+    "shippingPrice": 0,
+    "totalPrice": 127,
+    "isPaid": true,
+    "paidAt": "2026-07-22T16:57:42.806Z",
+    "paymentStatus": "paid",
+    "isDelivered": true,
+    "orderStatus": "delivered",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [
+      {
+        "status": "delivered",
+        "note": "",
+        "changedAt": "2026-07-22T16:59:40.706Z",
+        "_id": "6a60f6fc6ce09ad64420483f"
+      }
+    ],
+    "createdAt": "2026-07-22T16:57:42.808Z",
+    "updatedAt": "2026-07-22T16:57:42.811Z",
+    "orderNumber": 44,
+    "__v": 0,
+    "deliveredAt": "2026-07-22T16:59:40.706Z"
+  },
+  {
+    "_id": "6a60f8396ce09ad644204dcb",
+    "user": "6a604242ea7f03a97e90bb46",
+    "orderItems": [
+      {
+        "product": "6a5b2cb9eb67016e41def261",
+        "name": "Sportswear Premium Essentials",
+        "quantity": 3,
+        "price": 44,
+        "size": "XL",
+        "color": "Mountain green",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784360117/payra-store/assets/ptojfpgtopyh7atojnps.avif",
+        "_id": "6a60f8166ce09ad644204cc3"
+      },
+      {
+        "product": "6a43f4aa944f07f16766dbcc",
+        "name": "Classic Cotton Tee",
+        "quantity": 2,
+        "price": 34,
+        "size": "XL",
+        "color": "White",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1782838357/tshirt-store/products/fod5ry6blfms9xpsgesk.webp",
+        "_id": "6a60f8166ce09ad644204cc4"
+      },
+      {
+        "product": "6a5a30ea5bac018e87404e14",
+        "name": "Dri-FIT Crew Impossibly Soft",
+        "quantity": 3,
+        "price": 29,
+        "size": "M",
+        "color": "Wrought iron",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784295342/payra-store/assets/opsmjrjgrofr4lylirvd.avif",
+        "_id": "6a60f8166ce09ad644204cc5"
+      },
+      {
+        "product": "6a5a33405bac018e87404f70",
+        "name": "Crew-Neck Golf Crew-Neck",
+        "quantity": 3,
+        "price": 39,
+        "size": "XL",
+        "color": "White magnolia",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784295981/payra-store/assets/lglvpftpdvnmjnfas4um.avif",
+        "_id": "6a60f8166ce09ad644204cc6"
+      },
+      {
+        "product": "6a43f4aa944f07f16766dbcc",
+        "name": "Classic Cotton Tee",
+        "quantity": 3,
+        "price": 34,
+        "size": "L",
+        "color": "White",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1782838357/tshirt-store/products/fod5ry6blfms9xpsgesk.webp",
+        "_id": "6a60f8166ce09ad644204cc7"
+      }
+    ],
+    "shippingAddress": {
+      "street": "101 Maple Drive",
+      "city": "Chicago",
+      "state": "IL",
+      "postalCode": "60601",
+      "country": "United State"
+    },
+    "phone": "+1-555-010-1004",
+    "paymentMethod": "card",
+    "paymentResult": {
+      "id": "pi_3Tw3ZiCub7jP1bMn1C9eEBUc",
+      "status": "paid",
+      "update_time": "2026-07-22T17:04:57.870Z",
+      "email_address": "mark@gmail.com"
+    },
+    "stripeSessionId": "cs_test_a1MAxwa8LMxMjvo8mMyPHm5cdkZXiPaNRHXf0b6LRrbJEczfJx5cPFCdkB",
+    "itemsPrice": 506,
+    "taxPrice": 5,
+    "shippingPrice": 0,
+    "totalPrice": 485.7,
+    "isPaid": true,
+    "paidAt": "2026-07-22T17:04:57.870Z",
+    "paymentStatus": "paid",
+    "isDelivered": true,
+    "orderStatus": "delivered",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 25.3,
+    "couponCode": "SUMMER",
+    "statusHistory": [
+      {
+        "status": "delivered",
+        "note": "",
+        "changedAt": "2026-07-22T17:06:00.564Z",
+        "_id": "6a60f8786ce09ad644204efb"
+      }
+    ],
+    "createdAt": "2026-07-22T17:04:57.872Z",
+    "updatedAt": "2026-07-22T17:04:57.874Z",
+    "orderNumber": 45,
+    "__v": 0,
+    "deliveredAt": "2026-07-22T17:06:00.564Z"
+  },
+  {
+    "_id": "6a60fad06ce09ad644205be8",
+    "user": "6a60bf363d1839f619c4a933",
+    "orderItems": [
+      {
+        "product": "6a5b2ffceb67016e41def543",
+        "name": "England National Team",
+        "quantity": 1,
+        "price": 59.4,
+        "size": "XS",
+        "color": "404 Red",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784360953/payra-store/assets/pvukbwpxawhicxkz9pjt.avif",
+        "_id": "6a60fab46ce09ad644205a0b"
+      },
+      {
+        "product": "6a43f4aa944f07f16766dbcc",
+        "name": "Classic Cotton Tee",
+        "quantity": 1,
+        "price": 34,
+        "size": "XS",
+        "color": "White",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1782838357/tshirt-store/products/fod5ry6blfms9xpsgesk.webp",
+        "_id": "6a60fab46ce09ad644205a0c"
+      },
+      {
+        "product": "6a396084a03733eb17860fc0",
+        "name": "Classic Fit Jordan",
+        "quantity": 1,
+        "price": 122,
+        "size": "XS",
+        "color": "Orange",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1782144953/tshirt-store/products/rmwkmlsl2fc0enorz5bo.avif",
+        "_id": "6a60fab46ce09ad644205a0d"
+      },
+      {
+        "product": "6a5a25f25bac018e87404860",
+        "name": "Dri-FIT Golf Long-Sleeve",
+        "quantity": 1,
+        "price": 34,
+        "size": "XS",
+        "color": "Dust grey",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784536708/payra-store/assets/ginsr46eawxmy54wyajq.jpg",
+        "_id": "6a60fab46ce09ad644205a0e"
+      },
+      {
+        "product": "6a5a30ea5bac018e87404e14",
+        "name": "Dri-FIT Crew Impossibly Soft",
+        "quantity": 1,
+        "price": 29,
+        "size": "XXL",
+        "color": "Baroque rose",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784295473/payra-store/assets/os6wqjumshosu39xcmca.avif",
+        "_id": "6a60fab46ce09ad644205a0f"
+      },
+      {
+        "product": "6a5a33405bac018e87404f70",
+        "name": "Crew-Neck Golf Crew-Neck",
+        "quantity": 1,
+        "price": 39,
+        "size": "S",
+        "color": "VS Code Blue",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784296136/payra-store/assets/pahcxudxqzu3b6njzkks.avif",
+        "_id": "6a60fab46ce09ad644205a10"
+      },
+      {
+        "product": "6a5b313beb67016e41def684",
+        "name": "Norway National Team",
+        "quantity": 1,
+        "price": 65,
+        "size": "XS",
+        "color": "Red",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784361263/payra-store/assets/hcpojexyueze3snhgs4d.avif",
+        "_id": "6a60fab46ce09ad644205a11"
+      },
+      {
+        "product": "6a5b2ebceb67016e41def430",
+        "name": "Graphic Tees Sportswear",
+        "quantity": 1,
+        "price": 60.06,
+        "size": "M",
+        "color": "Green Silver",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784360631/payra-store/assets/ilby1jovnggg8uomcrs2.avif",
+        "_id": "6a60fab46ce09ad644205a12"
+      },
+      {
+        "product": "6a5b2df3eb67016e41def386",
+        "name": "Nike Sportswear tees",
+        "quantity": 1,
+        "price": 78,
+        "size": "S",
+        "color": "Concrete green",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784360432/payra-store/assets/fdtkip0htjf5ollaajjn.avif",
+        "_id": "6a60fab46ce09ad644205a13"
+      },
+      {
+        "product": "6a5b2cb9eb67016e41def261",
+        "name": "Sportswear Premium Essentials",
+        "quantity": 1,
+        "price": 44,
+        "size": "XL",
+        "color": "Mountain green",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784360117/payra-store/assets/ptojfpgtopyh7atojnps.avif",
+        "_id": "6a60fab46ce09ad644205a14"
+      }
+    ],
+    "shippingAddress": {
+      "street": "road 39",
+      "city": "Washiton",
+      "state": "US",
+      "postalCode": "12121",
+      "country": "United state"
+    },
+    "phone": "01938439474",
+    "paymentMethod": "card",
+    "paymentResult": {
+      "id": "pi_3Tw3kMCub7jP1bMn19ot98rn",
+      "status": "paid",
+      "update_time": "2026-07-22T17:16:00.757Z",
+      "email_address": "jlaservideo@gmail.com"
+    },
+    "stripeSessionId": "cs_test_a113OAvOOQJOFQXRy8rNVIY7l3MhpzRJ75hzRoqXbBNBYOpiXQ0Sn4SjN6",
+    "itemsPrice": 564.46,
+    "taxPrice": 5,
+    "shippingPrice": 0,
+    "totalPrice": 541.24,
+    "isPaid": true,
+    "paidAt": "2026-07-22T17:16:00.757Z",
+    "paymentStatus": "paid",
+    "isDelivered": true,
+    "orderStatus": "delivered",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 28.22,
+    "couponCode": "SUMMER",
+    "statusHistory": [
+      {
+        "status": "delivered",
+        "note": "",
+        "changedAt": "2026-07-22T17:17:15.228Z",
+        "_id": "6a60fb1b6ce09ad644205cc9"
+      }
+    ],
+    "createdAt": "2026-07-22T17:16:00.761Z",
+    "updatedAt": "2026-07-22T17:16:00.763Z",
+    "orderNumber": 46,
+    "__v": 0,
+    "deliveredAt": "2026-07-22T17:17:15.228Z"
+  },
+  {
+    "_id": "6a6115d1c22355f110da4c9e",
+    "user": "6a4f7ac4552500aa69a3ef7e",
+    "orderItems": [
+      {
+        "product": "6a5b2ebceb67016e41def430",
+        "name": "Graphic Tees Sportswear",
+        "quantity": 1,
+        "price": 60.06,
+        "size": "M",
+        "color": "Green Silver",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784360631/payra-store/assets/ilby1jovnggg8uomcrs2.avif",
+        "_id": "6a6115c4c22355f110da4c68"
+      }
+    ],
+    "shippingAddress": {
+      "street": "Banani, Gulshan",
+      "city": "Banani",
+      "state": "Dhaka",
+      "postalCode": "1213",
+      "country": "Bangladesh"
+    },
+    "phone": "01829940347",
+    "paymentMethod": "card",
+    "paymentResult": {
+      "id": "pi_3Tw5XvCub7jP1bMn02mnkG2m",
+      "status": "paid",
+      "update_time": "2026-07-22T19:11:13.127Z",
+      "email_address": "admin@tshirtstore.com"
+    },
+    "stripeSessionId": "cs_test_a1c9NlHD9JIHQ7pN60GkDVfoZ4Cq5lcVFzVaiS8NE4MzlHU8kVa8y8TWCf",
+    "itemsPrice": 60.06,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 75.06,
+    "isPaid": true,
+    "paidAt": "2026-07-22T19:11:13.127Z",
+    "paymentStatus": "paid",
+    "isDelivered": false,
+    "orderStatus": "cancelled",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [],
+    "createdAt": "2026-07-22T19:11:13.131Z",
+    "updatedAt": "2026-07-23T07:02:51.393Z",
+    "orderNumber": 47,
+    "__v": 0
+  },
+  {
+    "_id": "6a6208802bda5e924eaa12d1",
+    "user": "6a4f7ac4552500aa69a3ef7e",
+    "orderItems": [
+      {
+        "product": "6a5b3076eb67016e41def5ba",
+        "name": "Brazil National Team",
+        "quantity": 1,
+        "price": 61.75,
+        "size": "XS",
+        "color": "Yellow",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784361069/payra-store/assets/bksmhhzwzzcq718pbyih.avif",
+        "_id": "6a6208712141b7dea3587e1a"
+      }
+    ],
+    "shippingAddress": {
+      "street": "Banani, Gulshan",
+      "city": "Banani",
+      "state": "Dhaka",
+      "postalCode": "1213",
+      "country": "Bangladesh"
+    },
+    "phone": "01829940347",
+    "paymentMethod": "card",
+    "paymentResult": {
+      "id": "pi_3TwLhyCub7jP1bMn18EqBQEu",
+      "status": "paid",
+      "update_time": "2026-07-23T12:26:40.186Z",
+      "email_address": "admin@tshirtstore.com"
+    },
+    "stripeSessionId": "cs_test_a1xfGCIBFouMroltSis29nuGLY0zjMX27FgFb7ItMacN9vpvdrHL9XKcI1",
+    "itemsPrice": 61.75,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 76.75,
+    "isPaid": true,
+    "paidAt": "2026-07-23T12:26:40.186Z",
+    "paymentStatus": "paid",
+    "isDelivered": false,
+    "orderStatus": "pending",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [],
+    "createdAt": "2026-07-23T12:26:40.194Z",
+    "updatedAt": "2026-07-23T12:26:40.197Z",
+    "orderNumber": 48,
+    "__v": 0
+  },
+  {
+    "_id": "6a6208802141b7dea3587e38",
+    "user": "6a4f7ac4552500aa69a3ef7e",
+    "orderItems": [
+      {
+        "product": "6a5b3076eb67016e41def5ba",
+        "name": "Brazil National Team",
+        "quantity": 1,
+        "price": 61.75,
+        "size": "XS",
+        "color": "Yellow",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784361069/payra-store/assets/bksmhhzwzzcq718pbyih.avif",
+        "_id": "6a6208712141b7dea3587e1a"
+      }
+    ],
+    "shippingAddress": {
+      "street": "Banani, Gulshan",
+      "city": "Banani",
+      "state": "Dhaka",
+      "postalCode": "1213",
+      "country": "Bangladesh"
+    },
+    "phone": "01829940347",
+    "paymentMethod": "card",
+    "paymentResult": {
+      "id": "pi_3TwLhyCub7jP1bMn18EqBQEu",
+      "status": "paid",
+      "update_time": "2026-07-23T12:26:40.929Z",
+      "email_address": "admin@tshirtstore.com"
+    },
+    "stripeSessionId": "cs_test_a1xfGCIBFouMroltSis29nuGLY0zjMX27FgFb7ItMacN9vpvdrHL9XKcI1",
+    "itemsPrice": 61.75,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 76.75,
+    "isPaid": true,
+    "paidAt": "2026-07-23T12:26:40.929Z",
+    "paymentStatus": "paid",
+    "isDelivered": false,
+    "orderStatus": "pending",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [],
+    "createdAt": "2026-07-23T12:26:40.931Z",
+    "updatedAt": "2026-07-23T12:26:40.932Z",
+    "orderNumber": 49,
+    "__v": 0
+  },
+  {
+    "_id": "6a6208f62bda5e924eaa150e",
+    "user": "6a4f7ac4552500aa69a3ef7e",
+    "orderItems": [
+      {
+        "product": "6a5b2ffceb67016e41def543",
+        "name": "England National Team",
+        "quantity": 1,
+        "price": 59.4,
+        "size": "XS",
+        "color": "404 Red",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784360953/payra-store/assets/pvukbwpxawhicxkz9pjt.avif",
+        "_id": "6a6208e82bda5e924eaa14e2"
+      }
+    ],
+    "shippingAddress": {
+      "street": "Banani, Gulshan",
+      "city": "Banani",
+      "state": "Dhaka",
+      "postalCode": "1213",
+      "country": "Bangladesh"
+    },
+    "phone": "01829940347",
+    "paymentMethod": "card",
+    "paymentResult": {
+      "id": "pi_3TwLjsCub7jP1bMn0ruXlKIM",
+      "status": "paid",
+      "update_time": "2026-07-23T12:28:38.870Z",
+      "email_address": "admin@tshirtstore.com"
+    },
+    "stripeSessionId": "cs_test_a1dBqVYG87u3tycsAgpQTROb7EXlhDItV205QXAixSavNJBpSgatXIZoD2",
+    "itemsPrice": 59.4,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 74.4,
+    "isPaid": true,
+    "paidAt": "2026-07-23T12:28:38.870Z",
+    "paymentStatus": "paid",
+    "isDelivered": false,
+    "orderStatus": "pending",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [],
+    "createdAt": "2026-07-23T12:28:38.871Z",
+    "updatedAt": "2026-07-23T12:28:38.873Z",
+    "orderNumber": 50,
+    "__v": 0
+  },
+  {
+    "_id": "6a6208f72141b7dea3587edc",
+    "user": "6a4f7ac4552500aa69a3ef7e",
+    "orderItems": [
+      {
+        "product": "6a5b2ffceb67016e41def543",
+        "name": "England National Team",
+        "quantity": 1,
+        "price": 59.4,
+        "size": "XS",
+        "color": "404 Red",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784360953/payra-store/assets/pvukbwpxawhicxkz9pjt.avif",
+        "_id": "6a6208e82bda5e924eaa14e2"
+      }
+    ],
+    "shippingAddress": {
+      "street": "Banani, Gulshan",
+      "city": "Banani",
+      "state": "Dhaka",
+      "postalCode": "1213",
+      "country": "Bangladesh"
+    },
+    "phone": "01829940347",
+    "paymentMethod": "card",
+    "paymentResult": {
+      "id": "pi_3TwLjsCub7jP1bMn0ruXlKIM",
+      "status": "paid",
+      "update_time": "2026-07-23T12:28:39.406Z",
+      "email_address": "admin@tshirtstore.com"
+    },
+    "stripeSessionId": "cs_test_a1dBqVYG87u3tycsAgpQTROb7EXlhDItV205QXAixSavNJBpSgatXIZoD2",
+    "itemsPrice": 59.4,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 74.4,
+    "isPaid": true,
+    "paidAt": "2026-07-23T12:28:39.406Z",
+    "paymentStatus": "paid",
+    "isDelivered": false,
+    "orderStatus": "pending",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [],
+    "createdAt": "2026-07-23T12:28:39.408Z",
+    "updatedAt": "2026-07-23T12:28:39.408Z",
+    "orderNumber": 51,
+    "__v": 0
+  },
+  {
+    "_id": "6a6209342bda5e924eaa15e7",
+    "user": "6a4f7ac4552500aa69a3ef7e",
+    "orderItems": [
+      {
+        "product": "6a5b2ebceb67016e41def430",
+        "name": "Graphic Tees Sportswear",
+        "quantity": 1,
+        "price": 60.06,
+        "size": "M",
+        "color": "Green Silver",
+        "image": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784360631/payra-store/assets/ilby1jovnggg8uomcrs2.avif",
+        "_id": "6a6209342bda5e924eaa15e8"
+      }
+    ],
+    "shippingAddress": {
+      "street": "Banani, Gulshan",
+      "city": "Banani",
+      "state": "Dhaka",
+      "postalCode": "1213",
+      "country": "Bangladesh"
+    },
+    "phone": "01829940347",
+    "paymentMethod": "cod",
+    "stripeSessionId": null,
+    "itemsPrice": 60.06,
+    "taxPrice": 5,
+    "shippingPrice": 10,
+    "totalPrice": 75.06,
+    "isPaid": false,
+    "paymentStatus": "unpaid",
+    "isDelivered": false,
+    "orderStatus": "pending",
+    "isArchived": false,
+    "archivedAt": null,
+    "internalNotes": "",
+    "discountAmount": 0,
+    "couponCode": null,
+    "statusHistory": [],
+    "createdAt": "2026-07-23T12:29:40.133Z",
+    "updatedAt": "2026-07-23T12:29:40.134Z",
+    "orderNumber": 52,
+    "__v": 0
+  }
+]

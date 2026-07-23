@@ -1,0 +1,400 @@
+[
+  {
+    "_id": "6a4f7ac4552500aa69a3ef7e",
+    "name": "Bulbul",
+    "email": "admin@tshirtstore.com",
+    "password": "$2b$10$JoM3.hixxoa3PfPiNfSBo.pPg8fV9AxX0H./GIe.x5KcD/2pLpnDW",
+    "role": "admin",
+    "isVerified": false,
+    "wishlist": [],
+    "orders": [
+      "6a508e3fd38ed35ec90c9724",
+      "6a508e90d38ed35ec90c97f1",
+      "6a5118ac17e76660b898f1e8",
+      "6a511b4d01d76e2cca3fe1e0",
+      "6a53321e5e4d1cfa83096e78",
+      "6a5337aa5e4d1cfa83097048",
+      "6a53b69c68fc9418e5e78061",
+      "6a53e906a34355a7cedce5c5",
+      "6a5473933cdc10fc4c827f41",
+      "6a58b23b794ab8737408477b",
+      "6a58ba8c6a9f32d04448da2b",
+      "6a58bbe515bdb8b6a949e1f5",
+      "6a58bc6f15bdb8b6a949e2f2",
+      "6a6115d1c22355f110da4c9e",
+      "6a6208802bda5e924eaa12d1",
+      "6a6208802141b7dea3587e38",
+      "6a6208f62bda5e924eaa150e",
+      "6a6208f72141b7dea3587edc",
+      "6a6209342bda5e924eaa15e7"
+    ],
+    "avatar": "",
+    "status": "active",
+    "location": {
+      "city": "",
+      "country": ""
+    },
+    "segment": "regular",
+    "usedCoupons": [
+      {
+        "coupon": "6a58ba8c6a9f32d04448da37",
+        "code": "THANKSYMHNEF",
+        "_id": "6a58bbe515bdb8b6a949e1fe",
+        "usedAt": "2026-07-16T11:09:25.917Z"
+      },
+      {
+        "coupon": "6a58bc3415bdb8b6a949e26b",
+        "code": "COUPONS",
+        "_id": "6a58bc6f15bdb8b6a949e2fc",
+        "usedAt": "2026-07-16T11:11:43.483Z"
+      }
+    ],
+    "cart": [
+      {
+        "product": "6a5b3076eb67016e41def5ba",
+        "quantity": 1,
+        "size": "XS",
+        "color": "Yellow",
+        "_id": "6a620d57136573a15efa7cd8"
+      }
+    ],
+    "notes": [
+      {
+        "text": "not bad",
+        "addedBy": "Bulbul",
+        "_id": "6a537d81941779b4ad3299ba",
+        "createdAt": "2026-07-12T11:41:53.121Z"
+      }
+    ],
+    "createdAt": "2026-07-09T10:41:08.859Z",
+    "updatedAt": "2026-07-15T05:38:21.445Z",
+    "__v": 20,
+    "profilePicture": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784692573/payra-store/assets/clk7ksyit3nr1k2sqfh4.jpg",
+      "public_id": "payra-store/assets/clk7ksyit3nr1k2sqfh4"
+    },
+    "dateOfBirth": "2007-04-18T00:00:00.000Z",
+    "gender": "male",
+    "phoneNumber": "01829940347",
+    "address": {
+      "street": "Banani, Gulshan",
+      "city": "Banani",
+      "state": "Dhaka",
+      "postalCode": "1213",
+      "country": "Bangladesh"
+    },
+    "phone": "",
+    "verificationToken": "b708370a-7370-4be9-b31e-1e5da370afbd",
+    "verificationTokenExpires": "2026-07-13T07:35:24.756Z",
+    "lastOrderDate": "2026-07-23T12:28:39.408Z",
+    "resetPasswordExpires": "2026-07-19T08:23:54.862Z",
+    "resetPasswordToken": "9a5400b5-ed78-4a43-9c53-3aef05869450"
+  },
+  {
+    "_id": "6a5dd02053afc1c9d290a25e",
+    "name": "Jon",
+    "email": "jon@gmail.com",
+    "password": "$2b$10$WuAFLe9N5slkntKV.TYyhOaaMcJlD8ZJpeUqUZBiCexdzyDXlUKya",
+    "phone": "01925586745",
+    "gender": "male",
+    "role": "user",
+    "verificationToken": "a5559bbc-3ae2-4eb7-ac0d-05dcdafba03e",
+    "verificationTokenExpires": "2026-07-20T08:37:04.157Z",
+    "wishlist": [],
+    "orders": [
+      "6a5dd31d53afc1c9d290a3fb",
+      "6a5dd37b53afc1c9d290a4b0",
+      "6a5dd39a53afc1c9d290a537",
+      "6a5dd3d053afc1c9d290a62a",
+      "6a5dd82053afc1c9d290aed0"
+    ],
+    "avatar": "",
+    "status": "active",
+    "location": {
+      "city": "",
+      "country": ""
+    },
+    "segment": "repeat_buyer",
+    "usedCoupons": [],
+    "cart": [],
+    "notes": [],
+    "createdAt": "2026-07-20T07:37:04.164Z",
+    "updatedAt": "2026-07-20T07:37:04.256Z",
+    "__v": 5,
+    "address": {
+      "street": "742 Evergreen Terrace",
+      "city": "Springfield",
+      "state": "OR",
+      "postalCode": "97477",
+      "country": "United States"
+    },
+    "phoneNumber": "1-555-019-2834",
+    "lastOrderDate": "2026-07-20T07:52:48.075Z",
+    "profilePicture": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784692492/payra-store/assets/wba3eluahxllq2wiywol.jpg",
+      "public_id": "payra-store/assets/wba3eluahxllq2wiywol"
+    }
+  },
+  {
+    "_id": "6a5ddc0a53afc1c9d290b55c",
+    "name": "Emily Davis",
+    "email": "emily.davis@example.com",
+    "password": "$2b$10$J2zg8YMlbVVmqkl4fpdEFOQRdAxnWx9GdJEUp4Pt.Xg2uUodwzM1y",
+    "phone": "+1-555-010-1002",
+    "gender": "male",
+    "role": "user",
+    "verificationToken": "155b891a-c312-4fd4-9441-c2f17f544a29",
+    "verificationTokenExpires": "2026-07-20T09:27:54.006Z",
+    "wishlist": [],
+    "orders": [
+      "6a5ddd8553afc1c9d290b675",
+      "6a5dddaa53afc1c9d290b6eb",
+      "6a5ddf3753afc1c9d290bc3a",
+      "6a5ddf6553afc1c9d290bcda",
+      "6a5ddfb153afc1c9d290be0c",
+      "6a5de14c53afc1c9d290c3c2",
+      "6a5de20c53afc1c9d290c5d4"
+    ],
+    "avatar": "",
+    "status": "active",
+    "location": {
+      "city": "",
+      "country": ""
+    },
+    "segment": "regular",
+    "usedCoupons": [
+      {
+        "coupon": "6a5dddaa53afc1c9d290b6f1",
+        "code": "THANKSA1W0M9",
+        "_id": "6a5ddf3753afc1c9d290bc3f",
+        "usedAt": "2026-07-20T08:41:27.670Z"
+      },
+      {
+        "coupon": "6a5dd79353afc1c9d290ab81",
+        "code": "SUMMER",
+        "_id": "6a5ddf6653afc1c9d290bce0",
+        "usedAt": "2026-07-20T08:42:14.148Z"
+      }
+    ],
+    "cart": [],
+    "notes": [],
+    "createdAt": "2026-07-20T08:27:54.006Z",
+    "updatedAt": "2026-07-20T08:27:54.094Z",
+    "__v": 7,
+    "address": {
+      "street": "456 Oak Avenue",
+      "city": "Seattle",
+      "state": "  WA",
+      "postalCode": "98101",
+      "country": "United States"
+    },
+    "phoneNumber": "+1-555-010-1002",
+    "lastOrderDate": "2026-07-20T08:34:13.185Z"
+  },
+  {
+    "_id": "6a604242ea7f03a97e90bb46",
+    "name": "Mark rober",
+    "email": "mark@gmail.com",
+    "password": "$2b$10$J2zg8YMlbVVmqkl4fpdEFOQRdAxnWx9GdJEUp4Pt.Xg2uUodwzM1y",
+    "phone": "01934778283",
+    "gender": "male",
+    "role": "user",
+    "verificationToken": "4698fdab-4bec-465f-80b6-634e8b06ecd6",
+    "verificationTokenExpires": "2026-07-22T05:08:34.581Z",
+    "wishlist": [],
+    "orders": [
+      "6a607895fd07f89fea0d8bb4",
+      "6a607b11fd07f89fea0d8da7",
+      "6a607e3bfd07f89fea0d8fcb",
+      "6a60c14b3d1839f619c4aec3",
+      "6a60df3e3d1839f619c4b4dd",
+      "6a60f6866ce09ad64420466f",
+      "6a60f8396ce09ad644204dcb"
+    ],
+    "avatar": "",
+    "status": "active",
+    "location": {
+      "city": "",
+      "country": ""
+    },
+    "segment": "repeat_buyer",
+    "usedCoupons": [
+      {
+        "coupon": "6a607895fd07f89fea0d8bbe",
+        "code": "THANKS5097HW",
+        "_id": "6a607b13fd07f89fea0d8dac",
+        "usedAt": "2026-07-22T08:10:59.426Z"
+      },
+      {
+        "coupon": "6a5dd79353afc1c9d290ab81",
+        "code": "SUMMER",
+        "_id": "6a60f83a6ce09ad644204ddc",
+        "usedAt": "2026-07-22T17:04:58.388Z"
+      }
+    ],
+    "cart": [],
+    "notes": [],
+    "createdAt": "2026-07-22T04:08:34.588Z",
+    "updatedAt": "2026-07-22T04:08:34.689Z",
+    "__v": 7,
+    "address": {
+      "street": "101 Maple Drive",
+      "city": "Chicago",
+      "state": "IL",
+      "postalCode": "60601",
+      "country": "United State"
+    },
+    "profilePicture": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784706417/payra-store/assets/zytc3msej5z8tahlm9qt.jpg",
+      "public_id": "payra-store/assets/zytc3msej5z8tahlm9qt"
+    },
+    "dateOfBirth": "1979-08-23T00:00:00.000Z",
+    "phoneNumber": "+1-555-010-1004",
+    "lastOrderDate": "2026-07-22T17:04:57.872Z"
+  },
+  {
+    "_id": "6a60bf363d1839f619c4a933",
+    "name": "Jlaservideo",
+    "email": "jlaservideo@gmail.com",
+    "password": "$2b$10$J2zg8YMlbVVmqkl4fpdEFOQRdAxnWx9GdJEUp4Pt.Xg2uUodwzM1y",
+    "phone": "01631232349",
+    "gender": "male",
+    "role": "user",
+    "verificationToken": "a8edd9f7-fa32-4553-a39c-99f5fb5689e5",
+    "verificationTokenExpires": "2026-07-22T14:01:42.611Z",
+    "wishlist": [],
+    "orders": [
+      "6a60fad06ce09ad644205be8"
+    ],
+    "avatar": "",
+    "status": "active",
+    "location": {
+      "city": "",
+      "country": ""
+    },
+    "segment": "regular",
+    "usedCoupons": [
+      {
+        "coupon": "6a5dd79353afc1c9d290ab81",
+        "code": "SUMMER",
+        "_id": "6a60fad16ce09ad644205c02",
+        "usedAt": "2026-07-22T17:16:01.068Z"
+      }
+    ],
+    "cart": [
+      {
+        "product": "6a5b2ffceb67016e41def543",
+        "quantity": 1,
+        "size": "XS",
+        "color": "404 Red",
+        "_id": "6a60fd4f6ce09ad644206b47"
+      },
+      {
+        "product": "6a43f4aa944f07f16766dbcc",
+        "quantity": 1,
+        "size": "XS",
+        "color": "White",
+        "_id": "6a60fd4f6ce09ad644206b48"
+      },
+      {
+        "product": "6a396084a03733eb17860fc0",
+        "quantity": 1,
+        "size": "XS",
+        "color": "Orange",
+        "_id": "6a60fd4f6ce09ad644206b49"
+      },
+      {
+        "product": "6a5a25f25bac018e87404860",
+        "quantity": 1,
+        "size": "XS",
+        "color": "Dust grey",
+        "_id": "6a60fd4f6ce09ad644206b4a"
+      },
+      {
+        "product": "6a5a30ea5bac018e87404e14",
+        "quantity": 1,
+        "size": "XXL",
+        "color": "Baroque rose",
+        "_id": "6a60fd4f6ce09ad644206b4b"
+      },
+      {
+        "product": "6a5a33405bac018e87404f70",
+        "quantity": 1,
+        "size": "S",
+        "color": "VS Code Blue",
+        "_id": "6a60fd4f6ce09ad644206b4c"
+      },
+      {
+        "product": "6a5b313beb67016e41def684",
+        "quantity": 1,
+        "size": "XS",
+        "color": "Red",
+        "_id": "6a60fd4f6ce09ad644206b4d"
+      },
+      {
+        "product": "6a5b2ebceb67016e41def430",
+        "quantity": 1,
+        "size": "M",
+        "color": "Green Silver",
+        "_id": "6a60fd4f6ce09ad644206b4e"
+      },
+      {
+        "product": "6a5b2df3eb67016e41def386",
+        "quantity": 1,
+        "size": "S",
+        "color": "Concrete green",
+        "_id": "6a60fd4f6ce09ad644206b4f"
+      },
+      {
+        "product": "6a5b2cb9eb67016e41def261",
+        "quantity": 1,
+        "size": "XL",
+        "color": "Mountain green",
+        "_id": "6a60fd4f6ce09ad644206b50"
+      }
+    ],
+    "notes": [],
+    "createdAt": "2026-07-22T13:01:42.653Z",
+    "updatedAt": "2026-07-22T13:01:42.829Z",
+    "__v": 1,
+    "profilePicture": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784740366/payra-store/assets/duhm6kebtvjlawo9alyj.jpg",
+      "public_id": "payra-store/assets/duhm6kebtvjlawo9alyj"
+    },
+    "address": {
+      "street": "road 39",
+      "city": "Washiton",
+      "state": "US",
+      "postalCode": "12121",
+      "country": "United state"
+    },
+    "phoneNumber": "01938439474",
+    "lastOrderDate": "2026-07-22T17:16:00.761Z"
+  },
+  {
+    "_id": "6a60fd816ce09ad644206b77",
+    "name": "Hacker",
+    "email": "hacker@gmail.com",
+    "password": "$2b$10$Drwh1A8QeiSF3ODk5LjrpOjM/PZY.yoEPFdj3HFIiPs3hYZ0ENzfS",
+    "phone": "+88012312334",
+    "gender": "male",
+    "role": "user",
+    "verificationToken": "3e6309fa-6d0c-471a-a215-53d2bb401bac",
+    "verificationTokenExpires": "2026-07-22T18:27:29.677Z",
+    "wishlist": [],
+    "orders": [],
+    "avatar": "",
+    "status": "suspended",
+    "location": {
+      "city": "",
+      "country": ""
+    },
+    "segment": "regular",
+    "usedCoupons": [],
+    "cart": [],
+    "notes": [],
+    "createdAt": "2026-07-22T17:27:29.685Z",
+    "updatedAt": "2026-07-22T17:29:55.781Z",
+    "__v": 0
+  }
+]

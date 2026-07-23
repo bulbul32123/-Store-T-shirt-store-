@@ -1,0 +1,524 @@
+[
+  {
+    "_id": "6a534f33e9416912ccb6fb80",
+    "user": "6a4f7ac4552500aa69a3ef7e",
+    "subject": "General Support",
+    "status": "closed",
+    "unreadByAdmin": 0,
+    "unreadByUser": 6,
+    "messages": [
+      {
+        "sender": "user",
+        "content": "hey",
+        "timestamp": "2026-07-12T08:43:39.550Z",
+        "read": false,
+        "_id": "6a5353bbf7d628de12de0e59"
+      },
+      {
+        "sender": "user",
+        "content": "j",
+        "timestamp": "2026-07-12T08:43:42.035Z",
+        "read": false,
+        "_id": "6a5353bef7d628de12de0e60"
+      },
+      {
+        "sender": "user",
+        "content": "hello",
+        "timestamp": "2026-07-12T08:44:19.478Z",
+        "read": false,
+        "_id": "6a5353e3f7d628de12de0e77"
+      },
+      {
+        "sender": "user",
+        "content": "by",
+        "timestamp": "2026-07-12T08:45:27.514Z",
+        "read": false,
+        "_id": "6a535427f7d628de12de0eb0"
+      },
+      {
+        "sender": "admin",
+        "content": "yes",
+        "timestamp": "2026-07-12T08:45:36.677Z",
+        "read": false,
+        "_id": "6a535430f7d628de12de0ecb"
+      },
+      {
+        "sender": "admin",
+        "content": "asdasd",
+        "timestamp": "2026-07-12T08:45:44.397Z",
+        "read": false,
+        "_id": "6a535438f7d628de12de0edc"
+      },
+      {
+        "sender": "admin",
+        "content": "hello",
+        "timestamp": "2026-07-12T09:08:08.469Z",
+        "read": false,
+        "_id": "6a535978f5e28f6ad1685121"
+      },
+      {
+        "sender": "admin",
+        "content": "hhh",
+        "timestamp": "2026-07-12T09:08:14.530Z",
+        "read": false,
+        "_id": "6a53597ef5e28f6ad1685134"
+      },
+      {
+        "sender": "admin",
+        "content": "s",
+        "timestamp": "2026-07-12T09:08:35.463Z",
+        "read": false,
+        "_id": "6a535993f5e28f6ad1685150"
+      },
+      {
+        "sender": "admin",
+        "content": "hello",
+        "timestamp": "2026-07-12T09:08:48.599Z",
+        "read": false,
+        "_id": "6a5359a0f5e28f6ad1685168"
+      }
+    ],
+    "lastUpdated": "2026-07-12T09:08:48.602Z",
+    "createdAt": "2026-07-12T08:24:19.203Z",
+    "__v": 10
+  },
+  {
+    "_id": "6a5359c2f5e28f6ad168518d",
+    "user": "6a4f7ac4552500aa69a3ef7e",
+    "subject": "General Support",
+    "status": "closed",
+    "unreadByAdmin": 0,
+    "unreadByUser": 0,
+    "messages": [
+      {
+        "sender": "admin",
+        "content": "hello",
+        "timestamp": "2026-07-12T09:09:37.123Z",
+        "read": false,
+        "_id": "6a5359d1f5e28f6ad16851a4"
+      },
+      {
+        "sender": "user",
+        "content": "yes i want to say that",
+        "timestamp": "2026-07-12T09:09:48.031Z",
+        "read": false,
+        "_id": "6a5359dcf5e28f6ad16851ab"
+      },
+      {
+        "sender": "admin",
+        "content": "ok",
+        "timestamp": "2026-07-12T09:10:04.815Z",
+        "read": false,
+        "_id": "6a5359ecf5e28f6ad16851bb"
+      },
+      {
+        "sender": "user",
+        "content": "hello",
+        "timestamp": "2026-07-12T10:30:07.034Z",
+        "read": false,
+        "_id": "6a536caff5e28f6ad1685443"
+      },
+      {
+        "sender": "user",
+        "content": "hello",
+        "timestamp": "2026-07-12T10:32:32.767Z",
+        "read": false,
+        "_id": "6a536d40f5e28f6ad168548f"
+      }
+    ],
+    "lastUpdated": "2026-07-12T10:32:38.751Z",
+    "createdAt": "2026-07-12T09:09:22.389Z",
+    "__v": 5
+  },
+  {
+    "_id": "6a536d5bf5e28f6ad16854c7",
+    "user": "6a4f7ac4552500aa69a3ef7e",
+    "subject": "General Support",
+    "status": "closed",
+    "unreadByAdmin": 0,
+    "unreadByUser": 0,
+    "messages": [
+      {
+        "sender": "user",
+        "content": "hello",
+        "timestamp": "2026-07-12T10:33:45.548Z",
+        "read": false,
+        "_id": "6a536d89f5e28f6ad16854d1"
+      },
+      {
+        "sender": "admin",
+        "content": "hello",
+        "timestamp": "2026-07-12T10:36:06.927Z",
+        "read": false,
+        "_id": "6a536e16f5e28f6ad1685504"
+      },
+      {
+        "sender": "admin",
+        "content": "hello",
+        "timestamp": "2026-07-12T10:37:37.835Z",
+        "read": false,
+        "_id": "6a536e71f5e28f6ad168551b"
+      }
+    ],
+    "lastUpdated": "2026-07-12T11:39:38.734Z",
+    "createdAt": "2026-07-12T10:32:59.286Z",
+    "__v": 3
+  },
+  {
+    "_id": "6a537d00941779b4ad32993c",
+    "user": "6a4f7ac4552500aa69a3ef7e",
+    "subject": "General Support",
+    "status": "closed",
+    "unreadByAdmin": 0,
+    "unreadByUser": 0,
+    "messages": [
+      {
+        "sender": "user",
+        "content": "hello",
+        "timestamp": "2026-07-12T11:39:53.975Z",
+        "read": false,
+        "_id": "6a537d09941779b4ad329953"
+      },
+      {
+        "sender": "admin",
+        "content": "yes how can i help you",
+        "timestamp": "2026-07-12T11:40:27.816Z",
+        "read": false,
+        "_id": "6a537d2b941779b4ad329974"
+      },
+      {
+        "sender": "user",
+        "content": "i want to say",
+        "timestamp": "2026-07-12T11:40:54.904Z",
+        "read": false,
+        "_id": "6a537d46941779b4ad32998a"
+      },
+      {
+        "sender": "admin",
+        "content": "what?",
+        "timestamp": "2026-07-12T11:41:11.345Z",
+        "read": false,
+        "_id": "6a537d57941779b4ad329995"
+      },
+      {
+        "sender": "user",
+        "content": "oo soory",
+        "timestamp": "2026-07-12T11:41:22.488Z",
+        "read": false,
+        "_id": "6a537d62941779b4ad3299a5"
+      },
+      {
+        "sender": "admin",
+        "content": "hello?",
+        "timestamp": "2026-07-12T11:42:15.056Z",
+        "read": false,
+        "_id": "6a537d97941779b4ad3299cc"
+      },
+      {
+        "sender": "user",
+        "content": "hello",
+        "timestamp": "2026-07-12T11:47:08.584Z",
+        "read": false,
+        "_id": "6a537ebc941779b4ad329a5f"
+      },
+      {
+        "sender": "user",
+        "content": "hello",
+        "timestamp": "2026-07-12T11:48:01.764Z",
+        "read": false,
+        "_id": "6a537ef1941779b4ad329aab"
+      },
+      {
+        "sender": "admin",
+        "content": "hello",
+        "timestamp": "2026-07-12T11:48:41.134Z",
+        "read": false,
+        "_id": "6a537f19941779b4ad329b11"
+      },
+      {
+        "sender": "admin",
+        "content": "hello",
+        "timestamp": "2026-07-12T11:51:40.379Z",
+        "read": false,
+        "_id": "6a537fcc941779b4ad329ba4"
+      },
+      {
+        "sender": "admin",
+        "content": "hello",
+        "timestamp": "2026-07-12T11:51:58.633Z",
+        "read": false,
+        "_id": "6a537fde941779b4ad329bce"
+      },
+      {
+        "sender": "admin",
+        "content": "hello",
+        "timestamp": "2026-07-12T11:56:46.253Z",
+        "read": false,
+        "_id": "6a5380fe498e185fc051af48"
+      },
+      {
+        "sender": "user",
+        "content": "what",
+        "timestamp": "2026-07-12T11:57:00.465Z",
+        "read": false,
+        "_id": "6a53810c498e185fc051af65"
+      },
+      {
+        "sender": "admin",
+        "content": "who",
+        "timestamp": "2026-07-12T11:57:13.421Z",
+        "read": false,
+        "_id": "6a538119498e185fc051afa0"
+      },
+      {
+        "sender": "user",
+        "content": "hy",
+        "timestamp": "2026-07-12T11:57:24.146Z",
+        "read": false,
+        "_id": "6a538124498e185fc051afb4"
+      },
+      {
+        "sender": "user",
+        "content": "hello",
+        "timestamp": "2026-07-12T11:59:52.544Z",
+        "read": false,
+        "_id": "6a5381b8498e185fc051b07f"
+      }
+    ],
+    "lastUpdated": "2026-07-12T11:59:52.546Z",
+    "createdAt": "2026-07-12T11:39:44.735Z",
+    "__v": 16
+  },
+  {
+    "_id": "6a53bc7cb2a3ef2d2b9b9982",
+    "user": "6a4f7ac4552500aa69a3ef7e",
+    "subject": "General Support",
+    "status": "active",
+    "unreadByAdmin": 0,
+    "unreadByUser": 0,
+    "messages": [
+      {
+        "sender": "user",
+        "content": "hi",
+        "timestamp": "2026-07-12T16:11:01.932Z",
+        "read": false,
+        "_id": "6a53bc95b2a3ef2d2b9b99c9"
+      },
+      {
+        "sender": "admin",
+        "content": "by",
+        "timestamp": "2026-07-12T16:11:26.228Z",
+        "read": false,
+        "_id": "6a53bcaeb2a3ef2d2b9b9a3d"
+      },
+      {
+        "sender": "user",
+        "content": "hi",
+        "timestamp": "2026-07-12T16:11:53.512Z",
+        "read": false,
+        "_id": "6a53bcc9b2a3ef2d2b9b9ab8"
+      },
+      {
+        "sender": "user",
+        "content": "hi",
+        "timestamp": "2026-07-12T16:12:54.150Z",
+        "read": false,
+        "_id": "6a53bd06b2a3ef2d2b9b9b97"
+      },
+      {
+        "sender": "admin",
+        "content": "hi",
+        "timestamp": "2026-07-14T17:49:09.156Z",
+        "read": false,
+        "_id": "6a5676959cc2e9cf3e93b826"
+      },
+      {
+        "sender": "user",
+        "content": "hello",
+        "timestamp": "2026-07-23T10:33:55.928Z",
+        "read": false,
+        "_id": "6a61ee13e21d804c45437e31"
+      },
+      {
+        "sender": "admin",
+        "content": "yes, How may i help you?",
+        "timestamp": "2026-07-23T10:34:22.118Z",
+        "read": false,
+        "_id": "6a61ee2ee21d804c45437f97"
+      }
+    ],
+    "lastUpdated": "2026-07-23T10:34:31.319Z",
+    "createdAt": "2026-07-12T16:10:36.972Z",
+    "__v": 7
+  },
+  {
+    "_id": "6a53bc81b2a3ef2d2b9b999b",
+    "user": "6a50e47756f6d35912b93aca",
+    "subject": "General Support",
+    "status": "active",
+    "unreadByAdmin": 0,
+    "unreadByUser": 0,
+    "messages": [
+      {
+        "sender": "user",
+        "content": "hi",
+        "timestamp": "2026-07-12T16:12:14.113Z",
+        "read": false,
+        "_id": "6a53bcdeb2a3ef2d2b9b9b03"
+      },
+      {
+        "sender": "admin",
+        "content": "yes",
+        "timestamp": "2026-07-12T16:12:25.117Z",
+        "read": false,
+        "_id": "6a53bce9b2a3ef2d2b9b9b22"
+      },
+      {
+        "sender": "user",
+        "content": "gu",
+        "timestamp": "2026-07-12T16:12:39.831Z",
+        "read": false,
+        "_id": "6a53bcf7b2a3ef2d2b9b9b2e"
+      }
+    ],
+    "lastUpdated": "2026-07-12T16:12:39.832Z",
+    "createdAt": "2026-07-12T16:10:41.420Z",
+    "__v": 3
+  },
+  {
+    "_id": "6a5678069cc2e9cf3e93b900",
+    "user": "6a50f1586f2d3b5cbd81670a",
+    "subject": "General Support",
+    "status": "active",
+    "unreadByAdmin": 0,
+    "unreadByUser": 0,
+    "messages": [],
+    "lastUpdated": "2026-07-14T17:55:18.630Z",
+    "createdAt": "2026-07-14T17:55:18.630Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a5c81323846f8dcdebbef61",
+    "user": "6a5c81263846f8dcdebbef46",
+    "subject": "General Support",
+    "status": "active",
+    "unreadByAdmin": 0,
+    "unreadByUser": 0,
+    "messages": [],
+    "lastUpdated": "2026-07-19T07:48:02.741Z",
+    "createdAt": "2026-07-19T07:48:02.741Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a5dd03253afc1c9d290a27a",
+    "user": "6a5dd02053afc1c9d290a25e",
+    "subject": "General Support",
+    "status": "active",
+    "unreadByAdmin": 0,
+    "unreadByUser": 0,
+    "messages": [
+      {
+        "sender": "user",
+        "content": "hey why my tshirt Brazil National Team taking too much time to delivering time",
+        "timestamp": "2026-07-20T08:19:50.363Z",
+        "read": false,
+        "_id": "6a5dda2653afc1c9d290b247"
+      },
+      {
+        "sender": "admin",
+        "content": "we are really sorry for that",
+        "timestamp": "2026-07-20T08:20:19.417Z",
+        "read": false,
+        "_id": "6a5dda4353afc1c9d290b2b5"
+      },
+      {
+        "sender": "admin",
+        "content": "Our store is currently working on your product.",
+        "timestamp": "2026-07-20T08:20:55.605Z",
+        "read": false,
+        "_id": "6a5dda6753afc1c9d290b2ca"
+      }
+    ],
+    "lastUpdated": "2026-07-20T08:20:55.605Z",
+    "createdAt": "2026-07-20T07:37:22.367Z",
+    "__v": 3
+  },
+  {
+    "_id": "6a5ddc1d53afc1c9d290b573",
+    "user": "6a5ddc0a53afc1c9d290b55c",
+    "subject": "General Support",
+    "status": "active",
+    "unreadByAdmin": 0,
+    "unreadByUser": 0,
+    "messages": [
+      {
+        "sender": "user",
+        "content": "Thanks You for giving me Good quality products",
+        "timestamp": "2026-07-20T08:46:51.808Z",
+        "read": false,
+        "_id": "6a5de07b53afc1c9d290c0f2"
+      },
+      {
+        "sender": "admin",
+        "content": "Thank you so much, Emily! We're thrilled to hear that you're happy with your purchase. Please let us know if there's anything else we can do for you!",
+        "timestamp": "2026-07-20T08:47:38.944Z",
+        "read": false,
+        "_id": "6a5de0aa53afc1c9d290c13d"
+      }
+    ],
+    "lastUpdated": "2026-07-20T08:47:38.945Z",
+    "createdAt": "2026-07-20T08:28:13.424Z",
+    "__v": 2
+  },
+  {
+    "_id": "6a60424cea7f03a97e90bb5b",
+    "user": "6a604242ea7f03a97e90bb46",
+    "subject": "General Support",
+    "status": "active",
+    "unreadByAdmin": 0,
+    "unreadByUser": 0,
+    "messages": [
+      {
+        "sender": "user",
+        "content": "Good products",
+        "timestamp": "2026-07-22T16:56:23.761Z",
+        "read": false,
+        "_id": "6a60f6376ce09ad6442045d6"
+      },
+      {
+        "sender": "admin",
+        "content": "Thanks for purchasing from our store",
+        "timestamp": "2026-07-22T16:59:13.151Z",
+        "read": false,
+        "_id": "6a60f6e16ce09ad644204810"
+      }
+    ],
+    "lastUpdated": "2026-07-22T16:59:13.152Z",
+    "createdAt": "2026-07-22T04:08:44.959Z",
+    "__v": 2
+  },
+  {
+    "_id": "6a60bf4e3d1839f619c4a950",
+    "user": "6a60bf363d1839f619c4a933",
+    "subject": "General Support",
+    "status": "active",
+    "unreadByAdmin": 0,
+    "unreadByUser": 0,
+    "messages": [],
+    "lastUpdated": "2026-07-22T13:02:06.431Z",
+    "createdAt": "2026-07-22T13:02:06.430Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a60fd8c6ce09ad644206b8c",
+    "user": "6a60fd816ce09ad644206b77",
+    "subject": "General Support",
+    "status": "active",
+    "unreadByAdmin": 0,
+    "unreadByUser": 0,
+    "messages": [],
+    "lastUpdated": "2026-07-22T17:27:40.416Z",
+    "createdAt": "2026-07-22T17:27:40.415Z",
+    "__v": 0
+  }
+]

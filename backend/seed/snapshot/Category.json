@@ -1,0 +1,86 @@
+[
+  {
+    "_id": "6a38f8a390d81e1556a1bc35",
+    "name": "Classic Fit",
+    "image": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784231199/payra-store/categories-image/wzouic1utojvywqnestk.png",
+      "public_id": "payra-store/categories-image/wzouic1utojvywqnestk"
+    },
+    "featured": true,
+    "createdAt": "2026-06-22T08:56:07.197Z",
+    "updatedAt": "2026-07-16T19:46:40.002Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a59219c7628ad6329384955",
+    "name": "Long Sleeve",
+    "image": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784226206/tshirt-store/aaqgkg3rntzz1tsyx1pm.webp",
+      "public_id": "tshirt-store/aaqgkg3rntzz1tsyx1pm"
+    },
+    "featured": true,
+    "createdAt": "2026-07-16T18:23:26.799Z",
+    "updatedAt": "2026-07-16T19:43:23.738Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a5921cb4571a66e200f390b",
+    "name": "Short Sleeve",
+    "image": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784226254/tshirt-store/sqz0jyeo5a7j0g7rtk0n.webp",
+      "public_id": "tshirt-store/sqz0jyeo5a7j0g7rtk0n"
+    },
+    "featured": true,
+    "createdAt": "2026-07-16T18:24:14.673Z",
+    "updatedAt": "2026-07-16T19:43:43.978Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a5921f74571a66e200f391b",
+    "name": "Oversized",
+    "image": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784226298/tshirt-store/zdf5mgbucoxkgauneivm.webp",
+      "public_id": "tshirt-store/zdf5mgbucoxkgauneivm"
+    },
+    "featured": true,
+    "createdAt": "2026-07-16T18:24:58.697Z",
+    "updatedAt": "2026-07-16T19:44:03.719Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a5922204571a66e200f3932",
+    "name": "Vest Tops",
+    "image": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784226339/tshirt-store/fxljrbxwh72ohnt1je5v.webp",
+      "public_id": "tshirt-store/fxljrbxwh72ohnt1je5v"
+    },
+    "featured": true,
+    "createdAt": "2026-07-16T18:25:39.655Z",
+    "updatedAt": "2026-07-16T19:43:35.543Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a5922444571a66e200f3942",
+    "name": "Graphic Tees",
+    "image": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784226374/tshirt-store/rtxolysbrt88ehxykpgo.webp",
+      "public_id": "tshirt-store/rtxolysbrt88ehxykpgo"
+    },
+    "featured": true,
+    "createdAt": "2026-07-16T18:26:15.522Z",
+    "updatedAt": "2026-07-16T19:43:12.064Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a5922824571a66e200f3959",
+    "name": "Jerseys",
+    "image": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784226436/tshirt-store/rncmlkgelduakwrcjd6a.webp",
+      "public_id": "tshirt-store/rncmlkgelduakwrcjd6a"
+    },
+    "featured": true,
+    "createdAt": "2026-07-16T18:27:17.552Z",
+    "updatedAt": "2026-07-16T19:43:17.653Z",
+    "__v": 0
+  }
+]

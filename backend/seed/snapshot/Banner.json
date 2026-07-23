@@ -1,0 +1,15 @@
+[
+  {
+    "_id": "6a5936281412ffd05d3ade8f",
+    "__v": 0,
+    "createdAt": "2026-07-16T19:51:04.313Z",
+    "image": {
+      "url": "https://res.cloudinary.com/dtwbjriwu/image/upload/v1784485755/payra-store/assets/hqviuf3jkg96f9sfy7z2.jpg",
+      "public_id": "payra-store/assets/hqviuf3jkg96f9sfy7z2"
+    },
+    "product": "6a43f4aa944f07f16766dbcc",
+    "showStatus": false,
+    "title": "",
+    "updatedAt": "2026-07-19T18:29:16.165Z"
+  }
+]

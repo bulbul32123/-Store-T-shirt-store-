@@ -8,7 +8,9 @@ const http = require("http");
 const jwt = require("jsonwebtoken");
 const { Server } = require("socket.io");
 const { initSocket } = require("./utils/socket");
-const { registerChatEvents } = require("./utils/chatSocket");
+const cron = require("node-cron");
+const { restoreDemoData } = require("./scripts/restoreDefaultData");
+const { registerChatEvents } = require("./utils/chatSocket")
 
 const fs = require("fs");
 dotenv.config();
@@ -46,6 +48,7 @@ mongoose
   .then(() => {
     console.log("✅ MongoDB Atlas connected successfully");
     ensureAdmin();
+    cron.schedule("0 */6 * * *", restoreDemoData);
   })
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err.message);
@@ -115,6 +118,7 @@ app.use("/api/notifications", require("./routes/notifications"));
 app.use("/api/coupons", require("./routes/coupons"));
 app.use("/api/recommendations", require("./routes/recommendations"));
 app.use("/api/upload", require("./routes/upload"));
+app.use("/api/demo", require("./routes/demoReset"));
 
 app.use((err, req, res, next) => {
   console.error("Unhandled error:", err);
