@@ -1,16 +1,17 @@
-
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const counterSchema = new mongoose.Schema({
-    _id: { type: String, required: true },
-    seq: { type: Number, default: 1000 } 
+  _id: { type: String, required: true },
+  seq: { type: Number, default: 1000 },
 });
-const Counter = mongoose.models.Counter || mongoose.model('Counter', counterSchema);
+const Counter =
+  mongoose.models.Counter || mongoose.model("Counter", counterSchema);
 
 const orderSchema = new mongoose.Schema({
   orderNumber: {
     type: Number,
     unique: true,
+    index: true,
   },
 
   user: {
@@ -109,7 +110,7 @@ const orderSchema = new mongoose.Schema({
     ],
     default: "pending",
   },
-  isArchived: { type: Boolean, default: false }, 
+  isArchived: { type: Boolean, default: false },
   archivedAt: { type: Date, default: null },
   statusHistory: [
     {
@@ -129,28 +130,28 @@ const orderSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-orderSchema.pre('save', async function (next) {
-    this.updatedAt = Date.now();
-    if (this.isModified('isPaid') && !this.isModified('paymentStatus')) {
-        this.paymentStatus = this.isPaid ? 'paid' : 'unpaid';
-    }
-    if (this.isModified('paymentStatus')) {
-        this.isPaid = this.paymentStatus === 'paid';
-        if (this.isPaid && !this.paidAt) this.paidAt = new Date();
-    }
-    if (this.isNew && this.orderNumber == null) {
-        const counter = await Counter.findByIdAndUpdate(
-            'orderNumber',
-            { $inc: { seq: 1 } },
-            { new: true, upsert: true }
-        );
-        this.orderNumber = counter.seq;
-    }
+orderSchema.pre("save", async function (next) {
+  this.updatedAt = Date.now();
+  if (this.isModified("isPaid") && !this.isModified("paymentStatus")) {
+    this.paymentStatus = this.isPaid ? "paid" : "unpaid";
+  }
+  if (this.isModified("paymentStatus")) {
+    this.isPaid = this.paymentStatus === "paid";
+    if (this.isPaid && !this.paidAt) this.paidAt = new Date();
+  }
+  if (this.isNew && this.orderNumber == null) {
+    const counter = await Counter.findByIdAndUpdate(
+      "orderNumber",
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true },
+    );
+    this.orderNumber = counter.seq;
+  }
 
-    next();
+  next();
 });
 
-const Order = mongoose.models.Order || mongoose.model('Order', orderSchema);
+const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
 
 module.exports = Order;
 module.exports.Counter = Counter;

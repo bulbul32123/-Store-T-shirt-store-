@@ -35,8 +35,7 @@ export const NotificationProvider = ({ children }) => {
         `${API_URL}/api/notifications/unread-count`,
       );
       if (data.success) setUnreadCount(data.count);
-    } catch {
-    }
+    } catch {}
   }, [isAuthenticated]);
 
   const fetchNotifications = useCallback(
@@ -90,8 +89,7 @@ export const NotificationProvider = ({ children }) => {
       await axios.put(`${API_URL}/api/notifications/chat/${chatId}/read`);
       fetchUnreadCount();
       fetchNotifications(1);
-    } catch {
-    }
+    } catch {}
   };
 
   const removeNotification = async (id) => {
@@ -123,11 +121,12 @@ export const NotificationProvider = ({ children }) => {
     if (socket.connected) socket.disconnect();
     socket.connect();
 
+    const SILENT_TOAST_TYPES = ["chat_message", "order_update"];
     const handleNewNotification = (notification) => {
       if (notification.audience === "admin") return;
       setNotifications((prev) => [notification, ...prev]);
       setUnreadCount((prev) => prev + 1);
-      if (notification.type !== "chat_message")
+      if (!SILENT_TOAST_TYPES.includes(notification.type))
         toast(notification.title, { icon: "🔔" });
     };
 
@@ -138,7 +137,7 @@ export const NotificationProvider = ({ children }) => {
       socket.off("notification:new", handleNewNotification);
       socket.disconnect();
     };
-  }, [isAuthenticated, userId, fetchUnreadCount, fetchNotifications]); 
+  }, [isAuthenticated, userId, fetchUnreadCount, fetchNotifications]);
 
   const value = {
     notifications,

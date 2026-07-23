@@ -1,16 +1,18 @@
 "use client";
-import CouponBox from "@/components/profile/cart/CouponBox";
 import RewardBanner from "@/components/profile/cart/RewardBanner";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
-import { clearBuyNowItem, getBuyNowItem } from "@/lib/buyNow";
 import { checkoutApi } from "@/lib/checkoutApi";
 import { couponApi } from "@/lib/couponApi";
 import { ordersApi } from "@/lib/ordersApi";
-import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import { useEffect, useRef } from "react";
+import CouponBox from "@/components/profile/cart/CouponBox";
+import { clearBuyNowItem, getBuyNowItem } from "@/lib/buyNow";
+import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 const FREE_SHIPPING_THRESHOLD = 100;
 const STANDARD_SHIPPING_FEE = 10;
@@ -121,7 +123,7 @@ export default function CheckoutClientPage() {
       if (paymentMethod === "card") {
         const { url } = await checkoutApi.createSession(payload);
         sessionStorage.removeItem("appliedCoupon");
-        window.location.href = url;
+        window.location.href = url; 
         return;
       }
 

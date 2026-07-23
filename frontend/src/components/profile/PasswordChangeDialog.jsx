@@ -1,19 +1,20 @@
 "use client";
 
-import { useState } from "react";
-import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
-  DialogDescription,
 } from "@/components/ui/dialog";
+import { Eye, EyeOff } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/context/AuthContext";
+import { useState } from "react";
 
 export default function PasswordChangeDialog() {
   const { updateProfile } = useAuth();
@@ -23,12 +24,18 @@ export default function PasswordChangeDialog() {
   const [confirm, setConfirm] = useState("");
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [showOld, setShowOld] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const resetFields = () => {
     setOldPassword("");
     setPassword("");
     setConfirm("");
     setErrors({});
+    setShowOld(false);
+    setShowNew(false);
+    setShowConfirm(false);
   };
 
   const handleSubmit = async (e) => {
@@ -108,18 +115,28 @@ export default function PasswordChangeDialog() {
             >
               Current Password
             </Label>
-            <Input
-              id="old-password"
-              type="password"
-              placeholder="••••••••"
-              value={oldPassword}
-              onChange={(e) => {
-                setOldPassword(e.target.value);
-                if (errors.oldPassword)
-                  setErrors((p) => ({ ...p, oldPassword: undefined }));
-              }}
-              className={inputClass(!!errors.oldPassword)}
-            />
+            <div className="relative">
+              <Input
+                id="old-password"
+                type={showOld ? "text" : "password"}
+                placeholder="••••••••"
+                value={oldPassword}
+                onChange={(e) => {
+                  setOldPassword(e.target.value);
+                  if (errors.oldPassword)
+                    setErrors((p) => ({ ...p, oldPassword: undefined }));
+                }}
+                className={`${inputClass(!!errors.oldPassword)} pr-10`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowOld((v) => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6F6F6F] hover:text-[#111]"
+                tabIndex={-1}
+              >
+                {showOld ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
             {errors.oldPassword && (
               <p className="text-xs font-medium text-red-600">
                 {errors.oldPassword}
@@ -134,18 +151,28 @@ export default function PasswordChangeDialog() {
             >
               New Password
             </Label>
-            <Input
-              id="new-password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                if (errors.password)
-                  setErrors((p) => ({ ...p, password: undefined }));
-              }}
-              className={inputClass(!!errors.password)}
-            />
+            <div className="relative">
+              <Input
+                id="new-password"
+                type={showNew ? "text" : "password"}
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (errors.password)
+                    setErrors((p) => ({ ...p, password: undefined }));
+                }}
+                className={`${inputClass(!!errors.password)} pr-10`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowNew((v) => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6F6F6F] hover:text-[#111]"
+                tabIndex={-1}
+              >
+                {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
             {errors.password && (
               <p className="text-xs font-medium text-red-600">
                 {errors.password}
@@ -160,18 +187,28 @@ export default function PasswordChangeDialog() {
             >
               Confirm Password
             </Label>
-            <Input
-              id="confirm-password"
-              type="password"
-              placeholder="••••••••"
-              value={confirm}
-              onChange={(e) => {
-                setConfirm(e.target.value);
-                if (errors.confirm)
-                  setErrors((p) => ({ ...p, confirm: undefined }));
-              }}
-              className={inputClass(!!errors.confirm)}
-            />
+            <div className="relative">
+              <Input
+                id="confirm-password"
+                type={showConfirm ? "text" : "password"}
+                placeholder="••••••••"
+                value={confirm}
+                onChange={(e) => {
+                  setConfirm(e.target.value);
+                  if (errors.confirm)
+                    setErrors((p) => ({ ...p, confirm: undefined }));
+                }}
+                className={`${inputClass(!!errors.confirm)} pr-10`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirm((v) => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6F6F6F] hover:text-[#111]"
+                tabIndex={-1}
+              >
+                {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
             {errors.confirm && (
               <p className="text-xs font-medium text-red-600">
                 {errors.confirm}

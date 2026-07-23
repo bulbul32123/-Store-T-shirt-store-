@@ -1,4 +1,3 @@
-// src/app/(home)/layout.js
 import ChatWidget from "@/components/chat/ChatWidget";
 import AppLayer from "@/components/layout/AppLayer";
 
