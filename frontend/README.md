@@ -1,261 +1,97 @@
+# 🕊️ Payra - Premium T-Shirt E-Commerce Platform
 
+Payra is a modern, full-stack e-commerce application designed specifically for selling high-quality T-shirts (currently serving the Dhaka region). Built with a Next.js frontend and a Node.js/Express backend, Payra features real-time notifications, live customer support chat, robust administrative management tools, and secure role-based authentication.
 
+---
 
-Admin Sidebar layout:
+## 🛠️ Tech Stack & Architecture
 
-├── DASHBOARD
-│   └── Analytics
-├── MANAGEMENT
-│   ├── Orders (Active)
-|   |--- Categories
-│   ├── Products & Inventory
-│   └── Customers
-├── MARKETING
-│   ├── COUPONS & DISCOUNTS
-|       - Create coupons: code, type (% or flat), value, expiry date, usage limit, minimum order value
-|       - Table: Code | Type | Value | Expiry | Used/Limit | Status | Actions
-|       - Toggle coupon active/inactive
-|
-│   └── REVIEWS & RATINGS MANAGEMENT
-|        - Table: Product | Customer | Rating (stars) | Review Text | Date | Status (Approved/Pending/Rejected)
-|        - Admin can approve, reject, or delete reviews
-|        - Filter by rating, product, status
-|
-└── SETTINGS
-|
+- **Frontend:** Next.js (App / Pages Router), React, Tailwind CSS, Shadcn UI / Lucide Icons
+- **Backend:** Node.js, Express.js, MongoDB (Mongoose ORM)
+- **Real-Time Engine:** Socket.io (for customer support chat & real-time admin notifications)
+- **Image Storage:** Cloudinary (multi-category upload & asset management)
+- **Deployment:** 
+  - **Frontend:** Vercel (Edge Runtime for middleware)
+  - **Backend:** Render (Express REST API server)
+  - **Automation:** cron-job.org (automated database demo resetting)
 
+---
 
-|---NOTIFICATIONS CENTER
-| - In-app notification log: new orders, low stock alerts, new customer signups, new reviews
-| - Mark as read / clear all
-| - (Extendable: plug in email/SMS notification later)
+## 🚀 Key Features & Modules
 
+### 🔑 1. Advanced Authentication & User Profiles
+- **JWT & Cookie Security:** Secure HttpOnly cookie handling for auth tokens.
+- **Role-Based Access Control (RBAC):** Strict separation between standard `customer` users and `admin` roles guarded by custom Next.js middleware.
+- **Full Profile Object:** Includes full name, email, phone number, default address (street, city, state, postal code), gender, date of birth, and avatar/profile image uploading.
+- **Demo Admin Quick Login:** Built-in demo functionality for seamless administrative testing.
 
+---
 
+### 📦 2. Product Management
+- **Catalog Operations:** Full CRUD capabilities for T-shirt products (title, description, price, stock, variants, colors, sizes).
+- **Parent/Child Categories:** Organize products by primary and nested sub-categories.
+- **Cloudinary Integration:** Multi-image upload pipeline supporting image hosting and optimization.
 
-└── 📁tshirt
-    └── 📁backend
-        └── 📁config
-            ├── index.js
-        └── 📁controllers
-            ├── adminController.js
-            ├── admincustomercontroller.js
-            ├── adminOrderController.js
-            ├── authController.js
-            ├── categoryController.js
-            ├── chatController.js
-            ├── orderController.js
-            ├── productController.js
-            ├── uploadController.js
-        └── 📁middleware
-            ├── auth.js
-            ├── authMiddleware.js
-        └── 📁models
-            ├── Category.js
-            ├── Chat.js
-            ├── Order.js
-            ├── Product.js
-            ├── User.js
-        └── 📁routes
-            ├── admin.js
-            ├── auth.js
-            ├── categories.js
-            ├── chats.js
-            ├── orders.js
-            ├── productRoutes.js
-            ├── products.js
-            ├── upload.js
-        └── 📁scripts
-            ├── seedCustomers.js
-            ├── seedFiveMockOrders.js
-            ├── seedOrders.js
-            ├── test-cloudinary.js
-        └── 📁uploads
-            ├── 52e5e6024567c2c2e98d3b116b4ffbf2
-        └── 📁utils
-            ├── cloudinary.js
-            ├── email.js
-            ├── errorHandler.js
-            ├── imageConverter.js
-            ├── slugGenerator.js
-        ├── .env
-        ├── .gitignore
-        ├── package-lock.json
-        ├── package.json
-        ├── server.js
-    └── 📁frontend
-        └── 📁public
-            └── 📁images
-                ├── .DS_Store
-                ├── user.jpeg
-            └── 📁productImgs
-                └── 📁product1
-                    ├── .DS_Store
-                    ├── black-t-shirt-1.avif
-                    ├── black-t-shirt-2.avif
-                    ├── black-t-shirt-3.avif
-                    ├── black-t-shirt-4.avif
-                    ├── black-t-shirt-5.avif
-                    ├── black-t-shirt-6.avif
-                    ├── img-1.jpg
-                    ├── img-2.jpg
-                    ├── img-3.jpg
-                    ├── img-4.jpg
-                    ├── orange-t-shirt-1.avif
-                    ├── orange-t-shirt-2.avif
-                    ├── orange-t-shirt-3.avif
-                    ├── orange-t-shirt-4.avif
-                    ├── orange-t-shirt-5.avif
-                    ├── orange-t-shirt-6.avif
-                    ├── white-t-shirt-1.avif
-                    ├── white-t-shirt-2.avif
-                    ├── white-t-shirt-3.avif
-                    ├── white-t-shirt-4.avif
-                    ├── white-t-shirt-5.avif
-                    ├── white-t-shirt-6.avif
-                └── 📁product2
-                └── 📁product3
-                └── 📁product4
-                └── 📁product5
-                ├── .DS_Store
-            ├── .DS_Store
-            ├── file.svg
-            ├── globe.svg
-            ├── next.svg
-            ├── vercel.svg
-            ├── window.svg
-        └── 📁src
-            └── 📁app
-                └── 📁admin
-                    └── 📁categories
-                        ├── page.js
-                    └── 📁customers
-                        ├── page.jsx
-                    └── 📁dashboard
-                        └── 📁orders
-                            ├── page.js
-                        └── 📁users
-                            ├── page.js
-                        ├── page.js
-                    └── 📁login
-                        ├── page.js
-                    └── 📁orders
-                        ├── page.jsx
-                    └── 📁products
-                        └── 📁edit
-                            └── 📁[id]
-                                ├── page.js
-                        └── 📁new
-                            ├── page.js
-                        ├── page.js
-                    └── 📁profile
-                        ├── page.js
-                    ├── layout.js
-                    ├── page.js
-                └── 📁auth
-                    └── 📁forgot-password
-                        ├── page.js
-                    └── 📁login
-                        ├── page.js
-                    └── 📁register
-                        ├── page.js
-                    └── 📁reset-password
-                        └── 📁[token]
-                            ├── page.js
-                    └── 📁verify-email
-                        └── 📁[token]
-                            ├── page.js
-                └── 📁bg-remover
-                    ├── page.js
-                └── 📁cart
-                    ├── page.js
-                └── 📁category
-                    └── 📁[slug]
-                        ├── page.js
-                └── 📁customize
-                └── 📁product
-                    └── 📁[id]
-                        ├── page.js
-                └── 📁profile
-                    ├── page.js
-                ├── .DS_Store
-                ├── favicon.ico
-                ├── globals.css
-                ├── layout.js
-                ├── page.js
-            └── 📁components
-                └── 📁admin
-                    └── 📁footer
-                        ├── AdminFooter.js
-                    └── 📁header
-                        ├── NotificationDropdown.js
-                        ├── UserDropdown.js
-                    └── 📁search
-                        ├── SearchBar.js
-                    ├── AdminHeader.js
-                    ├── AdminLayout.js
-                    ├── AdminSidebar.js
-                    ├── AdminStats.js
-                    ├── CategoryForm.js
-                    ├── CustomerDrawer.jsx
-                    ├── CustomersTable.jsx
-                    ├── FilterBar.jsx
-                    ├── MetricsGrid.jsx
-                    ├── ProductsPage.js
-                    ├── ProductsTable.js
-                └── 📁common
-                    ├── Breadcrumb.js
-                    ├── ConfirmModal.js
-                    ├── LoadingSpinner.js
-                    ├── Newsletter.js
-                    ├── ThemeToggleButton.js
-                └── 📁home
-                    ├── Categories.js
-                    ├── FeaturedProducts.js
-                    ├── Hero.js
-                    ├── PopularProducts.js
-                    ├── TrendingProducts.js
-                └── 📁layout
-                    ├── AppLayer.js
-                    ├── Footer.js
-                    ├── Header.js
-                └── 📁products
-                    ├── DiscountedPrice.js
-                    ├── ProductCard.js
-                    ├── ProductReviews.js
-                    ├── Quantity.js
-                    ├── RelatedProducts.js
-                    ├── SizeSelection.js
-                └── 📁test
-                    ├── FileUploadTest.js
-                └── 📁ui
-                    └── 📁dropdown
-                        ├── Dropdown.js
-                        ├── DropdownItem.js
-                ├── BulkActionsBar.jsx
-                ├── OrderDetailDrawer.jsx
-                ├── OrderFiltersBar.jsx
-                ├── OrderMetricsCards.jsx
-                ├── OrdersTable.jsx
-                ├── Pagination.jsx
-                ├── StatusBadge.jsx
-            └── 📁context
-                ├── AuthContext.js
-                ├── CartContext.js
-                ├── SidebarContext.js
-            └── 📁hooks
-                ├── useBgRemover.js
-                ├── useDebounce.js
-                ├── useOrders.js
-            └── 📁lib
-                ├── adminOrdersApi.js
-                ├── api.js
-            └── 📁utils
-                ├── api.js
-                ├── config.js
-                ├── formatters.js
-                ├── formDataHelper.js
-        ├── .env
-```
+---
 
+### 🏷️ 3. Category Management
+- Hierarchical category structures with parent-child relationships.
+- Ability to attach, edit, and organize product categories dynamically from the Admin Dashboard.
 
+---
+
+### 🛒 4. Cart & Watchlist (Wishlist)
+- **Persistent Cart System:** Real-time cart state management synced across sessions and user accounts.
+- **Watchlist / Wishlist:** Save items for later viewing with quick add-to-cart transfers.
+
+---
+
+### 📦 5. Order Management
+- **Checkout Flow:** Integrated delivery location checks (optimized for Dhaka delivery zones).
+- **Order Lifecycle:** Track status from `Pending` $\rightarrow$ `Processing` $\rightarrow$ `Shipped` $\rightarrow$ `Delivered` / `Cancelled`.
+- **Order Details & History:** Customer dashboard for viewing past orders and receipt details; Admin dashboard for updating status and fulfillment.
+
+---
+
+### 👥 6. Customer Management
+- **Admin Customer Directory:** View active accounts, customer detail views, user roles, purchase history, and account metrics.
+- **Account Actions:** Manage user account statuses and customer profiles.
+
+---
+
+### 🎟️ 7. Coupons & Discount Management
+- **Dynamic Coupon Codes:** Fixed-amount and percentage-based discount validation.
+- **Usage Limits & Expirations:** Restrict coupon applicability by date, minimum cart subtotal, and single-use constraints.
+
+---
+
+### ⭐ 8. Review & Rating Management
+- **Product Reviews:** Customers can leave star ratings and written reviews on purchased products.
+- **Admin Moderation:** Manage, view, and moderate customer reviews across all product lines.
+
+---
+
+### 🔔 9. Real-Time Notification System
+- **Socket.io Event Engine:** Live admin alerts triggered on key business events (e.g., new order placed, new message received).
+- **In-App Alerts:** Dynamic header/dashboard notifications to keep administrators updated without requiring full page reloads.
+
+---
+
+### 💬 10. Live Customer Support Chat
+- **Real-Time Communication:** Direct Socket.io-powered messaging between online customers and support admins.
+- **Chat History:** Message persistence to maintain thread context during support sessions.
+
+---
+
+## 💻 Environment Setup
+
+### Backend Environment Variables (`.env`)
+```env
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+RESET_SECRET=your_demo_reset_secret
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+FRONTEND_URL=[https://your-frontend-domain.vercel.app](https://your-frontend-domain.vercel.app)
